@@ -1,0 +1,176 @@
+package com.angrybirds.game.Screens.Levels;
+
+import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Screens.LevelSelectScreen;
+import com.angrybirds.game.Screens.PlayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+public class Level3 extends Level {
+    private Stage stage;
+    private Texture angryBirdSheet, uiTexture, moreUITexture;
+    private Skin skin;
+    private boolean isPaused = false;
+    private TextureRegion pausePopUp;
+    private Label pauseLabel;
+    private ImageButton resumeButton, homeButton, skipButton;
+    public Level3(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
+        super(game, gameCam, gamePort, background);
+        stage = new Stage(gamePort, game.batch);
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin();
+        uiTexture = new Texture(Gdx.files.internal("SpriteSheet/UI.png"));
+        moreUITexture = new Texture(Gdx.files.internal("SpriteSheet/moreUI.png"));
+        pausePopUp = new TextureRegion(moreUITexture, 1039, 215, 680, 385);
+
+        TextureRegion pauseButtonRegion = new TextureRegion(uiTexture, 547, 693, 97, 107);
+        skin.add("pauseButton", pauseButtonRegion);
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = skin.getDrawable("pauseButton");
+        ImageButton pauseButton = new ImageButton(style);
+        pauseButton.setSize(50, 60);
+        pauseButton.getImage().setScale(1.25f);
+        pauseButton.setPosition(10, AngryBirds.V_HEIGHT - 75);
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPaused = !isPaused;
+            }
+        });
+
+        stage.addActor(pauseButton);
+
+        // Load custom font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Font/angrybirds.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 100; // Set the desired font size
+        parameter.borderColor = Color.BLACK; // Set the outline color
+        parameter.borderWidth = 2; // Set the outline width
+        BitmapFont customFont = generator.generateFont(parameter);
+        generator.dispose();
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = customFont;
+        Label titleLabel = new Label("Level 3 - Coming Soon", labelStyle);
+        titleLabel.setPosition(AngryBirds.V_WIDTH*0.2f, AngryBirds.V_HEIGHT*0.85f);
+        stage.addActor(titleLabel);
+
+
+
+        // Create pause label
+        pauseLabel = new Label("Game Paused", labelStyle);
+        pauseLabel.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 100, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 250);
+
+        // Create buttons
+        TextureRegion resumeButtonRegion = new TextureRegion(uiTexture, 443, 920, 100, 100);
+        skin.add("resumeButton", resumeButtonRegion);
+        ImageButton.ImageButtonStyle resumeStyle = new ImageButton.ImageButtonStyle();
+        resumeStyle.imageUp = skin.getDrawable("resumeButton");
+        resumeButton = new ImageButton(resumeStyle);
+        resumeButton.setSize(125, 125);
+        resumeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 250, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
+        //resumeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 50, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
+        resumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPaused = false;
+            }
+        });
+
+        TextureRegion homeButtonRegion = new TextureRegion(uiTexture, 108, 1419, 95, 95);
+        skin.add("homeButton", homeButtonRegion);
+        ImageButton.ImageButtonStyle homeStyle = new ImageButton.ImageButtonStyle();
+        homeStyle.imageUp = skin.getDrawable("homeButton");
+        homeButton = new ImageButton(homeStyle);
+        homeButton.setSize(125, 125);
+        //homeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 250, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
+        homeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 50, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
+        homeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PlayScreen(game));
+            }
+        });
+
+        TextureRegion skipButtonRegion = new TextureRegion(uiTexture, 341, 580, 100, 100);
+        skin.add("skipButton", skipButtonRegion);
+        ImageButton.ImageButtonStyle skipStyle = new ImageButton.ImageButtonStyle();
+        skipStyle.imageUp = skin.getDrawable("skipButton");
+        skipButton = new ImageButton(skipStyle);
+        skipButton.setSize(125, 125);
+        skipButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 450, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
+        skipButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelSelectScreen(game));
+            }
+        });
+
+    }
+
+    @Override
+    public void show() {
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.batch.begin();
+        TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538-1027), 207);
+        game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
+
+
+        if (isPaused) {
+            game.batch.draw(pausePopUp, (AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2);
+            stage.addActor(pauseLabel);
+            stage.addActor(resumeButton);
+            stage.addActor(homeButton);
+            stage.addActor(skipButton);
+        } else {
+            pauseLabel.remove();
+            resumeButton.remove();
+            homeButton.remove();
+            skipButton.remove();
+        }
+
+        game.batch.end();
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        gamePort.update(width, height);
+    }
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        uiTexture.dispose();
+        moreUITexture.dispose();
+    }
+}
+
+
