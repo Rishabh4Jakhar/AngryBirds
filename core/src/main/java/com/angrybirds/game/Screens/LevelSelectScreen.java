@@ -38,9 +38,9 @@ public class LevelSelectScreen implements Screen {
 
     // Flags to track level completion
 
-
-    private boolean isLevel1Completed = false;
-    private boolean isLevel2Completed = false;
+    // Commenting out this code to avoid errors till STATIC GUI deadline
+    //private boolean isLevel1Completed = false;
+    //private boolean isLevel2Completed = false;
 
     public LevelSelectScreen(AngryBirds game) {
         this.game = game;
@@ -52,7 +52,7 @@ public class LevelSelectScreen implements Screen {
         skin = new Skin();
 
         // Create a NinePatchDrawable for the button outline
-        Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
+        //Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
         //NinePatch outlinePatch = new NinePatch(outlineTexture, 1, 1, 1, 1);
         //NinePatchDrawable outlineDrawable = new NinePatchDrawable(outlinePatch);
 
@@ -92,9 +92,10 @@ public class LevelSelectScreen implements Screen {
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (isLevel1Completed) {
-                    game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
-                }
+                //if (isLevel1Completed) {
+                //    game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
+                //}
+                game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
             }
         });
 
@@ -113,9 +114,10 @@ public class LevelSelectScreen implements Screen {
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (isLevel2Completed) {
-                    game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
-                }
+                //if (isLevel2Completed) {
+                //    game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
+                //}
+                game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
             }
         });
 
