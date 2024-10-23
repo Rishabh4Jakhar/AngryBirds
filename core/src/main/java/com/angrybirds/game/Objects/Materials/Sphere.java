@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Sphere extends Material {
-    public Sphere(String type, Texture texture) {
-        super(type, 90, new TextureRegion(texture, 1055, 776, 84, 84));
+    public Sphere(String type, Texture texture, int x, int y, int width, int height) {
+        super(type, 90, new TextureRegion(texture, x, y, width, height));
     }
 }

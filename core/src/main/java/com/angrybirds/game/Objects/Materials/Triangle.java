@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Triangle extends Material {
-    public Triangle(String type, Texture texture) {
-        super(type, 80, new TextureRegion(texture, 887, 776, 84, 84));
+    public Triangle(String type, Texture texture, int x, int y, int width, int height) {
+        super(type, 80, new TextureRegion(texture, x, y, width, height));
     }
 }

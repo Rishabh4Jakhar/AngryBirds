@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Cube extends Material {
-    public Cube(String type, Texture texture) {
-        super(type, 100, new TextureRegion(texture, 803, 776, 84, 84));
+    public Cube(String type, Texture texture, int x, int y, int width, int height) {
+        super(type, 100, new TextureRegion(texture, x, y, width, height));
     }
 }
