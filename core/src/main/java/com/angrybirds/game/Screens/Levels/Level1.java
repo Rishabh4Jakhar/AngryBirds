@@ -154,12 +154,12 @@ public class Level1 extends Level {
         ArrayList<Cube> cubes = new ArrayList<Cube>();
         // For loop to create 5 cube objects
         for (int i = 0; i < 5; i++) {
-            Cube cube = new Cube("Wood Cube", angryBirdSheet, 803, 776, 84, 84);
+            Cube cube = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
             cube.setSize(60, 60);
             cubes.add(cube);
         }
         //Cube wood_cube1 = new Cube("Wood Cube", angryBirdSheet, 803, 776, 84, 84);
-        Triangle wood_triangle = new Triangle("Wood Triangle", angryBirdSheet, 887, 776, 84, 84);
+        Triangle wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
         //TextureRegion wood_cube = new TextureRegion(angryBirdSheet, 803, 776, 84, 84);
         //TextureRegion wood_triangle_with_space = new TextureRegion(angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
