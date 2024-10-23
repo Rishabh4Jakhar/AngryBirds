@@ -1,6 +1,8 @@
 package com.angrybirds.game.Screens.Levels;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Objects.Materials.Cube;
+import com.angrybirds.game.Objects.Materials.Triangle;
 import com.angrybirds.game.Objects.Pig;
 import com.angrybirds.game.Objects.RedBird;
 import com.angrybirds.game.Objects.Slingshot;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 public class Level1 extends Level {
     private Stage stage;
@@ -147,17 +151,40 @@ public class Level1 extends Level {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
-        TextureRegion wood_cube = new TextureRegion(angryBirdSheet, 803, 776, 84, 84);
-        TextureRegion wood_triangle_with_space = new TextureRegion(angryBirdSheet, 887, 776, 84, 84);
+        ArrayList<Cube> cubes = new ArrayList<Cube>();
+        // For loop to create 5 cube objects
+        for (int i = 0; i < 5; i++) {
+            Cube cube = new Cube("Wood Cube", angryBirdSheet, 803, 776, 84, 84);
+            cube.setSize(60, 60);
+            cubes.add(cube);
+        }
+        //Cube wood_cube1 = new Cube("Wood Cube", angryBirdSheet, 803, 776, 84, 84);
+        Triangle wood_triangle = new Triangle("Wood Triangle", angryBirdSheet, 887, 776, 84, 84);
+        //TextureRegion wood_cube = new TextureRegion(angryBirdSheet, 803, 776, 84, 84);
+        //TextureRegion wood_triangle_with_space = new TextureRegion(angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
+        /*
         game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
         game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.22f, 60, 60);
         game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
         game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.22f, 60, 60);
         game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.3f, 60, 60);
         game.batch.draw(wood_triangle_with_space, AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
+        */
+        // Level Designing
+        for (int i = 0; i < 2; i++) {
+            cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f + (i * 0.081f * AngryBirds.V_HEIGHT));
+            cubes.get(i).draw(game.batch);
+        }
+        for (int i = 2; i < 5; i++) {
+            cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f + ((i - 2) * 0.081f * AngryBirds.V_HEIGHT));
+            cubes.get(i).draw(game.batch);
+        }
+        wood_triangle.setPosition(AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f);
+        wood_triangle.setSize(60, 60);
+        wood_triangle.draw(game.batch);
 
         // Sprites
         redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
