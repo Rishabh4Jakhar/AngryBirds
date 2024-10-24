@@ -167,16 +167,54 @@ public class Level2 extends Level {
         TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
-        game.batch.draw(stone_ball, AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f, 60, 60);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.138f, 0, 0, 150, ice_rod_long.getRegionHeight(), 1, 1, 90);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.138f, 0, 0, 150, ice_rod_long.getRegionHeight(), 1, 1, 90);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.633f, AngryBirds.V_HEIGHT * 0.339f, AngryBirds.V_WIDTH * 0.147f, 21);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.359f, 0, 0, 140, ice_rod_long.getRegionHeight(), 1, 1, 90);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.91f, AngryBirds.V_HEIGHT * 0.136f, 0, 0, 302, ice_rod_long.getRegionHeight(), 1, 1, 90);
-        game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.763f, AngryBirds.V_HEIGHT * 0.539f, AngryBirds.V_WIDTH * 0.147f, 21);
+        //game.batch.draw(stone_ball, AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f, 60, 60);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.138f, 0, 0, 150, ice_rod_long.getRegionHeight(), 1, 1, 90);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.138f, 0, 0, 150, ice_rod_long.getRegionHeight(), 1, 1, 90);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.633f, AngryBirds.V_HEIGHT * 0.339f, AngryBirds.V_WIDTH * 0.147f, 21);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.359f, 0, 0, 140, ice_rod_long.getRegionHeight(), 1, 1, 90);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.91f, AngryBirds.V_HEIGHT * 0.136f, 0, 0, 302, ice_rod_long.getRegionHeight(), 1, 1, 90);
+        //game.batch.draw(ice_rod_long, AngryBirds.V_WIDTH * 0.763f, AngryBirds.V_HEIGHT * 0.539f, AngryBirds.V_WIDTH * 0.147f, 21);
         game.batch.draw(tnt, AngryBirds.V_WIDTH * 0.68f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
         //game.batch.draw(wood_triangle_with_space, AngryBirds.V_WIDTH * 0.5f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
 
+        // Level designing
+        for (int i = 0; i < 2; i++) {
+            Rectangle rod = rods.get(i);
+            rod.setSize(150, 21);
+            rod.setRotation(90);
+            if (i == 0) {
+                rod.setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.138f);
+            } else {
+                rod.setPosition(AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.138f);
+            }
+            //rod.setPosition(AngryBirds.V_WIDTH * 0.65f + (i * 0.13f), AngryBirds.V_HEIGHT * 0.138f);
+            rod.draw(game.batch);
+        }
+        Rectangle support_rod = rods.get(2);
+        support_rod.setSize(AngryBirds.V_WIDTH*0.147f, 21);
+        support_rod.setPosition(AngryBirds.V_WIDTH * 0.633f, AngryBirds.V_HEIGHT * 0.339f);
+        support_rod.draw(game.batch);
+        Rectangle support_rod2 = rods.get(3);
+        support_rod2.setSize(AngryBirds.V_WIDTH*0.147f, 21);
+        support_rod2.setPosition(AngryBirds.V_WIDTH * 0.763f, AngryBirds.V_HEIGHT * 0.359f);
+        support_rod2.draw(game.batch);
+        /*
+        for (int i = 4; i < 6; i++) {
+            Rectangle rod = rods.get(i);
+            if (i==4) {
+                rod.setSize(140, 21);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.359f);
+            } else {
+                rod.setSize(302, 21);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.91f, AngryBirds.V_HEIGHT * 0.136f);
+            }
+            rod.setRotation(90);
+            rod.draw(game.batch);
+        }
+         */
+        stone_ball.setPosition(AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f);
+        stone_ball.setSize(60, 60);
+        stone_ball.draw(game.batch);
         // Sprites
         redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
         redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
