@@ -183,9 +183,9 @@ public class Level2 extends Level {
             rod.setSize(150, 21);
             rod.setRotation(90);
             if (i == 0) {
-                rod.setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.138f);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.56f, AngryBirds.V_HEIGHT * 0.265f);
             } else {
-                rod.setPosition(AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.138f);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.69f, AngryBirds.V_HEIGHT * 0.265f);
             }
             //rod.setPosition(AngryBirds.V_WIDTH * 0.65f + (i * 0.13f), AngryBirds.V_HEIGHT * 0.138f);
             rod.draw(game.batch);
@@ -196,22 +196,20 @@ public class Level2 extends Level {
         support_rod.draw(game.batch);
         Rectangle support_rod2 = rods.get(3);
         support_rod2.setSize(AngryBirds.V_WIDTH*0.147f, 21);
-        support_rod2.setPosition(AngryBirds.V_WIDTH * 0.763f, AngryBirds.V_HEIGHT * 0.359f);
+        support_rod2.setPosition(AngryBirds.V_WIDTH * 0.763f, AngryBirds.V_HEIGHT * 0.539f);
         support_rod2.draw(game.batch);
-        /*
         for (int i = 4; i < 6; i++) {
             Rectangle rod = rods.get(i);
             if (i==4) {
-                rod.setSize(140, 21);
-                rod.setPosition(AngryBirds.V_WIDTH * 0.78f, AngryBirds.V_HEIGHT * 0.359f);
+                rod.setSize(130, 21);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.69f, AngryBirds.V_HEIGHT * 0.489f);
             } else {
-                rod.setSize(302, 21);
-                rod.setPosition(AngryBirds.V_WIDTH * 0.91f, AngryBirds.V_HEIGHT * 0.136f);
+                rod.setSize(292, 21);
+                rod.setPosition(AngryBirds.V_WIDTH * 0.816f, AngryBirds.V_HEIGHT * 0.264f);
             }
             rod.setRotation(90);
             rod.draw(game.batch);
         }
-         */
         stone_ball.setPosition(AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f);
         stone_ball.setSize(60, 60);
         stone_ball.draw(game.batch);
