@@ -244,7 +244,7 @@ public class Level2 extends Level {
             homeButton.remove();
             skipButton.remove();
         }
-
+        renderPopUps();
         game.batch.end();
         stage.act();
         stage.draw();
