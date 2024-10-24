@@ -40,9 +40,9 @@ public abstract class Level implements Screen {
         levelClearedPopUp = new TextureRegion(moreUITexture, 12, 448, 172, 165); // Adjust coordinates as needed
         levelFailedPopUp = new TextureRegion(moreUITexture, 204, 448, 175, 165); // Adjust coordinates as needed
 
-        addDummyButtons();
+        //addDummyButtons();
     }
-
+    /*
     private void addDummyButtons() {
         // Green button for level cleared
         TextureRegion greenButtonRegion = new TextureRegion(uiTexture, 332, 696, 95, 95); // Adjust coordinates as needed
@@ -76,6 +76,8 @@ public abstract class Level implements Screen {
         stage.addActor(greenButton);
         stage.addActor(redButton);
     }
+
+     */
     protected void renderPopUps() {
         if (isLevelCleared) {
             game.batch.draw(levelClearedPopUp, (AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2);

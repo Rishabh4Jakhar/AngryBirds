@@ -41,6 +41,7 @@ public class Level1 extends Level {
     private TextureRegion pausePopUp;
     private Label pauseLabel;
     private ImageButton resumeButton, homeButton, skipButton;
+    private ImageButton greenButton, redButton;
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -103,7 +104,6 @@ public class Level1 extends Level {
         resumeButton = new ImageButton(resumeStyle);
         resumeButton.setSize(125, 125);
         resumeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 250, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
-        //resumeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 50, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -117,7 +117,6 @@ public class Level1 extends Level {
         homeStyle.imageUp = skin.getDrawable("homeButton");
         homeButton = new ImageButton(homeStyle);
         homeButton.setSize(125, 125);
-        //homeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 250, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
         homeButton.setPosition((AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2 + 50, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2 + 50);
         homeButton.addListener(new ClickListener() {
             @Override
@@ -139,11 +138,44 @@ public class Level1 extends Level {
                 game.setScreen(new LevelSelectScreen(game));
             }
         });
+
+        // Add dummy buttons
+        addDummyButtons();
     }
 
-    @Override
-    public void show() {
+    private void addDummyButtons() {
+        // Green button for level cleared
+        TextureRegion greenButtonRegion = new TextureRegion(uiTexture, 332, 696, 95, 95); // Adjust coordinates as needed
+        skin.add("greenButton", greenButtonRegion);
+        ImageButton.ImageButtonStyle greenStyle = new ImageButton.ImageButtonStyle();
+        greenStyle.imageUp = skin.getDrawable("greenButton");
+        greenButton = new ImageButton(greenStyle);
+        greenButton.setSize(50, 50);
+        greenButton.setPosition(AngryBirds.V_WIDTH - 110, AngryBirds.V_HEIGHT - 60);
+        greenButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isLevelCleared = true;
+            }
+        });
 
+        // Red button for level failed
+        TextureRegion redButtonRegion = new TextureRegion(uiTexture, 114, 1032, 92, 86);  // Adjust coordinates as needed
+        skin.add("redButton", redButtonRegion);
+        ImageButton.ImageButtonStyle redStyle = new ImageButton.ImageButtonStyle();
+        redStyle.imageUp = skin.getDrawable("redButton");
+        redButton = new ImageButton(redStyle);
+        redButton.setSize(50, 50);
+        redButton.setPosition(AngryBirds.V_WIDTH - 60, AngryBirds.V_HEIGHT - 60);
+        redButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isLevelFailed = true;
+            }
+        });
+
+        stage.addActor(greenButton);
+        stage.addActor(redButton);
     }
 
     @Override
@@ -158,21 +190,11 @@ public class Level1 extends Level {
             cube.setSize(60, 60);
             cubes.add(cube);
         }
-        //Cube wood_cube1 = new Cube("Wood Cube", angryBirdSheet, 803, 776, 84, 84);
         Triangle wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
-        //TextureRegion wood_cube = new TextureRegion(angryBirdSheet, 803, 776, 84, 84);
-        //TextureRegion wood_triangle_with_space = new TextureRegion(angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
-        /*
-        game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
-        game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.22f, 60, 60);
-        game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
-        game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.22f, 60, 60);
-        game.batch.draw(wood_cube, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.3f, 60, 60);
-        game.batch.draw(wood_triangle_with_space, AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
-        */
+
         // Level Designing
         for (int i = 0; i < 2; i++) {
             cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f + (i * 0.081f * AngryBirds.V_HEIGHT));
@@ -217,6 +239,9 @@ public class Level1 extends Level {
         stage.act();
         stage.draw();
     }
+
+    @Override
+    public void show() {}
 
     @Override
     public void resize(int width, int height) {
