@@ -1,6 +1,8 @@
 package com.angrybirds.game.Screens.Levels;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Objects.Materials.Rectangle;
+import com.angrybirds.game.Objects.Materials.Sphere;
 import com.angrybirds.game.Objects.Pig;
 import com.angrybirds.game.Objects.RedBird;
 import com.angrybirds.game.Objects.Slingshot;
@@ -22,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 public class Level2 extends Level {
     private Stage stage;
@@ -148,11 +152,18 @@ public class Level2 extends Level {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
+        ArrayList<Rectangle> rods = new ArrayList<Rectangle>();
+        // 6 Ice rods
+        for (int i = 0; i < 6; i++) {
+            Rectangle rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21);
+            rods.add(rod);
+        }
         // TextureRegion wood_cube = new TextureRegion(angryBirdSheet, 803, 776, 84, 84);
         TextureRegion ice_rod_long = new TextureRegion(angryBirdSheet, 1090, 1344, 205, 21);
         // TextureRegion wood_triangle_with_space = new TextureRegion(angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
-        TextureRegion stone_ball = new TextureRegion(angryBirdSheet, 975, 1703, 78, 78);
+        Sphere stone_ball = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
+        //TextureRegion stone_ball = new TextureRegion(angryBirdSheet, 975, 1703, 78, 78);
         TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
