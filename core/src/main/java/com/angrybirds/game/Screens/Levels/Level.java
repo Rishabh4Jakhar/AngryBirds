@@ -80,9 +80,9 @@ public abstract class Level implements Screen {
      */
     protected void renderPopUps() {
         if (isLevelCleared) {
-            game.batch.draw(levelClearedPopUp, (AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2);
+            game.batch.draw(levelClearedPopUp, (AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2, levelClearedPopUp.getRegionWidth()*4f, levelClearedPopUp.getRegionHeight()*4f);
         } else if (isLevelFailed) {
-            game.batch.draw(levelFailedPopUp, (AngryBirds.V_WIDTH - levelFailedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelFailedPopUp.getRegionHeight()) / 2);
+            game.batch.draw(levelFailedPopUp, (AngryBirds.V_WIDTH - levelFailedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelFailedPopUp.getRegionHeight()) / 2, levelFailedPopUp.getRegionWidth()*4f, levelFailedPopUp.getRegionHeight()*4f);
         }
     }
     public void setInputProcessor() {
