@@ -48,13 +48,22 @@ To run the project, follow these steps:
 - For win/lose screens, dummy buttons are used to show if a level has been completed (green button) or failed (red button) on each level screen.
 
 ## Preview
+- **Main Menu**
+<br>
+<img src="https://github.com/user-attachments/assets/7ace0db9-3ffc-4f40-8c9c-997b2e13b221" height="300" width="533">
 
-In-game screenshots have been attached below
+- **Level Selection Screen**
+<br>
+<img src="https://github.com/user-attachments/assets/c1a279c0-6147-4a97-8167-ee4873e09ae3" height="300" width="533">
 
-## UML Diagram
-UML Diagram:
+- **Level 1 Preview**
+<br>
+<img src="https://github.com/user-attachments/assets/6d2781f3-6512-4680-87e3-897b31dbadac" height="300" width="533">
 
-Use Case Diagram:
+- **Level 2 Preview**
+<br>
+<img src="https://github.com/user-attachments/assets/a7017042-7cc8-4181-9515-71c18e395f83" height="300" width="533">
+
 
 ## Online References
 
