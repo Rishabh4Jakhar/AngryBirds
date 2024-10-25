@@ -2,32 +2,65 @@
 
 ## Project Description
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+This project is a replica of the Angry Birds game, developed in **Java using the libGDX framework** for desktop. 
+<br>
+Made by [Rishabh Jakhar](https://github.com/Rishabh4Jakhar/) and [Advik Gupta](https://github.com/NOVA2OP) as part of the **Advanced Programming 2024 course**.
+<br><br>
+The game features three levels, three types of birds, three types of pigs, and three types of materials. 
+The first two levels are basic, while the third level is still under development. The game also includes dummy buttons to indicate level completion or failure.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+## How to Run
 
-This is a project created by Advik Gupta and Rishabh Jakhar as a part of major project of course Advanced Programming 2024. This is a replica of AngryBirds game made in java using libGDX.
+To run the project, follow these steps:
 
-## Platforms
+1. **Clone the repository**:
+    ```sh
+    git clone https://github.com/Rishabh4Jakhar/AngryBirds.git
+    cd AngryBirds
+    ```
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+2. **Import the project into your IDE**:
+    - Open IntelliJ IDEA.
+    - Select "Open" and navigate to the cloned repository.
+    - Open the `build.gradle` file to import the project.
 
-For example, `core:clean` removes `build` folder only from the `core` project.
+3. **Run the game**:
+    - Navigate to the `lwjgl3` module.
+    - Run the `DesktopLauncher` class.
+
+4. **Build the project**:
+    ```sh
+    ./gradlew build
+    ```
+
+5. **Clean the project**:
+    ```sh
+    ./gradlew clean
+    ```
+
 
 ## Assumptions
 
-1) Made only 3 levels out of which level 1 and level 2 are created in a very basic manner and level 3 is coming soon.
-2) 3 birds created; RedBird, YellowBird and BlueBird.
-3) 3 pigs used; normal pig, chief pig and king pig.
-4) 3 types of materials used; wood, ice and stone.
-5) For win/lose screen, we have made dummy buttons to show if level has been completed (green button) or has been failed (red button) on each level screen.
+- Only three levels are created, with level 1 and level 2 being basic, and level 3 coming soon. 
+- Three birds are created: RedBird, YellowBird, and BlueBird.
+- Three pigs are used: normal pig, chief pig, and king pig. 
+- Three types of materials are used: wood, ice, and stone. 
+- For win/lose screens, dummy buttons are used to show if a level has been completed (green button) or failed (red button) on each level screen.
 
 ## Preview
 
-In game screenshots have been attached below.
+In-game screenshots have been attached below
 
+## UML Diagram
+UML Diagram:
+
+Use Case Diagram:
 
 ## Online References
 
-1) 
+- [libGDX Documentation](https://libgdx.com/documentation/)
+- [libGDX Official Github](https://github.com/libgdx/libgdx/)
+- [gdx-liftoff](https://github.com/libgdx/gdx-liftoff)
+- [Brent Aureli Code YouTube Playlist](https://www.youtube.com/watch?v=a8MPxzkwBwo&list=PLZm85UZQLd2SXQzsF-a0-pPF6IWDDdrXt&index=1)
+- [LibGDX Beginner Tutorial](https://colourtann.github.io/HelloLibgdx/index.html)
+- [Spriters Resource](https://www.spriters-resource.com/search/?q=Angry+Birds)
