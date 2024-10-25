@@ -19,11 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * Screen for playing the Angry Birds game.
+ */
 public class PlayScreen implements Screen {
     private final AngryBirds game;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
-    //private Hud hud;
     private Texture background;
     private Texture birdSheet;
     private Texture pigSheet;
@@ -37,16 +39,18 @@ public class PlayScreen implements Screen {
     private Skin skin;
     private ImageButton startButton;
 
-
+    /**
+     * Constructor for PlayScreen.
+     * Initializes the screen with game objects and UI elements.
+     *
+     * @param game The main game instance.
+     */
     public PlayScreen(AngryBirds game) {
         this.game = game;
         gameCam = new OrthographicCamera();
         gamePort = new StretchViewport(AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT, gameCam);
-        //hud = new Hud(game.batch);
         background = new Texture(Gdx.files.internal("SpriteSheet/Background.png"));
-        // Convert all the textures to sprites
         birdSheet = new Texture(Gdx.files.internal("SpriteSheet/Birdsheet.png"));
-        //birdSprite = new Sprite(birdSheet);
         pigSheet = new Texture(Gdx.files.internal("SpriteSheet/Pigsheet.png"));
         blockSheet = new Texture(Gdx.files.internal("SpriteSheet/Blocksheet.png"));
         redBird = new RedBird(birdSheet);
@@ -66,7 +70,7 @@ public class PlayScreen implements Screen {
         startButton = new ImageButton(style);
         startButton.setSize(125, 125);
         startButton.getImage().setScale(1.25f);
-        startButton.setPosition(AngryBirds.V_WIDTH*0.45f, AngryBirds.V_HEIGHT*0.13f);
+        startButton.setPosition(AngryBirds.V_WIDTH * 0.45f, AngryBirds.V_HEIGHT * 0.13f);
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -75,18 +79,16 @@ public class PlayScreen implements Screen {
         });
 
         stage.addActor(startButton);
-
     }
+
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
 
@@ -95,14 +97,13 @@ public class PlayScreen implements Screen {
         game.batch.draw(angryBirdsLogo, AngryBirds.V_WIDTH * 0.25f, AngryBirds.V_HEIGHT * 0.8f);
 
         TextureRegion textBox = new TextureRegion(uiTexture, 207, 1027, 335, 95);
-
         game.batch.draw(textBox, AngryBirds.V_WIDTH * 0.35f, AngryBirds.V_HEIGHT * 0.6f);
+
         // Calculate relative positions
         redBird.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.1f);
         yellowBird.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.1f);
         blueBird.setPosition(AngryBirds.V_WIDTH * 0.17f, AngryBirds.V_HEIGHT * 0.1f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.21f, AngryBirds.V_HEIGHT * 0.1f);
-
 
         // Draw sprites
         redBird.draw(game.batch);
@@ -114,8 +115,6 @@ public class PlayScreen implements Screen {
 
         stage.act();
         stage.draw();
-        //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        //hud.stage.draw();
     }
 
     @Override
@@ -125,17 +124,14 @@ public class PlayScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

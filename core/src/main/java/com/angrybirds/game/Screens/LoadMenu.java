@@ -13,12 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * Screen for loading saved games in the Angry Birds game.
+ * Currently only displays dummy saved games and a back button and no background.
+ */
 public class LoadMenu implements Screen {
     private final AngryBirds game;
     private Stage stage;
     private Skin skin;
     private Viewport viewport;
 
+    /**
+     * Constructor for LoadMenu.
+     * Initializes the screen with buttons for saved games and a back button.
+     *
+     * @param game The main game instance.
+     */
     public LoadMenu(AngryBirds game) {
         this.game = game;
         viewport = new StretchViewport(AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);

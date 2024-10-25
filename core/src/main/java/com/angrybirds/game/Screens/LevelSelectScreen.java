@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,12 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
+/**
+ * Screen for selecting levels in the Angry Birds game.
+ */
 public class LevelSelectScreen implements Screen {
     private final AngryBirds game;
     private OrthographicCamera gameCam;
@@ -33,17 +34,14 @@ public class LevelSelectScreen implements Screen {
     private Texture moreUiTexture, uiTexture;
     private Stage stage;
     private Skin skin;
-    private ImageButton level1Button;
-    private ImageButton level2Button;
-    private ImageButton level3Button;
-    private ImageButton homeButton;
+    private ImageButton level1Button, level2Button, level3Button, homeButton;
 
-    // Flags to track level completion
-
-    // Commenting out this code to avoid errors till STATIC GUI deadline
-    //private boolean isLevel1Completed = false;
-    //private boolean isLevel2Completed = false;
-
+    /**
+     * Constructor for LevelSelectScreen.
+     * Initializes the screen with buttons for each level and a home button.
+     *
+     * @param game The main game instance.
+     */
     public LevelSelectScreen(AngryBirds game) {
         this.game = game;
         moreUiTexture = new Texture(Gdx.files.internal("SpriteSheet/MoreUI.png"));
@@ -59,13 +57,8 @@ public class LevelSelectScreen implements Screen {
         skin.add("default", font);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = skin.getFont("default");
-        // Increase the font size
         textButtonStyle.font.getData().setScale(2f);
         skin.add("default", textButtonStyle);
-        // Create a NinePatchDrawable for the button outline
-        //Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
-        //NinePatch outlinePatch = new NinePatch(outlineTexture, 1, 1, 1, 1);
-        //NinePatchDrawable outlineDrawable = new NinePatchDrawable(outlinePatch);
 
         // Home button
         TextureRegion homeButtonRegion = new TextureRegion(uiTexture, 108, 1419, 95, 95);
@@ -87,11 +80,6 @@ public class LevelSelectScreen implements Screen {
         skin.add("level1Button", level1Region);
         ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = skin.getDrawable("level1Button");
-        //Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
-        //NinePatch outlinePatch = new NinePatch(level1Region, 1, 1, 1, 1);
-        //NinePatchDrawable outlineDrawable = new NinePatchDrawable(outlinePatch);
-
-        //style1.up = outlineDrawable; // Set the outline as the background
         level1Button = new ImageButton(style1);
         level1Button.setSize(120, 154); // 2x scaling
         level1Button.getImage().setScale(2f); // 2x scaling
@@ -108,19 +96,14 @@ public class LevelSelectScreen implements Screen {
         skin.add("level2Button", level2Region);
         ImageButton.ImageButtonStyle style2 = new ImageButton.ImageButtonStyle();
         style2.imageUp = skin.getDrawable("level2Button");
-        //style2.up = outlineDrawable; // Set the outline as the background
         level2Button = new ImageButton(style2);
         level2Button.setSize(120, 154); // 2x scaling
         level2Button.getImage().setScale(2f); // 2x scaling
         level2Button.setPosition(AngryBirds.V_WIDTH * 0.4f, AngryBirds.V_HEIGHT * 0.4f);
         level2Button.setDisabled(true); // Initially disabled
-        //level2Button.getImage().setColor(Color.GRAY); // Greyed out
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //if (isLevel1Completed) {
-                //    game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
-                //}
                 game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
             }
         });
@@ -130,19 +113,14 @@ public class LevelSelectScreen implements Screen {
         skin.add("level3Button", level3Region);
         ImageButton.ImageButtonStyle style3 = new ImageButton.ImageButtonStyle();
         style3.imageUp = skin.getDrawable("level3Button");
-        //style3.up = outlineDrawable; // Set the outline as the background
         level3Button = new ImageButton(style3);
         level3Button.setSize(120, 154); // 2x scaling
         level3Button.getImage().setScale(2f); // 2x scaling
         level3Button.setPosition(AngryBirds.V_WIDTH * 0.7f, AngryBirds.V_HEIGHT * 0.4f);
         level3Button.setDisabled(true); // Initially disabled
-        //level3Button.getImage().setColor(Color.GRAY); // Greyed out
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //if (isLevel2Completed) {
-                //    game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
-                //}
                 game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
             }
         });
