@@ -29,12 +29,13 @@ public class LevelSelectScreen implements Screen {
     private final AngryBirds game;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
-    private Texture moreUiTexture;
+    private Texture moreUiTexture, uiTexture;
     private Stage stage;
     private Skin skin;
     private ImageButton level1Button;
     private ImageButton level2Button;
     private ImageButton level3Button;
+    private ImageButton homeButton;
 
     // Flags to track level completion
 
@@ -45,6 +46,7 @@ public class LevelSelectScreen implements Screen {
     public LevelSelectScreen(AngryBirds game) {
         this.game = game;
         moreUiTexture = new Texture(Gdx.files.internal("SpriteSheet/MoreUI.png"));
+        uiTexture = new Texture(Gdx.files.internal("SpriteSheet/UI.png"));
         gameCam = new OrthographicCamera();
         gamePort = new StretchViewport(AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT, gameCam);
         stage = new Stage(gamePort, game.batch);
@@ -55,6 +57,21 @@ public class LevelSelectScreen implements Screen {
         //Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
         //NinePatch outlinePatch = new NinePatch(outlineTexture, 1, 1, 1, 1);
         //NinePatchDrawable outlineDrawable = new NinePatchDrawable(outlinePatch);
+
+        // Home button
+        TextureRegion homeButtonRegion = new TextureRegion(uiTexture, 108, 1419, 95, 95);
+        skin.add("homeButton", homeButtonRegion);
+        ImageButton.ImageButtonStyle homeStyle = new ImageButton.ImageButtonStyle();
+        homeStyle.imageUp = skin.getDrawable("homeButton");
+        homeButton = new ImageButton(homeStyle);
+        homeButton.setSize(125, 125);
+        homeButton.setPosition(20, AngryBirds.V_HEIGHT - 120);
+        homeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PlayScreen(game));
+            }
+        });
 
         // Level 1 button
         TextureRegion level1Region = new TextureRegion(moreUiTexture, 777, 593, 60, 77);
@@ -147,6 +164,7 @@ public class LevelSelectScreen implements Screen {
         Label titleLabel = new Label("Select Level", labelStyle);
         titleLabel.setPosition(AngryBirds.V_WIDTH * 0.35f, AngryBirds.V_HEIGHT * 0.85f);
 
+        stage.addActor(homeButton);
         stage.addActor(level1Button);
         stage.addActor(level1Label);
         stage.addActor(level2Button);
