@@ -40,8 +40,7 @@ public class Level1 extends Level {
     private boolean isPaused = false;
     private TextureRegion pausePopUp;
     private Label pauseLabel, levelClearedLabel, levelFailedLabel;
-    private ImageButton resumeButton, homeButton, skipButton, skipButton2;
-    private ImageButton greenButton, redButton;
+    private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
