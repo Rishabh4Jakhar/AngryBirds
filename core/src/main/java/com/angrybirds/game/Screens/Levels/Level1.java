@@ -39,8 +39,8 @@ public class Level1 extends Level {
     private Slingshot slingshot;
     private boolean isPaused = false;
     private TextureRegion pausePopUp;
-    private Label pauseLabel;
-    private ImageButton resumeButton, homeButton, skipButton;
+    private Label pauseLabel, levelClearedLabel, levelFailedLabel;
+    private ImageButton resumeButton, homeButton, skipButton, skipButton2;
     private ImageButton greenButton, redButton;
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
@@ -139,6 +139,31 @@ public class Level1 extends Level {
             }
         });
 
+        skin.add("skipButton2", skipButtonRegion);
+        ImageButton.ImageButtonStyle skipStyle2 = new ImageButton.ImageButtonStyle();
+        skipStyle2.imageUp = skin.getDrawable("skipButton2");
+        skipButton2 = new ImageButton(skipStyle2);
+        skipButton2.setSize(125, 125);
+        skipButton2.setPosition((AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2 + 50);
+        skipButton2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelSelectScreen(game));
+            }
+        });
+        // Labels for level clear level fail
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle(); // Use default font
+        labelStyle2.font = new BitmapFont();
+        // Increase font size
+        labelStyle2.font.getData().setScale(3);
+        levelClearedLabel = new Label("Level Cleared", labelStyle2);
+        levelClearedLabel.setPosition((AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2 - 60 , (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2 + 200);
+
+        levelFailedLabel = new Label("Level Failed", labelStyle2);
+        levelFailedLabel.setPosition((AngryBirds.V_WIDTH - levelFailedPopUp.getRegionWidth()) / 2 - 60, (AngryBirds.V_HEIGHT - levelFailedPopUp.getRegionHeight()) / 2 + 200);
+
+
+
         // Add dummy buttons
         addDummyButtons();
     }
@@ -151,7 +176,7 @@ public class Level1 extends Level {
         greenStyle.imageUp = skin.getDrawable("greenButton");
         greenButton = new ImageButton(greenStyle);
         greenButton.setSize(50, 50);
-        greenButton.setPosition(AngryBirds.V_WIDTH - 110, AngryBirds.V_HEIGHT - 60);
+        greenButton.setPosition(AngryBirds.V_WIDTH - 130, AngryBirds.V_HEIGHT - 60);
         greenButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -235,6 +260,18 @@ public class Level1 extends Level {
             skipButton.remove();
         }
         renderPopUps();
+        if (isLevelCleared) { // Add button to go to next level in level clear pop up
+            stage.addActor(levelClearedLabel);
+            stage.addActor(skipButton2);
+        } else if (isLevelFailed) { // Add button to retry level in level fail pop up
+            stage.addActor(levelFailedLabel);
+            stage.addActor(skipButton2);
+        } else {
+            levelClearedLabel.remove();
+            levelFailedLabel.remove();
+            skipButton2.remove();
+        }
+
         game.batch.end();
         stage.act();
         stage.draw();
