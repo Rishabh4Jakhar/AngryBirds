@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -53,6 +54,14 @@ public class LevelSelectScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin();
 
+        // Register a TextButtonStyle
+        BitmapFont font = new BitmapFont();
+        skin.add("default", font);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = skin.getFont("default");
+        // Increase the font size
+        textButtonStyle.font.getData().setScale(2f);
+        skin.add("default", textButtonStyle);
         // Create a NinePatchDrawable for the button outline
         //Texture outlineTexture = new Texture(Gdx.files.internal("SpriteSheet/outline.png"));
         //NinePatch outlinePatch = new NinePatch(outlineTexture, 1, 1, 1, 1);
@@ -137,6 +146,18 @@ public class LevelSelectScreen implements Screen {
                 game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
             }
         });
+
+        // Load Menu button
+        TextButton loadMenuButton = new TextButton("Load Game", skin);
+        loadMenuButton.setSize(150, 50);
+        loadMenuButton.setPosition(AngryBirds.V_WIDTH - 160, 10);
+        loadMenuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LoadMenu(game));
+            }
+        });
+        stage.addActor(loadMenuButton);
 
         // Load custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Font/angrybirds.ttf"));
