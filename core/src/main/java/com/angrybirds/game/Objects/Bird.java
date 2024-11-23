@@ -45,10 +45,6 @@ public class Bird extends Sprite {
     public Body getBody() {
         return body;
     }
-    public void update() {
-        Vector2 position = body.getPosition();
-
-    }
 
     public void createBody(World world, float v, float v1) {
         // Create body definition
