@@ -52,6 +52,7 @@ public class Level1 extends Level {
     // Box 2d
     private Bird currentBird;
     private Vector2 dragStart, dragEnd;
+    private OrthographicCamera b2dCam;
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -243,6 +244,10 @@ public class Level1 extends Level {
         }
         );
 
+        // Create camera for debug rendering
+        b2dCam = new OrthographicCamera();
+        b2dCam.setToOrtho(false, AngryBirds.V_WIDTH / PPM, AngryBirds.V_HEIGHT / PPM);
+
     }
 
     /*
@@ -293,8 +298,9 @@ public class Level1 extends Level {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Testing
-        gameCam.update();
+
+        // TESTING MIGHT BREAK
+        currentBird.update();
 
         game.batch.begin();
         ArrayList<Cube> cubes = new ArrayList<Cube>();
@@ -322,8 +328,9 @@ public class Level1 extends Level {
         wood_triangle.setSize(60, 60);
         wood_triangle.draw(game.batch);
 
+
         // Sprites
-        redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
+        //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
         redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.13f, AngryBirds.V_HEIGHT * 0.139f);
         pig1.setSize(60, 60);
@@ -332,7 +339,9 @@ public class Level1 extends Level {
         pig2.setPosition(AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.38f);
         pig1.draw(game.batch);
         pig2.draw(game.batch);
-        redBird1.draw(game.batch);
+        //redBird1.draw(game.batch);
+        currentBird.draw(game.batch);
+
         redBird2.draw(game.batch);
         slingshot.draw(game.batch);
 
@@ -365,8 +374,8 @@ public class Level1 extends Level {
         stage.act();
         stage.draw();
 
-
-        b2dr.render(world, gameCam.combined);
+        b2dCam.update();
+        b2dr.render(world, b2dCam.combined);
     }
 
     @Override
