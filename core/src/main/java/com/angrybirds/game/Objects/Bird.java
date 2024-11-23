@@ -130,4 +130,44 @@ public class Bird extends Sprite {
         isShot = false;
         isSelected = false;
     }
+
+    private boolean isOutOfBounds() {
+        return body.getPosition().x < 0 || body.getPosition().x * PPM > 800 || body.getPosition().y < 0 || body.getPosition().y * PPM > 480;
+    }
+
+    private boolean isStopped() {
+        return body.getLinearVelocity().len() < 0.1f;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public boolean isShot() {
+        return isShot;
+    }
+
+    public Vector2 getOriginalPosition() {
+        return originalPosition;
+    }
 }
