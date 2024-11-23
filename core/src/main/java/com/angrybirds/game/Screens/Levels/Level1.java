@@ -193,6 +193,12 @@ public class Level1 extends Level {
         fdef.shape = shape;
         body.createFixture(fdef);
 
+        // Sprite batch rendering for level design is done in render method
+        // Now create bodies for the objects (birds, pigs, structures here)
+
+        // Create birds
+        redBird1.createBody(world, 0.05f, 0.139f);
+
     }
 
     private void addDummyButtons() {
