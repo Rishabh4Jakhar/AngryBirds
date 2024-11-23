@@ -1,6 +1,7 @@
 package com.angrybirds.game.Screens.Levels;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Objects.Bird;
 import com.angrybirds.game.Objects.Materials.Cube;
 import com.angrybirds.game.Objects.Materials.Triangle;
 import com.angrybirds.game.Objects.Pig;
@@ -9,6 +10,7 @@ import com.angrybirds.game.Objects.Slingshot;
 import com.angrybirds.game.Screens.LevelSelectScreen;
 import com.angrybirds.game.Screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -45,6 +48,10 @@ public class Level1 extends Level {
     private TextureRegion pausePopUp;
     private Label pauseLabel, levelClearedLabel, levelFailedLabel;
     private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
+
+    // Box 2d
+    private Bird currentBird;
+    private Vector2 dragStart, dragEnd;
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -197,10 +204,49 @@ public class Level1 extends Level {
         // Now create bodies for the objects (birds, pigs, structures here)
 
         // Create birds
-        redBird1.createBody(world, 0.05f, 0.139f);
+        redBird1.createBody(world, 0.13f, 0.139f);
+        currentBird = redBird1;
+
+        // Input processor
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
+                if (currentBird != null && !currentBird.isShot() &&
+                    touchPoint.dst(currentBird.getOriginalPosition()) < 30f) {
+                    currentBird.setSelected(true);
+                    dragStart = touchPoint;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
+                if (currentBird != null && currentBird.isSelected()) {
+                    Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
+                    currentBird.dragTo(touchPoint.x, touchPoint.y);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                if (currentBird != null && currentBird.isSelected()) {
+                    Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
+                    Vector2 dragVector = touchPoint.sub(dragStart);
+                    currentBird.shoot(dragVector);
+                    // Optionally prepare next bird
+                    // prepareNextBird();
+                }
+                return true;
+            }
+        }
+        );
 
     }
 
+    /*
+    Made for static GUI buttons
     private void addDummyButtons() {
         // Green button for level cleared
         TextureRegion greenButtonRegion = new TextureRegion(uiTexture, 332, 696, 95, 95); // Adjust coordinates as needed
@@ -235,6 +281,8 @@ public class Level1 extends Level {
         stage.addActor(greenButton);
         stage.addActor(redButton);
     }
+    */
+
 
     @Override
     public void render(float delta) {
