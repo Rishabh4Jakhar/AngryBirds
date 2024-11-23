@@ -39,6 +39,9 @@ public class PlayScreen implements Screen {
     private Skin skin;
     private ImageButton startButton;
 
+    // Box 2d variables
+    // Nvm
+
     /**
      * Constructor for PlayScreen.
      * Initializes the screen with game objects and UI elements.

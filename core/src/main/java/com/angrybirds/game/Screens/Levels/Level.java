@@ -6,12 +6,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 public abstract class Level implements Screen {
     protected final AngryBirds game;
@@ -27,6 +33,14 @@ public abstract class Level implements Screen {
     protected boolean isLevelCleared = false;
     protected boolean isLevelFailed = false;
 
+    // Box 2d variables
+    protected World world;
+    protected Box2DDebugRenderer b2dr;
+    protected ArrayList<Body> birdBodies;
+    protected ArrayList<Body> pigBodies;
+    protected ArrayList<Body> blockBodies;
+    protected final float PPM = 100;
+
     public Level(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         this.game = game;
         this.gameCam = gameCam;
@@ -39,7 +53,11 @@ public abstract class Level implements Screen {
         moreUITexture = new Texture(Gdx.files.internal("SpriteSheet/moreUI.png"));
         levelClearedPopUp = new TextureRegion(moreUITexture, 12, 448, 172, 165); // Adjust coordinates as needed
         levelFailedPopUp = new TextureRegion(moreUITexture, 204, 448, 175, 165); // Adjust coordinates as needed
-
+        world = new World(new Vector2(0, -9.8f), true);
+        b2dr = new Box2DDebugRenderer();
+        birdBodies = new ArrayList<>();
+        pigBodies = new ArrayList<>();
+        blockBodies = new ArrayList<>();
         //addDummyButtons();
     }
     /*
@@ -92,6 +110,11 @@ public abstract class Level implements Screen {
     public void resize(int width, int height) {
         gamePort.update(width, height);
     }
+
+    //@Override
+    //public void render(float delta) {
+    //    world.step(1/60f, 6, 2);
+    //}
 
     @Override
     public void pause() {}

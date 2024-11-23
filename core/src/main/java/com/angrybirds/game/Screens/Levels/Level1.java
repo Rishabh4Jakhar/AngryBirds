@@ -16,6 +16,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -164,7 +168,31 @@ public class Level1 extends Level {
 
 
         // Add dummy buttons
-        addDummyButtons();
+        //addDummyButtons();
+
+        initializeLevel();
+    }
+
+    private void initializeLevel() {
+
+        // Create ground
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.position.set(0, 0);
+        body = world.createBody(bdef);
+
+        shape.setAsBox(AngryBirds.V_WIDTH, 1);
+        fdef.shape = shape;
+        body.createFixture(fdef);
+
+        shape.setAsBox(1, AngryBirds.V_HEIGHT);
+        fdef.shape = shape;
+        body.createFixture(fdef);
+
     }
 
     private void addDummyButtons() {
@@ -204,8 +232,16 @@ public class Level1 extends Level {
 
     @Override
     public void render(float delta) {
+
+        world.step(1/60f, 6, 2);
+
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Testing
+        gameCam.update();
+
         game.batch.begin();
         ArrayList<Cube> cubes = new ArrayList<Cube>();
         // For loop to create 5 cube objects
@@ -274,6 +310,9 @@ public class Level1 extends Level {
         game.batch.end();
         stage.act();
         stage.draw();
+
+
+        b2dr.render(world, gameCam.combined);
     }
 
     @Override
@@ -298,5 +337,8 @@ public class Level1 extends Level {
         stage.dispose();
         uiTexture.dispose();
         moreUITexture.dispose();
+
+        world.dispose();
+        b2dr.dispose();
     }
 }
