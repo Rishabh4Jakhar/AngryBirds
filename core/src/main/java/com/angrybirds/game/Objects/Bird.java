@@ -22,7 +22,7 @@ public class Bird extends Sprite {
     protected static final float BIRD_DENSITY = 1.0f;
     protected static final float BIRD_FRICTION = 0.3f;
     protected static final float BIRD_RESTITUTION = 0.5f;
-    protected static final float BIRD_RADIUS = 15f / PPM;
+    protected static final float BIRD_RADIUS = 18f / PPM;
 
 
     // Shooting variables
@@ -30,7 +30,7 @@ public class Bird extends Sprite {
     protected boolean isShot = false;
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f;
-    protected static final float SHOOT_POWER_MULTIPLIER = 2.5f;
+    protected static final float SHOOT_POWER_MULTIPLIER = 2f;
 
 
     public Bird(Texture birdSheet, int x, int y, int width, int height) {
@@ -78,6 +78,7 @@ public class Bird extends Sprite {
         if (body!=null) {
             Vector2 position = body.getPosition();
             setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
+            //System.out.println("Bird position: " + position);
             setRotation((float) Math.toDegrees(body.getAngle()));
 
             if (isShot && (isOutOfBounds() || isStopped())) {
@@ -111,7 +112,7 @@ public class Bird extends Sprite {
             //velocity.scl(SHOOT_POWER_MULTIPLIER);
             //body.setLinearVelocity(velocity);
             body.setLinearVelocity(0, 0);
-            body.applyLinearImpulse(force.x/PPM, force.y/PPM, body.getWorldCenter().x, body.getWorldCenter().y, true);
+            body.applyLinearImpulse(force, body.getWorldCenter(), true);
             isShot = true;
         }
     }
@@ -120,6 +121,7 @@ public class Bird extends Sprite {
         if (body == null) {
             return;
         }
+        System.out.println("Resetting bird to position: " + originalPosition);
         body.setTransform(originalPosition, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
