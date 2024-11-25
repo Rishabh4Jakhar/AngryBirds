@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Cube extends Material {
     private static final long serialVersionUID = 1L;
     protected Body body;
+    protected int textureWidth;
+    protected int textureHeight;
     protected static final float PPM = 100f;
     protected static final float RECTANGLE_DENSITY = 1.0f;
     protected static final float RECTANGLE_FRICTION = 0.5f;
@@ -16,6 +18,10 @@ public class Cube extends Material {
 
     public Cube(String type, int health, Texture texture, int x, int y, int width, int height) {
         super(type, health, new TextureRegion(texture, x, y, width, height));
+        this.textureWidth=width;
+        this.textureHeight=height;
+        setSize(60, 60);
+        setOrigin(getWidth() / 2, getHeight() / 2);
     }
 
     public void createBody(World world, float x, float y, float width, float height, boolean isStatic) {
@@ -39,6 +45,14 @@ public class Cube extends Material {
 
         originalPosition = new Vector2(x, y);
         body.setUserData(this); // Link this object with the body
+    }
+
+    public void update() {
+        if (body!=null) {
+            Vector2 position = body.getPosition();
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
+            setRotation((float) Math.toDegrees(body.getAngle()));
+        }
     }
 
     public void reduceHP(int amount) {

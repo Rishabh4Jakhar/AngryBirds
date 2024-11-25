@@ -44,6 +44,14 @@ public class Rectangle extends Material implements Serializable {
         body.setUserData(this); // Link this object with the body
     }
 
+    public void update() {
+        if (body!=null) {
+            Vector2 position = body.getPosition();
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
+            setRotation((float) Math.toDegrees(body.getAngle()));
+        }
+    }
+
     public void reduceHP(int amount) {
         health -= amount;
         if (health <= 0) {
