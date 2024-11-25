@@ -399,12 +399,12 @@ public class Level1 extends Level {
         // Level Designing
         for (int i = 0; i < 2; i++) {
             cubes.get(i).setSize(60,60);
-            cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f + (i * 0.081f * AngryBirds.V_HEIGHT));
+            cubes.get(i).update();
             cubes.get(i).draw(game.batch);
         }
         for (int i = 2; i < 5; i++) {
             cubes.get(i).setSize(60,60);
-            cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f + ((i - 2) * 0.081f * AngryBirds.V_HEIGHT));
+            cubes.get(i).update();
             cubes.get(i).draw(game.batch);
         }
         wood_triangle.setPosition(AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f);
