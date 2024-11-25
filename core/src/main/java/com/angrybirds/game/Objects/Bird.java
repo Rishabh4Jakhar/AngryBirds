@@ -31,7 +31,7 @@ public class Bird extends Sprite {
     protected boolean isShot = false;
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f * PPM;
-    protected static final float SHOOT_POWER_MULTIPLIER = 2.0f;
+    protected static final float SHOOT_POWER_MULTIPLIER = 1f;
 
 
     public Bird(Texture birdSheet, int x, int y, int width, int height) {

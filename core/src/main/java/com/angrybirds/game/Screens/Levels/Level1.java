@@ -340,7 +340,7 @@ public class Level1 extends Level {
 
             // Update position using basic physics
             currentPosition.add(velocity.x * timeStep, velocity.y * timeStep);
-            velocity.add(0, -9.8f * timeStep); // Apply gravity (adjust if world gravity is different)
+            velocity.add(0, -4f * timeStep); // Apply gravity (adjust if world gravity is different)
         }
 
         shapeRenderer.end();
