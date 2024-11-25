@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -53,6 +54,11 @@ public class Level1 extends Level {
     private Bird currentBird;
     private Vector2 dragStart, dragEnd;
     private OrthographicCamera b2dCam;
+    private ShapeRenderer shapeRenderer;
+
+    // Constants
+    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 0.2f; // 20% from left
+    private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 0.3f; // 25% from bottom
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -177,7 +183,7 @@ public class Level1 extends Level {
 
         // Add dummy buttons
         //addDummyButtons();
-
+        shapeRenderer = new ShapeRenderer();
         initializeLevel();
     }
 
@@ -203,7 +209,7 @@ public class Level1 extends Level {
 
         // Sprite batch rendering for level design is done in render method
         // Now create bodies for the objects (birds, pigs, structures here)
-
+        System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
         redBird1.createBody(world, 0.13f, 0.139f);
         currentBird = redBird1;
@@ -213,8 +219,10 @@ public class Level1 extends Level {
                                         @Override
                                         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                                             Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
+                                            System.out.println("Touch Down at: " + touchPoint); // Debug print
+                                            float dragAreaRadius = 30f;
                                             if (currentBird != null && !currentBird.isShot() &&
-                                                touchPoint.dst(currentBird.getOriginalPosition()) < 30f) {
+                                                touchPoint.dst(new Vector2(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM )) < dragAreaRadius) {
                                                 currentBird.setSelected(true);
                                                 dragStart = touchPoint;
                                             }
@@ -344,6 +352,23 @@ public class Level1 extends Level {
 
         redBird2.draw(game.batch);
         slingshot.draw(game.batch);
+        game.batch.end();
+
+        // Draw draggable area outline
+        shapeRenderer.setProjectionMatrix(gameCam.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+
+        // Convert slingshot position to meters
+        float slingshotX = SLINGSHOT_X / PPM;
+        float slingshotY = SLINGSHOT_Y / PPM;
+        float maxDragRadius = 0.3f; // In meters (adjust as needed)
+
+        // Draw circle for draggable area
+        shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
+
+        shapeRenderer.end();
+
 
         if (isPaused) {
             game.batch.draw(pausePopUp, (AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2);
@@ -369,8 +394,6 @@ public class Level1 extends Level {
             levelFailedLabel.remove();
             skipButton2.remove();
         }
-
-        game.batch.end();
         stage.act();
         stage.draw();
 
