@@ -30,7 +30,7 @@ public class Bird extends Sprite {
     protected boolean isSelected = false;
     protected boolean isShot = false;
     protected Vector2 originalPosition;
-    protected static final float MAX_DRAG_DISTANCE = 100f;
+    protected static final float MAX_DRAG_DISTANCE = 100f * PPM;
     protected static final float SHOOT_POWER_MULTIPLIER = 2.0f;
 
 
@@ -93,16 +93,17 @@ public class Bird extends Sprite {
             float distance = new Vector2(x, y).sub(originalPosition).len();
             System.out.println("DEBUGGING: 100f and " + distance);
 
-            if (distance <= MAX_DRAG_DISTANCE) {
-                body.setTransform(x / PPM, y / PPM, 0);
+            if (distance <= AngryBirds.V_WIDTH*0.3f) {
+                body.setTransform(x, y, 0);
                 System.out.println("DEBUGGING: Bird is dragged to position (if): " + x + ", " + y);
-            } else {
-                System.out.println("DEBUGGING: Bird is dragged to position: " + x + ", " + y);
-                Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
-                Vector2 newPosition = direction.scl(MAX_DRAG_DISTANCE).add(originalPosition);
-                System.out.println("DEBUGGING (Actually): Bird is dragged to position: " + newPosition);
-                body.setTransform(newPosition.scl(1/PPM), 0);
-            }
+            } //else {
+                //System.out.println("DEBUGGING: Bird is dragged to position: " + x + ", " + y);
+                //Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
+                //Vector2 newPosition = direction.scl(MAX_DRAG_DISTANCE).add(originalPosition);
+                //System.out.println("DEBUGGING (Actually): Bird is dragged to position: " + newPosition);
+                //body.setTransform(newPosition, 0);
+                //body.setTransform(x, y, 0);
+            //}
 
             body.setLinearVelocity(0, 0);
         }
