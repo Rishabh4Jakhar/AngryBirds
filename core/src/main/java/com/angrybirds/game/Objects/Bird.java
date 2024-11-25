@@ -1,5 +1,6 @@
 package com.angrybirds.game.Objects;
 
+import com.angrybirds.game.AngryBirds;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -128,7 +129,7 @@ public class Bird extends Sprite {
     }
 
     private boolean isOutOfBounds() {
-        return body.getPosition().x < 0 || body.getPosition().x * PPM > 800 || body.getPosition().y < 0 || body.getPosition().y * PPM > 480;
+        return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
     }
 
     private boolean isStopped() {
