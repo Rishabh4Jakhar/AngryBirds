@@ -93,7 +93,7 @@ public class Bird extends Sprite {
             float distance = new Vector2(x, y).sub(originalPosition).len();
             System.out.println("DEBUGGING: 100f and " + distance);
 
-            if (distance <= AngryBirds.V_WIDTH*0.3f) {
+            if (distance <= AngryBirds.V_WIDTH*0.27f) {
                 body.setTransform(x, y, 0);
                 System.out.println("DEBUGGING: Bird is dragged to position (if): " + x + ", " + y);
             } //else {
