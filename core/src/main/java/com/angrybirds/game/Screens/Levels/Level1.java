@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Level1 extends Level {
     private Stage stage;
@@ -218,6 +219,8 @@ public class Level1 extends Level {
         redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
         pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
         pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.4f);
+        this.pigBodies.add(pig1);
+        this.pigBodies.add(pig2);
         currentBird = redBird1;
         cubes = new ArrayList<Cube>();
         for (int i = 0; i < 2; i++) {
@@ -374,9 +377,17 @@ public class Level1 extends Level {
 
 
         // TESTING MIGHT BREAK
-        currentBird.update();
-        pig1.update();
-        pig2.update();
+        currentBird.update(delta);
+        Iterator<Pig> pigIterator = pigBodies.iterator();
+        while (pigIterator.hasNext()) {
+            Pig pig = pigIterator.next();
+            if (pig.getBody() == null) {
+                pigIterator.remove();
+                System.out.println("Pig removed");
+            } else {
+                pig.update(delta);
+            }
+        }
 
         game.batch.begin();
 
@@ -408,9 +419,20 @@ public class Level1 extends Level {
         //pig1.setSize(60, 60);
         //pig1.setOrigin(pig1.getWidth() / 2, pig1.getHeight() / 2);
         //pig2.setSize(60, 60);
-        pig1.draw(game.batch);
-        pig2.draw(game.batch);
         //redBird1.draw(game.batch);
+
+
+        //for (Pig pig : pigBodies) {
+        //    System.out.println("Pig Position: " + pig.getBody().getPosition());
+        //    pig.render(game.batch);
+        //}
+        if (pig1.getBody()!=null) {
+            pig1.render(game.batch);
+        }
+        if (pig2.getBody()!=null) {
+            pig2.render(game.batch);
+        }
+
         currentBird.draw(game.batch);
         redBird2.draw(game.batch);
         slingshot.draw(game.batch);

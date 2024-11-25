@@ -32,6 +32,9 @@ public class Bird extends Sprite {
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f * PPM;
     protected static final float SHOOT_POWER_MULTIPLIER = 1f;
+    private float rollingTime = 0; // Tracks how long the body has been rolling
+    private static final float ROLLING_THRESHOLD = 0.8f; // Velocity below which it's considered rolling (adjust as needed)
+    private static final float MAX_ROLLING_TIME = 2.0f;  // Maximum time allowed for rolling in seconds
 
 
     public Bird(Texture birdSheet, int x, int y, int width, int height) {
@@ -75,8 +78,22 @@ public class Bird extends Sprite {
         body.setUserData(this);
     }
 
-    public void update() {
+    public void update(float delta) {
         if (body!=null) {
+            Vector2 velocity = body.getLinearVelocity();
+
+            // Check if the body is rolling
+            if (velocity.len() < ROLLING_THRESHOLD && velocity.len() > 0.1) {
+                rollingTime += delta;
+                if (rollingTime >= MAX_ROLLING_TIME) {
+                    // Reset or "kill" the object
+                    reset();
+                    System.out.println("Resetting due to rolling too long!");
+                }
+            } else {
+                // Reset the rolling timer if velocity exceeds the threshold
+                rollingTime = 0;
+            }
             Vector2 position = body.getPosition();
             setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
             setRotation((float) Math.toDegrees(body.getAngle()));
@@ -143,6 +160,7 @@ public class Bird extends Sprite {
         body.setType(BodyDef.BodyType.KinematicBody);
         isShot = false;
         isSelected = false;
+        rollingTime = 0;
     }
 
     private boolean isOutOfBounds() {

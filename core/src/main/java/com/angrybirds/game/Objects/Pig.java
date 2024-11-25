@@ -3,6 +3,7 @@ package com.angrybirds.game.Objects;
 import com.angrybirds.game.AngryBirds;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -26,6 +27,11 @@ public class Pig extends Sprite implements Serializable {
 
     // Original position of the pig
     protected Vector2 originalPosition;
+
+    private float rollingTime = 0; // Tracks how long the body has been rolling
+    private static final float ROLLING_THRESHOLD = 1f; // Velocity below which it's considered rolling (adjust as needed)
+    private static final float MAX_ROLLING_TIME = 0.5f;  // Maximum time allowed for rolling in seconds
+    private World world;
 
     public Pig(Texture pigSheet, int x, int y, int width, int height) {
         super(new TextureRegion(pigSheet, x, y, width, height));
@@ -51,6 +57,7 @@ public class Pig extends Sprite implements Serializable {
 
         // Create body in world
         body = world.createBody(bodyDef);
+        this.world = world;
 
         // Create shape
         CircleShape shape = new CircleShape();
@@ -70,8 +77,24 @@ public class Pig extends Sprite implements Serializable {
         body.setUserData(this);
     }
 
-    public void update() {
+    public void update(float delta) {
         if (body!=null) {
+            Vector2 velocity = body.getLinearVelocity();
+
+            // Check if the body is rolling
+            if (velocity.len() < ROLLING_THRESHOLD && velocity.len() > 0.1) {
+                rollingTime += delta;
+                if (rollingTime >= MAX_ROLLING_TIME) {
+                    // Reset or "kill" the object
+                    die();
+                    System.out.println("Resetting due to rolling too long!");
+                    return;
+                }
+            } else {
+                // Reset the rolling timer if velocity exceeds the threshold
+                rollingTime = 0;
+            }
+
             Vector2 position = body.getPosition();
             //setPosition(position.x * PPM - 30, position.y * PPM - 30);
             setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
@@ -82,6 +105,17 @@ public class Pig extends Sprite implements Serializable {
         }
     }
 
+    private void die() {
+        if (body != null) {
+            world.destroyBody(body); // Remove the body from the physics world
+            body = null;
+            rollingTime = 0; // Reset the rolling timer
+            System.out.println("Pig has been killed!");
+        }
+    }
+    public void render(SpriteBatch batch) {
+        this.draw(batch); // Use the sprite's updated position and rotation
+    }
     private boolean isOutOfBounds() {
         return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
     }

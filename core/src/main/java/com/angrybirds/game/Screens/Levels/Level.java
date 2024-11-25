@@ -1,6 +1,9 @@
 package com.angrybirds.game.Screens.Levels;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Objects.Bird;
+import com.angrybirds.game.Objects.Materials.Material;
+import com.angrybirds.game.Objects.Pig;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,9 +37,9 @@ public abstract class Level implements Screen {
     // Box 2d variables
     protected World world;
     protected Box2DDebugRenderer b2dr;
-    protected ArrayList<Body> birdBodies;
-    protected ArrayList<Body> pigBodies;
-    protected ArrayList<Body> blockBodies;
+    protected ArrayList<Bird> birdBodies;
+    protected ArrayList<Pig> pigBodies;
+    protected ArrayList<Material> blockBodies;
     protected final float PPM = 100;
 
     public Level(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
