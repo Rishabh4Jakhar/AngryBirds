@@ -18,7 +18,7 @@ public class Bird extends Sprite {
     protected Body body;
 
     // Physics variables
-    protected static final float PPM = 100f;
+    protected static final float PPM = 100.0f;
     protected static final float BIRD_DENSITY = 1.0f;
     protected static final float BIRD_FRICTION = 0.3f;
     protected static final float BIRD_RESTITUTION = 0.5f;
@@ -77,7 +77,8 @@ public class Bird extends Sprite {
     public void update() {
         if (body!=null) {
             Vector2 position = body.getPosition();
-            setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
+            // Ensure that the position is scaled to match the world coordinates
+            setPosition(body.getPosition().x * PPM - textureWidth / 2, body.getPosition().y * PPM - textureHeight / 2);
             //System.out.println("Bird position: " + position);
             setRotation((float) Math.toDegrees(body.getAngle()));
 
@@ -96,7 +97,7 @@ public class Bird extends Sprite {
             } else {
                 Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
                 Vector2 newPosition = direction.scl(MAX_DRAG_DISTANCE).add(originalPosition);
-                body.setTransform(newPosition, 0);
+                body.setTransform(newPosition.x / PPM, newPosition.y / PPM, 0);
             }
             body.setLinearVelocity(0, 0);
         }

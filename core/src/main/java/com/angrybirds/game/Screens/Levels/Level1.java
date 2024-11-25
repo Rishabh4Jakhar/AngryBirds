@@ -60,7 +60,7 @@ public class Level1 extends Level {
     // Constants
     private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 0.17f; // 20% from left
     private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 0.3f; // 25% from bottom
-
+    public static final float PPM = 100.0f;
 
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
@@ -226,15 +226,16 @@ public class Level1 extends Level {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY).scl(1/PPM));
                 //Vector2 slingshotPosition = new Vector2(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM); // Convert to meters
+                System.out.println("Touch Down at: " + touchPoint); // Debug print
 
                 if (currentBird != null && !currentBird.isShot() &&
-                    touchPoint.dst(currentBird.getOriginalPosition()) < 20f) {
+                    touchPoint.dst(currentBird.getOriginalPosition()) < 30f) {
                     System.out.println("Touch down");
                     System.out.println("Touch Point (Meters): " + touchPoint);
                     System.out.println("Bird Position (Meters): " + currentBird.getBody().getPosition());
 
                     currentBird.setSelected(true);
-                    dragStart = touchPoint.scl(1/PPM);
+                    dragStart = touchPoint;
                 }
                 return true;
             }
@@ -244,6 +245,7 @@ public class Level1 extends Level {
                 if (currentBird != null && currentBird.isSelected()) {
                     System.out.println("Dragging");
                     Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY).scl(1/PPM));
+                    System.out.println("Dragging at: " + touchPoint); // Debug print
                     currentBird.dragTo(touchPoint.x, touchPoint.y);
                 }
                 return true;
@@ -374,7 +376,7 @@ public class Level1 extends Level {
         // Convert slingshot position to meters
         float slingshotX = SLINGSHOT_X / PPM;
         float slingshotY = SLINGSHOT_Y / PPM;
-        float maxDragRadius = 20f; // In meters (adjust as needed)
+        float maxDragRadius = 30f; // In meters (adjust as needed)
 
         // Draw circle for draggable area
         shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
@@ -414,11 +416,13 @@ public class Level1 extends Level {
         b2dr.render(world, b2dCam.combined);
 
         // Debug info
+        /*
         if (Gdx.input.isTouched()) {
             Vector3 touchPoint = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             b2dCam.unproject(touchPoint);
             System.out.println("Touch position: " + touchPoint.x + ", " + touchPoint.y);
         }
+        */
     }
 
     @Override
