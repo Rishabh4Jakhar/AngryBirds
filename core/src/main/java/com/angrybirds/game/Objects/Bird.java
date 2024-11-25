@@ -18,11 +18,11 @@ public class Bird extends Sprite {
     protected Body body;
 
     // Physics variables
-    protected static final float PPM = 100.0f;
+    protected static final float PPM = 100f;
     protected static final float BIRD_DENSITY = 1.0f;
     protected static final float BIRD_FRICTION = 0.3f;
     protected static final float BIRD_RESTITUTION = 0.5f;
-    protected static final float BIRD_RADIUS = 18f / PPM;
+    protected static final float BIRD_RADIUS = 15f / PPM;
 
 
     // Shooting variables
@@ -30,7 +30,7 @@ public class Bird extends Sprite {
     protected boolean isShot = false;
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f;
-    protected static final float SHOOT_POWER_MULTIPLIER = 2f;
+    protected static final float SHOOT_POWER_MULTIPLIER = 2.5f;
 
 
     public Bird(Texture birdSheet, int x, int y, int width, int height) {
@@ -77,9 +77,7 @@ public class Bird extends Sprite {
     public void update() {
         if (body!=null) {
             Vector2 position = body.getPosition();
-            // Ensure that the position is scaled to match the world coordinates
-            setPosition(body.getPosition().x * PPM - textureWidth / 2, body.getPosition().y * PPM - textureHeight / 2);
-            //System.out.println("Bird position: " + position);
+            setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
             setRotation((float) Math.toDegrees(body.getAngle()));
 
             if (isShot && (isOutOfBounds() || isStopped())) {
@@ -97,7 +95,7 @@ public class Bird extends Sprite {
             } else {
                 Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
                 Vector2 newPosition = direction.scl(MAX_DRAG_DISTANCE).add(originalPosition);
-                body.setTransform(newPosition.x / PPM, newPosition.y / PPM, 0);
+                body.setTransform(newPosition, 0);
             }
             body.setLinearVelocity(0, 0);
         }
@@ -113,7 +111,7 @@ public class Bird extends Sprite {
             //velocity.scl(SHOOT_POWER_MULTIPLIER);
             //body.setLinearVelocity(velocity);
             body.setLinearVelocity(0, 0);
-            body.applyLinearImpulse(force, body.getWorldCenter(), true);
+            body.applyLinearImpulse(force.x/PPM, force.y/PPM, body.getWorldCenter().x, body.getWorldCenter().y, true);
             isShot = true;
         }
     }
@@ -122,7 +120,6 @@ public class Bird extends Sprite {
         if (body == null) {
             return;
         }
-        System.out.println("Resetting bird to position: " + originalPosition);
         body.setTransform(originalPosition, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
