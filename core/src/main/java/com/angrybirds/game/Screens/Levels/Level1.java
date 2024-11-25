@@ -57,8 +57,8 @@ public class Level1 extends Level {
     private ShapeRenderer shapeRenderer;
 
     // Constants
-    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 0.2f; // 20% from left
-    private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 0.3f; // 25% from bottom
+    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 16f; // 20% from left
+    private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 26f; // 25% from bottom
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -220,7 +220,7 @@ public class Level1 extends Level {
                                         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                                             Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                                             System.out.println("Touch Down at: " + touchPoint); // Debug print
-                                            float dragAreaRadius = 30f;
+                                            float dragAreaRadius = 50f;
                                             if (currentBird != null && !currentBird.isShot() &&
                                                 touchPoint.dst(new Vector2(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM )) < dragAreaRadius) {
                                                 currentBird.setSelected(true);
@@ -362,7 +362,7 @@ public class Level1 extends Level {
         // Convert slingshot position to meters
         float slingshotX = SLINGSHOT_X / PPM;
         float slingshotY = SLINGSHOT_Y / PPM;
-        float maxDragRadius = 0.3f; // In meters (adjust as needed)
+        float maxDragRadius = 50f; // In meters (adjust as needed)
 
         // Draw circle for draggable area
         shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
