@@ -71,7 +71,7 @@ public class Bird extends Sprite {
         shape.dispose();
 
         originalPosition = new Vector2(v, v1);
-
+        body.setType(BodyDef.BodyType.KinematicBody);
         body.setUserData(this);
     }
 
@@ -92,6 +92,9 @@ public class Bird extends Sprite {
         if (!isShot && isSelected) {
             float distance = new Vector2(x, y).sub(originalPosition).len();
             System.out.println("DEBUGGING: 100f and " + distance);
+            if (body.getType() != BodyDef.BodyType.KinematicBody) {
+                body.setType(BodyDef.BodyType.KinematicBody);
+            }
 
             if (distance <= AngryBirds.V_WIDTH*0.27f) {
                 body.setTransform(x, y, 0);
@@ -109,21 +112,25 @@ public class Bird extends Sprite {
         }
     }
 
-    public void shoot(Vector2 dragVector) {
-        if (!isShot && isSelected) {
-            isSelected = false;
-
-            // Calculate velocity
-            Vector2 force = dragVector.scl(SHOOT_POWER_MULTIPLIER/PPM);
-            //Vector2 velocity = new Vector2(originalPosition.x - body.getPosition().x, originalPosition.y - body.getPosition().y);
-            //velocity.scl(SHOOT_POWER_MULTIPLIER);
-            //body.setLinearVelocity(velocity);
-            body.setLinearVelocity(0, 0);
-            body.applyLinearImpulse(force.x/PPM, force.y/PPM, body.getWorldCenter().x, body.getWorldCenter().y, true);
-            isShot = true;
-            System.out.println("DEBUGGING: Bird is shot" + force);
+        public void shoot(Vector2 dragVector) {
+            if (!isShot && isSelected) {
+                isSelected = false;
+                body.setType(BodyDef.BodyType.DynamicBody);
+                // Calculate velocity
+                Vector2 force = dragVector.scl((SHOOT_POWER_MULTIPLIER-0.2f)/PPM);
+                // Add max limit to force to prevent bird over speeding
+                if (force.x > 0.95f || force.y > 0.95f) {
+                    force = force.scl(0.6f);
+                }
+                //Vector2 velocity = new Vector2(originalPosition.x - body.getPosition().x, originalPosition.y - body.getPosition().y);
+                //velocity.scl(SHOOT_POWER_MULTIPLIER);
+                //body.setLinearVelocity(velocity);
+                body.setLinearVelocity(0, 0);
+                body.applyLinearImpulse(force, body.getWorldCenter(), true);
+                isShot = true;
+                System.out.println("DEBUGGING: Bird is shot" + force);
+            }
         }
-    }
 
     public void reset() {
         if (body == null) {
@@ -133,6 +140,7 @@ public class Bird extends Sprite {
         body.setTransform(originalPosition.x / PPM, originalPosition.y / PPM, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
+        body.setType(BodyDef.BodyType.KinematicBody);
         isShot = false;
         isSelected = false;
     }
@@ -151,6 +159,10 @@ public class Bird extends Sprite {
 
     public int getHealth() {
         return health;
+    }
+
+    public static float getBirdDensity() {
+        return BIRD_DENSITY;
     }
 
     public void setName(String name) {

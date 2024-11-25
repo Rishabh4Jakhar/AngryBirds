@@ -57,8 +57,8 @@ public class Level1 extends Level {
     private ShapeRenderer shapeRenderer;
 
     // Constants
-    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 16f; // 20% from left
-    private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 26f; // 25% from bottom
+    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 15.5f; // 20% from left
+    private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 27f; // 25% from bottom
 
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
@@ -220,7 +220,7 @@ public class Level1 extends Level {
                                         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                                             Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                                             System.out.println("Touch Down at: " + touchPoint); // Debug print
-                                            float dragAreaRadius = 50f;
+                                            float dragAreaRadius = 20f;
                                             if (currentBird != null && !currentBird.isShot() &&
                                                 touchPoint.dst(new Vector2(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM )) < dragAreaRadius) {
                                                 currentBird.setSelected(true);
@@ -232,7 +232,24 @@ public class Level1 extends Level {
                                         @Override
                                         public boolean touchDragged(int screenX, int screenY, int pointer) {
                                             if (currentBird != null && currentBird.isSelected()) {
+                                                //System.out.println("Dragging Bird " + dragStart.x + ", " + dragStart.y);
                                                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY)).scl(1/PPM);
+                                                // Limit drag distance
+                                                // Optionally add a check to see if the bird is being dragged in the right direction
+                                                // If bird is dragged beyond a certain distance, set it to the max distance
+                                                float distance = touchPoint.dst(dragStart)/PPM;
+                                                System.out.println("Distance: " + distance);
+                                                float maxDrag = 2.5f;
+                                                if (distance > maxDrag) {
+                                                    System.out.println("Dragging beyond max distance " + distance);
+                                                    Vector2 direction = touchPoint.sub(dragStart).nor();
+                                                    //touchPoint = gamePort.unproject(new Vector2(screenX, screenY)).scl(1/PPM).add(direction);
+                                                    touchPoint = new Vector2(dragStart).add(direction.scl(maxDrag)).scl(1/PPM);
+                                                    //touchPoint = touchPoint.scl(1/PPM);
+                                                    System.out.println("Current Distance: " + distance);
+                                                    System.out.println("Clamped Position: " + touchPoint);
+                                                }
+                                                // Right direction check
                                                 currentBird.dragTo(touchPoint.x, touchPoint.y);
                                                 System.out.println("Dragging Bird to: " + touchPoint);
                                             }
@@ -297,7 +314,37 @@ public class Level1 extends Level {
         stage.addActor(redButton);
     }
     */
+    private void renderTrajectory(Vector2 startPosition, Vector2 dragVector) {
+        float timeStep = 0.1f; // Time step for simulation (seconds)
+        int maxSteps = 30;     // Number of dots to draw
 
+        // Adjust the drag vector to match the scaled force applied during shoot
+        Vector2 force = dragVector.scl((2.0f - 0.2f) / PPM);
+
+        // Apply max limit to force as per shoot logic
+        if (force.x > 0.95f || force.y > 0.95f) {
+            force = force.scl(0.6f);
+        }
+
+        // Initial velocity based on force
+        Vector2 velocity = new Vector2(force).scl(1 / Bird.getBirdDensity()); // Adjust based on mass/density
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.WHITE);
+
+        Vector2 currentPosition = new Vector2(startPosition);
+
+        for (int i = 0; i < maxSteps; i++) {
+            // Draw a dot at the current position
+            shapeRenderer.circle(currentPosition.x * PPM, currentPosition.y * PPM, 2); // Convert to pixels
+
+            // Update position using basic physics
+            currentPosition.add(velocity.x * timeStep, velocity.y * timeStep);
+            velocity.add(0, -9.8f * timeStep); // Apply gravity (adjust if world gravity is different)
+        }
+
+        shapeRenderer.end();
+    }
 
     @Override
     public void render(float delta) {
@@ -355,7 +402,12 @@ public class Level1 extends Level {
         redBird2.draw(game.batch);
         slingshot.draw(game.batch);
         game.batch.end();
-
+        /*
+        if (currentBird != null && currentBird.isSelected()) {
+            Vector2 startPosition = currentBird.getBody().getPosition(); // Bird's current position in world units
+            renderTrajectory(startPosition, dragStart.sub(startPosition)); // Drag vector
+        }
+        */
         // Draw draggable area outline
         shapeRenderer.setProjectionMatrix(gameCam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -364,7 +416,7 @@ public class Level1 extends Level {
         // Convert slingshot position to meters
         float slingshotX = SLINGSHOT_X / PPM;
         float slingshotY = SLINGSHOT_Y / PPM;
-        float maxDragRadius = 50f; // In meters (adjust as needed)
+        float maxDragRadius = 20f; // In meters (adjust as needed)
 
         // Draw circle for draggable area
         shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
