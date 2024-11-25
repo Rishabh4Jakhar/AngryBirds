@@ -407,8 +407,6 @@ public class Level1 extends Level {
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.13f, AngryBirds.V_HEIGHT * 0.139f);
         pig1.setSize(60, 60);
         pig2.setSize(60, 60);
-        pig1.setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.3f);
-        pig2.setPosition(AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.38f);
         pig1.draw(game.batch);
         pig2.draw(game.batch);
         //redBird1.draw(game.batch);

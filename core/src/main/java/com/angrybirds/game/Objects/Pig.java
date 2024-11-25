@@ -66,6 +66,7 @@ public class Pig extends Sprite implements Serializable {
         if (body!=null) {
             Vector2 position = body.getPosition();
             setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
+            setRotation((float) Math.toDegrees(body.getAngle()));
             if (isOutOfBounds()) {
                 health = 0;
             }
