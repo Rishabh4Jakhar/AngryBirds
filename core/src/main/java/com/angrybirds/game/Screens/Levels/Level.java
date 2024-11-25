@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -106,6 +104,46 @@ public abstract class Level implements Screen {
     public void setInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
+
+    private void setupContactListener() {
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                // Handle initial contact logic (e.g., HP reduction)
+                Object userDataA = contact.getFixtureA().getBody().getUserData();
+                Object userDataB = contact.getFixtureB().getBody().getUserData();
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+                // Handle logic when contact ends (if needed)
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+                // Optional: modify collision properties before solving
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+                // Get the colliding bodies
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
+
+                // Change velocity based on impulse
+                Vector2 velocityA = bodyA.getLinearVelocity();
+                Vector2 velocityB = bodyB.getLinearVelocity();
+
+                // Calculate new velocities by inverting direction based on impulse magnitude
+                float totalImpulse = impulse.getNormalImpulses()[0];
+                if (totalImpulse > 0.1f) { // Threshold to avoid very small changes
+                    bodyA.setLinearVelocity(velocityA.scl(-1)); // Reverse direction
+                    bodyB.setLinearVelocity(velocityB.scl(-1)); // Reverse direction
+                }
+            }
+        });
+    }
+
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);

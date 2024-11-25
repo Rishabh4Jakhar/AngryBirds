@@ -21,7 +21,7 @@ public class Bird extends Sprite {
     // Physics variables
     protected static final float PPM = 100f;
     protected static final float BIRD_DENSITY = 1.0f;
-    protected static final float BIRD_FRICTION = 0.3f;
+    protected static final float BIRD_FRICTION = 0.1f;
     protected static final float BIRD_RESTITUTION = 0.5f;
     protected static final float BIRD_RADIUS = 20f / PPM;
 

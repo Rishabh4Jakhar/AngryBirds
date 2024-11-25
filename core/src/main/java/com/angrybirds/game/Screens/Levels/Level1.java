@@ -50,11 +50,15 @@ public class Level1 extends Level {
     private Label pauseLabel, levelClearedLabel, levelFailedLabel;
     private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
 
-    // Box 2d
+    // For loop to create 5 cube objects
+
+   //Box2D
     private Bird currentBird;
     private Vector2 dragStart, dragEnd;
     private OrthographicCamera b2dCam;
     private ShapeRenderer shapeRenderer;
+    private ArrayList<Cube> cubes;
+    private Triangle wood_triangle;
 
     // Constants
     private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 15.5f; // 20% from left
@@ -212,7 +216,20 @@ public class Level1 extends Level {
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
         redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
+        pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
+        pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.42f);
         currentBird = redBird1;
+        cubes = new ArrayList<Cube>();
+        for (int i = 0; i < 2; i++) {
+            Cube cube = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
+            cube.createBody(world, AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f + (i * 0.081f * AngryBirds.V_HEIGHT), 57, 57, false);
+            cubes.add(cube);
+        }
+        for (int i = 2; i < 5; i++) {
+            Cube cube = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
+            cube.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f + ((i - 2) * 0.081f * AngryBirds.V_HEIGHT), 57, 57, false);
+            cubes.add(cube);
+        }
 
         // Input processor
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -358,26 +375,24 @@ public class Level1 extends Level {
 
         // TESTING MIGHT BREAK
         currentBird.update();
+        pig1.update();
+        pig2.update();
 
         game.batch.begin();
-        ArrayList<Cube> cubes = new ArrayList<Cube>();
-        // For loop to create 5 cube objects
-        for (int i = 0; i < 5; i++) {
-            Cube cube = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
-            cube.setSize(60, 60);
-            cubes.add(cube);
-        }
-        Triangle wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
+
+        wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
 
         // Level Designing
         for (int i = 0; i < 2; i++) {
+            cubes.get(i).setSize(60,60);
             cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.65f, AngryBirds.V_HEIGHT * 0.139f + (i * 0.081f * AngryBirds.V_HEIGHT));
             cubes.get(i).draw(game.batch);
         }
         for (int i = 2; i < 5; i++) {
+            cubes.get(i).setSize(60,60);
             cubes.get(i).setPosition(AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f + ((i - 2) * 0.081f * AngryBirds.V_HEIGHT));
             cubes.get(i).draw(game.batch);
         }
@@ -398,7 +413,6 @@ public class Level1 extends Level {
         pig2.draw(game.batch);
         //redBird1.draw(game.batch);
         currentBird.draw(game.batch);
-
         redBird2.draw(game.batch);
         slingshot.draw(game.batch);
         game.batch.end();
