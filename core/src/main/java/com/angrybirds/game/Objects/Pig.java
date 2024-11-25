@@ -16,16 +16,24 @@ public class Pig extends Sprite implements Serializable {
     protected int health = 100;
     protected int textureWidth;
     protected int textureHeight;
+
+    // Physics constants
     protected static final float PPM = 100f;
     protected static final float PIG_DENSITY = 1.0f;
     protected static final float PIG_FRICTION = 0.3f;
     protected static final float PIG_RESTITUTION = 0.5f;
     protected static final float PIG_RADIUS = 28f / PPM;
+
+    // Original position of the pig
     protected Vector2 originalPosition;
 
     public Pig(Texture pigSheet, int x, int y, int width, int height) {
         super(new TextureRegion(pigSheet, x, y, width, height));
+        this.textureWidth = width;
+        this.textureHeight = height;
         originalPosition = new Vector2(x, y);
+        setSize(60, 60);
+        setOrigin(getWidth() / 2, getHeight() / 2);
     }
     public void setBody(Body body) {
         this.body = body;
@@ -39,7 +47,7 @@ public class Pig extends Sprite implements Serializable {
         // Create body definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(v / PPM, v1 / PPM);
+        bodyDef.position.set(v / PPM, (v1 + 100) / PPM);
 
         // Create body in world
         body = world.createBody(bodyDef);
@@ -65,7 +73,8 @@ public class Pig extends Sprite implements Serializable {
     public void update() {
         if (body!=null) {
             Vector2 position = body.getPosition();
-            setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
+            //setPosition(position.x * PPM - 30, position.y * PPM - 30);
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
             setRotation((float) Math.toDegrees(body.getAngle()));
             if (isOutOfBounds()) {
                 health = 0;

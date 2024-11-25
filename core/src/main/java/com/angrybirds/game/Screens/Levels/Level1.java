@@ -217,7 +217,7 @@ public class Level1 extends Level {
         // Create birds
         redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
         pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
-        pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.42f);
+        pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.4f);
         currentBird = redBird1;
         cubes = new ArrayList<Cube>();
         for (int i = 0; i < 2; i++) {
@@ -405,8 +405,9 @@ public class Level1 extends Level {
         //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
         redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.13f, AngryBirds.V_HEIGHT * 0.139f);
-        pig1.setSize(60, 60);
-        pig2.setSize(60, 60);
+        //pig1.setSize(60, 60);
+        //pig1.setOrigin(pig1.getWidth() / 2, pig1.getHeight() / 2);
+        //pig2.setSize(60, 60);
         pig1.draw(game.batch);
         pig2.draw(game.batch);
         //redBird1.draw(game.batch);
