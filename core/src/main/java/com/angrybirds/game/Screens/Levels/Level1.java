@@ -211,7 +211,7 @@ public class Level1 extends Level {
         // Now create bodies for the objects (birds, pigs, structures here)
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
-        redBird1.createBody(world, 0.13f, 0.139f);
+        redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
         currentBird = redBird1;
 
         // Input processor
@@ -232,8 +232,9 @@ public class Level1 extends Level {
                                         @Override
                                         public boolean touchDragged(int screenX, int screenY, int pointer) {
                                             if (currentBird != null && currentBird.isSelected()) {
-                                                Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
+                                                Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY)).scl(1/PPM);
                                                 currentBird.dragTo(touchPoint.x, touchPoint.y);
+                                                System.out.println("Dragging Bird to: " + touchPoint);
                                             }
                                             return true;
                                         }
@@ -242,8 +243,9 @@ public class Level1 extends Level {
                                         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                                             if (currentBird != null && currentBird.isSelected()) {
                                                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
-                                                Vector2 dragVector = touchPoint.sub(dragStart);
+                                                Vector2 dragVector = dragStart.sub(touchPoint);
                                                 currentBird.shoot(dragVector);
+                                                System.out.println("Shooting Bird with vector: " + dragVector);
                                                 // Optionally prepare next bird
                                                 // prepareNextBird();
                                             }

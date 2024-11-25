@@ -23,7 +23,7 @@ public class Bird extends Sprite {
     protected static final float BIRD_DENSITY = 1.0f;
     protected static final float BIRD_FRICTION = 0.3f;
     protected static final float BIRD_RESTITUTION = 0.5f;
-    protected static final float BIRD_RADIUS = 15f / PPM;
+    protected static final float BIRD_RADIUS = 20f / PPM;
 
 
     // Shooting variables
@@ -31,7 +31,7 @@ public class Bird extends Sprite {
     protected boolean isShot = false;
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f;
-    protected static final float SHOOT_POWER_MULTIPLIER = 2.5f;
+    protected static final float SHOOT_POWER_MULTIPLIER = 2.0f;
 
 
     public Bird(Texture birdSheet, int x, int y, int width, int height) {
@@ -52,7 +52,7 @@ public class Bird extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(v / PPM, v1 / PPM);
-
+        //originalPosition = new Vector2(v / PPM, v1 / PPM);
         // Create body in world
         body = world.createBody(bodyDef);
 
@@ -91,13 +91,19 @@ public class Bird extends Sprite {
     public void dragTo(float x, float y) {
         if (!isShot && isSelected) {
             float distance = new Vector2(x, y).sub(originalPosition).len();
+            System.out.println("DEBUGGING: 100f and " + distance);
+
             if (distance <= MAX_DRAG_DISTANCE) {
                 body.setTransform(x / PPM, y / PPM, 0);
+                System.out.println("DEBUGGING: Bird is dragged to position (if): " + x + ", " + y);
             } else {
+                System.out.println("DEBUGGING: Bird is dragged to position: " + x + ", " + y);
                 Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
                 Vector2 newPosition = direction.scl(MAX_DRAG_DISTANCE).add(originalPosition);
-                body.setTransform(newPosition, 0);
+                System.out.println("DEBUGGING (Actually): Bird is dragged to position: " + newPosition);
+                body.setTransform(newPosition.scl(1/PPM), 0);
             }
+
             body.setLinearVelocity(0, 0);
         }
     }
@@ -107,13 +113,14 @@ public class Bird extends Sprite {
             isSelected = false;
 
             // Calculate velocity
-            Vector2 force = dragVector.scl(SHOOT_POWER_MULTIPLIER);
+            Vector2 force = dragVector.scl(SHOOT_POWER_MULTIPLIER/PPM);
             //Vector2 velocity = new Vector2(originalPosition.x - body.getPosition().x, originalPosition.y - body.getPosition().y);
             //velocity.scl(SHOOT_POWER_MULTIPLIER);
             //body.setLinearVelocity(velocity);
             body.setLinearVelocity(0, 0);
             body.applyLinearImpulse(force.x/PPM, force.y/PPM, body.getWorldCenter().x, body.getWorldCenter().y, true);
             isShot = true;
+            System.out.println("DEBUGGING: Bird is shot" + force);
         }
     }
 
@@ -121,7 +128,8 @@ public class Bird extends Sprite {
         if (body == null) {
             return;
         }
-        body.setTransform(originalPosition, 0);
+        System.out.println("DEBUGGING: Bird is reset to position: " + originalPosition);
+        body.setTransform(originalPosition.x / PPM, originalPosition.y / PPM, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
         isShot = false;
