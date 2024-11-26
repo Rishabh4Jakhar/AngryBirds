@@ -30,7 +30,7 @@ public class Pig extends Sprite implements Serializable {
 
     private float rollingTime = 0; // Tracks how long the body has been rolling
     private static final float ROLLING_THRESHOLD = 1f; // Velocity below which it's considered rolling (adjust as needed)
-    private static final float MAX_ROLLING_TIME = 0.5f;  // Maximum time allowed for rolling in seconds
+    private static final float MAX_ROLLING_TIME = 0.8f;  // Maximum time allowed for rolling in seconds
     private World world;
 
     public Pig(Texture pigSheet, int x, int y, int width, int height) {
