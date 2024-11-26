@@ -27,7 +27,7 @@ public class Pig extends Sprite implements Serializable {
     protected static final float PIG_FRICTION = 0.3f;
     protected static final float PIG_RESTITUTION = 0.5f;
     protected static final float PIG_RADIUS = 28f / PPM;
-
+    private static final float GROUND_Y = 0.0f;
     // Original position of the pig
     protected Vector2 originalPosition;
     private boolean grounded = false;
@@ -90,6 +90,9 @@ public class Pig extends Sprite implements Serializable {
 
         originalPosition = new Vector2(v, v1);
         body.setUserData(this);
+        if (Math.abs(v1 - GROUND_Y) < 1.0f) { // GROUND_Y is the ground level in world coordinates
+            setGrounded(true);
+        }
     }
 
     public void update(float delta, List<Body> bodiesToDestroy) {

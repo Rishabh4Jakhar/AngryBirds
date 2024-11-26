@@ -59,7 +59,7 @@ public class Level1 extends Level {
     private ShapeRenderer shapeRenderer;
     private ArrayList<Cube> cubes;
     private Triangle wood_triangle;
-
+    private Body ground;
     // Constants
     private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 15.5f; // 20% from left
     private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 27f; // 25% from bottom
@@ -197,19 +197,20 @@ public class Level1 extends Level {
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
-        Body body;
+        //Body ground;
 
         bdef.type = BodyDef.BodyType.StaticBody;
         bdef.position.set(0, 0);
-        body = world.createBody(bdef);
+        ground = world.createBody(bdef);
 
         shape.setAsBox(AngryBirds.V_WIDTH, 1);
         fdef.shape = shape;
-        body.createFixture(fdef);
+        ground.createFixture(fdef);
 
         shape.setAsBox(1, AngryBirds.V_HEIGHT);
         fdef.shape = shape;
-        body.createFixture(fdef);
+        ground.createFixture(fdef);
+        ground.setUserData("Ground");
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
@@ -224,7 +225,9 @@ public class Level1 extends Level {
             public void preSolve(Contact contact, Manifold oldManifold) {}
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+                handleCollisionGround(contact, impulse);
+            }
         });
 
 
@@ -318,7 +321,8 @@ public class Level1 extends Level {
     private void handleCollision(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-
+        Object dataA = fixtureA.getBody().getUserData();
+        Object dataB = fixtureB.getBody().getUserData();
         // Check if bird collides with a pig or block
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
             Pig pig = (Pig) fixtureB.getBody().getUserData();
@@ -335,7 +339,71 @@ public class Level1 extends Level {
             Material block = (Material) fixtureA.getBody().getUserData();
             block.takeDamage(world,30, bodiesToDestroy); // Adjust damage value
         }
+
     }
+
+    private void handleCollisionGround(Contact contact, ContactImpulse impulse) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+        Object dataA = fixtureA.getBody().getUserData();
+        Object dataB = fixtureB.getBody().getUserData();
+        if ("Ground".equals(dataA)) {
+            processGroundCollision(fixtureB.getBody(), impulse);
+        } else if ("Ground".equals(dataB)) {
+            processGroundCollision(fixtureA.getBody(), impulse);
+        }
+    }
+    private void processGroundCollision(Body body, ContactImpulse impulse) {
+        if (body.getUserData() instanceof Material) {
+            Material material = (Material) body.getUserData();
+            handleGroundCollision(material, impulse);
+        } else if (body.getUserData() instanceof Pig) {
+            Pig pig = (Pig) body.getUserData();
+            handleGroundCollision(pig, impulse);
+        }
+    }
+
+    private void handleGroundCollision(Material material, ContactImpulse impulse) {
+        if (material.isGrounded()) {
+            return; // Don't apply damage to blocks that started on the ground
+        }
+
+        // Calculate total impulse magnitude
+        float totalImpulse = 0;
+        for (float normalImpulse : impulse.getNormalImpulses()) {
+            totalImpulse += normalImpulse;
+        }
+
+        // Apply damage based on impulse strength
+        int damage = (int) (totalImpulse * DAMAGE_SCALING_FACTOR); // Adjust scaling factor as needed
+        if (damage > MINIMUM_DAMAGE_THRESHOLD) { // Ignore small impacts
+            material.takeDamage(world, damage, bodiesToDestroy);
+        }
+
+        // Mark the object as grounded after the first collision with the ground
+        material.setGrounded(true);
+    }
+    private void handleGroundCollision(Pig pig, ContactImpulse impulse) {
+        if (pig.isGrounded()) {
+            return; // Don't apply damage to blocks that started on the ground
+        }
+
+        // Calculate total impulse magnitude
+        float totalImpulse = 0;
+        for (float normalImpulse : impulse.getNormalImpulses()) {
+            totalImpulse += normalImpulse;
+        }
+
+        // Apply damage based on impulse strength
+        int damage = (int) (totalImpulse * DAMAGE_SCALING_FACTOR); // Adjust scaling factor as needed
+        if (damage > MINIMUM_DAMAGE_THRESHOLD) { // Ignore small impacts
+            pig.takeDamage(damage, bodiesToDestroy);
+        }
+
+        // Mark the object as grounded after the first collision with the ground
+        pig.setGrounded(true);
+    }
+
     /*
     Made for static GUI buttons
     private void addDummyButtons() {

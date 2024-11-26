@@ -16,7 +16,7 @@ public abstract class Material extends Sprite {
     protected World world;
     private boolean isDead = false;
     private boolean grounded = false;
-
+    protected static final float GROUND_Y = 0.0f;
 
     public Material(String type, int health, TextureRegion textureRegion) {
         super(textureRegion);

@@ -41,6 +41,8 @@ public abstract class Level implements Screen {
     protected ArrayList<Pig> pigBodies;
     protected ArrayList<Material> blockBodies;
     protected final float PPM = 100;
+    protected int DAMAGE_SCALING_FACTOR = 10;
+    protected int MINIMUM_DAMAGE_THRESHOLD = 5;
 
     public Level(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         this.game = game;

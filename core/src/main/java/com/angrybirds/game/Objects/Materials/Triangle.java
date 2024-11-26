@@ -57,6 +57,9 @@ public class Triangle extends Material {
         body.setUserData(this); // Link  this object to the body
         System.out.println("Creating body for: " + this.type);
         System.out.println("Body state in createBody: " + body);
+        if (Math.abs(y - GROUND_Y) < 1.0f) { // GROUND_Y is the ground level in world coordinates
+            setGrounded(true);
+        }
     }
 
     public void update() {
