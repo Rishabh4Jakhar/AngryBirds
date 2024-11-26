@@ -30,6 +30,7 @@ public class Pig extends Sprite implements Serializable {
 
     // Original position of the pig
     protected Vector2 originalPosition;
+    private boolean grounded = false;
 
     private float rollingTime = 0; // Tracks how long the body has been rolling
     private static final float ROLLING_THRESHOLD = 0.7f; // Velocity below which it's considered rolling (adjust as needed)
@@ -53,7 +54,12 @@ public class Pig extends Sprite implements Serializable {
     public void setBody(Body body) {
         this.body = body;
     }
-
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
+    }
+    public boolean isGrounded() {
+        return grounded;
+    }
     public Body getBody() {
         return body;
     }

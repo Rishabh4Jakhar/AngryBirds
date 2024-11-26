@@ -15,6 +15,8 @@ public abstract class Material extends Sprite {
     protected TextureRegion normalTexture, damagedTexture, criticalTexture;
     protected World world;
     private boolean isDead = false;
+    private boolean grounded = false;
+
 
     public Material(String type, int health, TextureRegion textureRegion) {
         super(textureRegion);
@@ -26,7 +28,12 @@ public abstract class Material extends Sprite {
     public String getType() {
         return type;
     }
-
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
+    }
+    public boolean isGrounded() {
+        return grounded;
+    }
     public int getHealth() {
         return health;
     }
