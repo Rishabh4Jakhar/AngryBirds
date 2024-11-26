@@ -588,8 +588,8 @@ public class Level1 extends Level {
             }
             if (pig.getBody() == null) {
                 // Remove the pig from the list if it has been destroyed
-                pigBodies.remove(pig);
-                //pigIterator.remove();
+                //pigBodies.remove(pig);
+                pigIterator.remove();
                 System.out.println("Pig removed");
             } else {
                 pig.update(delta, bodiesToDestroy);
