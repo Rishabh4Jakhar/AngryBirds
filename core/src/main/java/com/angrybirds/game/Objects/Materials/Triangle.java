@@ -53,7 +53,7 @@ public class Triangle extends Material {
         shape.dispose();
 
         originalPosition = new Vector2(x, y);
-        body.setUserData(this); // Link this object to the body
+        body.setUserData(this); // Link  this object to the body
     }
 
     public void update() {
