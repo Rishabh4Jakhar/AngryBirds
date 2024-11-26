@@ -3,13 +3,14 @@ package com.angrybirds.game.Objects.Materials;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class Triangle extends Material {
     private static final long serialVersionUID = 1L;
     protected Body body;
     protected int textureWidth;
     protected int textureHeight;
+    protected static final float PPM = 100f;
     private static final float MATERIAL_DENSITY = 1.0f;
     private static final float MATERIAL_FRICTION = 0.5f;
     private static final float MATERIAL_RESTITUTION = 0.2f;
@@ -54,11 +55,11 @@ public class Triangle extends Material {
 
     public void update() {
         // Sync game object position with Box2D body
-        Vector2 bodyPosition = body.getPosition();
-        float angle = body.getAngle();
-        System.out.println("WoodTriangle Position: " + bodyPosition + ", Angle: " + angle);
-
-        // Optionally handle custom logic, like rotation or position constraints
+        if (body != null) {
+            Vector2 position = body.getPosition();
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
+            setRotation((float) Math.toDegrees(body.getAngle()));
+        }
     }
 
     public Vector2 getPosition() {

@@ -233,7 +233,8 @@ public class Level1 extends Level {
             cube.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.139f + ((i - 2) * 0.081f * AngryBirds.V_HEIGHT), 57, 57, false);
             cubes.add(cube);
         }
-
+        wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
+        wood_triangle.createBody(world, AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f, 57, 57, false);
         // Input processor
         Gdx.input.setInputProcessor(new InputAdapter() {
                                         @Override
@@ -391,7 +392,7 @@ public class Level1 extends Level {
 
         game.batch.begin();
 
-        wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
+        //wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
@@ -407,8 +408,9 @@ public class Level1 extends Level {
             cubes.get(i).update();
             cubes.get(i).draw(game.batch);
         }
-        wood_triangle.setPosition(AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f);
-        wood_triangle.setSize(60, 60);
+        //wood_triangle.setPosition(AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f);
+       // wood_triangle.setSize(60, 60);
+        wood_triangle.update();
         wood_triangle.draw(game.batch);
 
 
