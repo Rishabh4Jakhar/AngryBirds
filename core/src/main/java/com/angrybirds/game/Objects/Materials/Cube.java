@@ -48,6 +48,7 @@ public class Cube extends Material {
         setBody(body);
         originalPosition = new Vector2(x, y);
         body.setUserData(this); // Link this object with the body
+
     }
 
     public void update() {
