@@ -12,6 +12,7 @@ import com.angrybirds.game.Screens.LevelSelectScreen;
 import com.angrybirds.game.Screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -61,6 +62,10 @@ public class Level1 extends Level {
     private ArrayList<Cube> cubes;
     private Triangle wood_triangle;
     private Body ground;
+    private InputMultiplexer inputMultiplexer;
+    private float levelEndTimer = 0; // Tracks elapsed time after the last bird is used
+    private boolean waitingForLevelEnd = false; // Indicates if we are waiting for pigs to die
+
     // Constants
     private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 15.5f; // 20% from left
     private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 27f; // 25% from bottom
@@ -68,7 +73,9 @@ public class Level1 extends Level {
     public Level1(AngryBirds game, OrthographicCamera gameCam, Viewport gamePort, Texture background) {
         super(game, gameCam, gamePort, background);
         stage = new Stage(gamePort, game.batch);
-        Gdx.input.setInputProcessor(stage);
+        inputMultiplexer = new InputMultiplexer();
+        //Gdx.input.setInputProcessor(stage);
+        inputMultiplexer.addProcessor(stage);
         skin = new Skin();
         uiTexture = new Texture(Gdx.files.internal("SpriteSheet/UI.png"));
         moreUITexture = new Texture(Gdx.files.internal("SpriteSheet/moreUI.png"));
@@ -236,8 +243,8 @@ public class Level1 extends Level {
         // Now create bodies for the objects (birds, pigs, structures here)
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
-        redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
-        redBird2.createBody(world, AngryBirds.V_WIDTH * 0.1f / PPM, AngryBirds.V_HEIGHT * 0.2f / PPM);
+        redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, true);
+        redBird2.createBody(world, (SLINGSHOT_X/ PPM)-70, (SLINGSHOT_Y/ PPM)-72, false);
         birdBodies.add(redBird1);
         birdBodies.add(redBird2);
         pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
@@ -260,11 +267,47 @@ public class Level1 extends Level {
         wood_triangle.createBody(world, AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f, 57, 57, false);
         System.out.println("Triangle body created: " + wood_triangle.getBody());
         // Input processor
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        InputAdapter birdInputProcessor = new InputAdapter() {
                                         @Override
                                         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                                             Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
-                                            System.out.println("Touch Down at: " + touchPoint); // Debug print
+                                            //System.out.println("Touch Down at: " + touchPoint); // Debug print
+                                            // Check if the click is on any bird
+                                            for (Bird bird : birdBodies) {
+                                                //System.out.println("Bird: " + bird);
+                                                //System.out.println("Bird bounds: " + bird.getBounds());
+                                                //System.out.println("Touch Point: " + touchPoint);
+                                                if (!bird.isDead() && bird != currentBird &&bird.getBounds().contains(touchPoint.x/PPM, touchPoint.y/PPM)) {
+                                                    System.out.println("Bird clicked: " + bird);
+
+                                                    // If there is already a bird on the slingshot, return it to the list
+                                                    if (currentBird != null) {
+                                                        // Check if the currentbird is in birdbodies, if not add to bird bodies
+                                                        if (!birdBodies.contains(currentBird)) {
+                                                            birdBodies.add(currentBird);
+                                                        }
+                                                        // Place the current bird to the positions of the bird replacing it
+                                                        System.out.println("Placing current bird back to the coordinates of the clicked bird " + bird + " at " + bird.getBody().getPosition() + " from " + currentBird.getBody().getPosition());
+                                                        currentBird.getBody().setTransform(bird.getBody().getPosition().x, bird.getBody().getPosition().y, 0);
+                                                        //birdBodies.add(currentBird); // Add the current bird back to the list
+                                                    }
+
+                                                    // Set the clicked bird as the current bird and remove it from the list
+                                                    currentBird = bird;
+                                                    //birds.remove(bird);
+
+                                                    // Place the bird on the slingshot
+                                                    currentBird.getBody().setTransform((SLINGSHOT_X / PPM)/ PPM, (SLINGSHOT_Y / PPM) / PPM, 0);
+                                                    currentBird.update();
+                                                    // Print coordinates of bird sprite
+                                                    System.out.println("Bird body position: " + currentBird.getBody().getPosition());
+                                                    System.out.println("Bird sprite position: " + currentBird.getX() + ", " + currentBird.getY());
+                                                    currentBird.setSelected(false);
+                                                    return true;
+                                                }
+                                            }
+
+
                                             float dragAreaRadius = 20f;
                                             if (currentBird != null && !currentBird.isShot() &&
                                                 touchPoint.dst(new Vector2(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM )) < dragAreaRadius) {
@@ -326,8 +369,9 @@ public class Level1 extends Level {
                                             }
                                             return true;
                                         }
-                                    }
-        );
+                                    };
+        inputMultiplexer.addProcessor(birdInputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         // Create camera for debug rendering
         b2dCam = new OrthographicCamera();
@@ -535,8 +579,17 @@ public class Level1 extends Level {
         Iterator<Pig> pigIterator = pigBodies.iterator();
         while (pigIterator.hasNext()) {
             Pig pig = pigIterator.next();
-            if (pig.getBody() == null) {
+            // If pigs is out of bounds remove it and destroy the body
+            if (pig.getBody() != null && pig.isOutOfBounds()) {
+                pig.die(bodiesToDestroy);
                 pigIterator.remove();
+                System.out.println("Pig out of bounds");
+                //world.destroyBody(pig.getBody());
+            }
+            if (pig.getBody() == null) {
+                // Remove the pig from the list if it has been destroyed
+                pigBodies.remove(pig);
+                //pigIterator.remove();
                 System.out.println("Pig removed");
             } else {
                 pig.update(delta, bodiesToDestroy);
@@ -616,7 +669,7 @@ public class Level1 extends Level {
                 System.out.println("Bird removed");
             } else {
                 bird.draw(game.batch);
-                System.out.println("Bird Position: " + bird.getBody().getPosition());
+                //System.out.println("Bird Position: " + bird.getBody().getPosition());
             }
             // Check if the bird is out of bounds or has stopped moving
             if (bird.isOutOfBounds() || bird.isStopped()) {
@@ -628,6 +681,13 @@ public class Level1 extends Level {
                     currentBird = birdBodies.remove(0); // Get the next bird
                     currentBird.getBody().setTransform(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM, 0);
                 }
+            }
+        }
+        // Also render birds not in birdsInAction list
+        for (Bird bird : birdBodies) {
+            // If bird not in birdsinaction
+            if (!birdsInAction.contains(bird)) {
+                bird.draw(game.batch);
             }
         }
         //redBird1.draw(game.batch);
@@ -662,8 +722,26 @@ public class Level1 extends Level {
         if (pigBodies.isEmpty() && !isLevelCleared) {
             isLevelCleared = true;
             System.out.println("Level Cleared!");
-        } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && !pigBodies.isEmpty()) {
-            isLevelFailed = true;
+        } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && currentBird == null && !waitingForLevelEnd && !pigBodies.isEmpty()) {
+            //isLevelFailed = true;
+            waitingForLevelEnd = true;
+            levelEndTimer = 0;
+            System.out.println("Waiting for level end");
+        }
+        if (waitingForLevelEnd) {
+            levelEndTimer += delta; // Increment the timer
+
+            if (levelEndTimer >= 4.0f) { // 4 seconds delay
+                waitingForLevelEnd = false;
+
+                if (pigBodies.isEmpty()) {
+                    isLevelCleared = true; // All pigs are dead, level is cleared
+                    System.out.println("Level Cleared!");
+                } else {
+                    isLevelFailed = true; // Pigs remain, level is failed
+                    System.out.println("Level Failed!");
+                }
+            }
         }
         game.batch.end();
         /*

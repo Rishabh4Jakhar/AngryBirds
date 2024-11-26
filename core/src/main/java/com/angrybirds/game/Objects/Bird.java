@@ -4,6 +4,7 @@ import com.angrybirds.game.AngryBirds;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -50,11 +51,23 @@ public class Bird extends Sprite {
     public Body getBody() {
         return body;
     }
-
-    public void createBody(World world, float v, float v1) {
+    public Rectangle getBounds() {
+        return new Rectangle(
+            getX() / PPM,
+            getY() / PPM,
+            getWidth() / PPM,
+            getHeight() / PPM
+        );
+    }
+    public void createBody(World world, float v, float v1, boolean isDynamic) {
         // Create body definition
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        if (isDynamic) {
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        } else {
+            bodyDef.type = BodyDef.BodyType.KinematicBody;
+        }
+        //bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(v / PPM, v1 / PPM);
         //originalPosition = new Vector2(v / PPM, v1 / PPM);
         // Create body in world
@@ -108,6 +121,14 @@ public class Bird extends Sprite {
         }
     }
 
+    public void update() {
+        // Directly sync if body is not null
+        if (body != null) {
+            Vector2 position = body.getPosition(); // Get the body's position in world units
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2); // Sync sprite position
+            setRotation((float) Math.toDegrees(body.getAngle())); // Sync rotation
+        }
+    }
     public void dragTo(float x, float y) {
         if (!isShot && isSelected) {
             float distance = new Vector2(x, y).sub(originalPosition).len();

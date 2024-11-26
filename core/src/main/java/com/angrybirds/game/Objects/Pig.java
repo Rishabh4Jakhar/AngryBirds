@@ -119,11 +119,12 @@ public class Pig extends Sprite implements Serializable {
             setRotation((float) Math.toDegrees(body.getAngle()));
             if (isOutOfBounds()) {
                 health = 0;
+                //die(bodiesToDestroy);
             }
         }
     }
 
-    private void die(List<Body> bodiesToDestroy) {
+    public void die(List<Body> bodiesToDestroy) {
         if (body != null) {
             bodiesToDestroy.add(body);
             //world.destroyBody(body); // Remove the body from the physics world
@@ -135,7 +136,7 @@ public class Pig extends Sprite implements Serializable {
     public void render(SpriteBatch batch) {
         this.draw(batch); // Use the sprite's updated position and rotation
     }
-    private boolean isOutOfBounds() {
+    public boolean isOutOfBounds() {
         return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
     }
 
