@@ -27,6 +27,7 @@ public class Bird extends Sprite {
 
 
     // Shooting variables
+    protected boolean isDead = false;
     protected boolean isSelected = false;
     protected boolean isShot = false;
     protected Vector2 originalPosition;
@@ -94,13 +95,15 @@ public class Bird extends Sprite {
                 // Reset the rolling timer if velocity exceeds the threshold
                 rollingTime = 0;
             }
-            Vector2 position = body.getPosition();
-            setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
-            setRotation((float) Math.toDegrees(body.getAngle()));
+            if (body != null) {
+                Vector2 position = body.getPosition();
+                setPosition(position.x * PPM - textureWidth / 2, position.y * PPM - textureHeight / 2);
+                setRotation((float) Math.toDegrees(body.getAngle()));
 
-            if (isShot && (isOutOfBounds() || isStopped())) {
-                health = 0;
-                reset();
+                if (isShot && (isOutOfBounds() || isStopped())) {
+                    health = 0;
+                    reset();
+                }
             }
         }
     }
@@ -153,7 +156,15 @@ public class Bird extends Sprite {
         if (body == null) {
             return;
         }
-        System.out.println("DEBUGGING: Bird is reset to position: " + originalPosition);
+        if (body != null) {
+            //body.setUserData(null);
+            body.getWorld().destroyBody(body);
+            body = null;
+            isDead = true;
+            return;
+        }
+        //System.out.println("DEBUGGING: Bird is reset to position: " + originalPosition);
+        /*
         body.setTransform(originalPosition.x / PPM, originalPosition.y / PPM, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
@@ -161,13 +172,23 @@ public class Bird extends Sprite {
         isShot = false;
         isSelected = false;
         rollingTime = 0;
+
+         */
     }
 
-    private boolean isOutOfBounds() {
+    public boolean isOutOfBounds() {
+        if (body == null) {
+            return false;
+        }
         return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
     }
-
-    private boolean isStopped() {
+    public boolean isDead() {
+        return isDead;
+    }
+    public boolean isStopped() {
+        if (body == null) {
+            return false;
+        }
         return body.getLinearVelocity().len() < 0.1f;
     }
 

@@ -40,6 +40,7 @@ public abstract class Level implements Screen {
     protected ArrayList<Bird> birdBodies;
     protected ArrayList<Pig> pigBodies;
     protected ArrayList<Material> blockBodies;
+    protected ArrayList<Bird> birdsInAction = new ArrayList<>();
     protected final float PPM = 100;
     protected int DAMAGE_SCALING_FACTOR = 10;
     protected int MINIMUM_DAMAGE_THRESHOLD = 5;

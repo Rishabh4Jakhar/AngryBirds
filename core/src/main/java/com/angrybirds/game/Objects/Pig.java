@@ -162,6 +162,10 @@ public class Pig extends Sprite implements Serializable {
             setRegion(new TextureRegion(criticalTexture));
         }
     }
+
+    public int getHealth() {
+        return health;
+    }
 }
 
 

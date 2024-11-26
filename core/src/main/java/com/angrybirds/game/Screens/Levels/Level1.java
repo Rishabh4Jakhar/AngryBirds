@@ -50,6 +50,7 @@ public class Level1 extends Level {
     private Label pauseLabel, levelClearedLabel, levelFailedLabel;
     private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
     private List<Body> bodiesToDestroy = new ArrayList<>();
+    private int score = 0;
     // For loop to create 5 cube objects
 
    //Box2D
@@ -236,11 +237,14 @@ public class Level1 extends Level {
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
         redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM);
+        redBird2.createBody(world, AngryBirds.V_WIDTH * 0.1f / PPM, AngryBirds.V_HEIGHT * 0.2f / PPM);
+        birdBodies.add(redBird1);
+        birdBodies.add(redBird2);
         pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
         pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.4f);
         this.pigBodies.add(pig1);
         this.pigBodies.add(pig2);
-        currentBird = redBird1;
+        currentBird = birdBodies.get(0);
         cubes = new ArrayList<Cube>();
         for (int i = 0; i < 2; i++) {
             Cube cube = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
@@ -303,9 +307,22 @@ public class Level1 extends Level {
                                                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                                                 Vector2 dragVector = dragStart.sub(touchPoint);
                                                 currentBird.shoot(dragVector);
+                                                birdBodies.remove(currentBird);
                                                 //System.out.println("Shooting Bird with vector: " + dragVector);
                                                 // Optionally prepare next bird
                                                 // prepareNextBird();
+                                                //if (!birdBodies.isEmpty()) {
+                                                //    System.out.println("Preparing next bird");
+                                                //    currentBird = birdBodies.get(0);
+                                                //    currentBird.getBody().setTransform(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM, 0); // Position at slingshot
+                                                //    currentBird.setSelected(false);
+                                                //} else {
+                                                //    System.out.println("No more birds");
+                                                //    currentBird = null; // No more birds
+                                                //}
+                                                // Add the bird to the active list
+                                                birdsInAction.add(currentBird);
+                                                currentBird = null;
                                             }
                                             return true;
                                         }
@@ -326,18 +343,30 @@ public class Level1 extends Level {
         // Check if bird collides with a pig or block
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
             Pig pig = (Pig) fixtureB.getBody().getUserData();
+            if (pig.getHealth() - 50 <= 0) {
+                score += 500;
+            }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Pig && fixtureB.getBody().getUserData() instanceof Bird) {
             Pig pig = (Pig) fixtureA.getBody().getUserData();
+            if (pig.getHealth() - 50 <= 0) {
+                score += 500;
+            }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         }
 
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
             Material block = (Material) fixtureB.getBody().getUserData();
-            block.takeDamage(world,30, bodiesToDestroy); // Adjust damage value
+            if (block.getHealth() - 25 <= 0) {
+                score += 100;
+            }
+            block.takeDamage(world,25, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
             Material block = (Material) fixtureA.getBody().getUserData();
-            block.takeDamage(world,30, bodiesToDestroy); // Adjust damage value
+            if (block.getHealth() - 25 <= 0) {
+                score += 100;
+            }
+            block.takeDamage(world,25, bodiesToDestroy); // Adjust damage value
         }
 
     }
@@ -494,7 +523,15 @@ public class Level1 extends Level {
 
         destroyBodies();
         // TESTING MIGHT BREAK
-        currentBird.update(delta);
+        //redBird1.update(delta);
+        //redBird2.update(delta);
+        if (redBird1.getBody() != null) {
+            redBird1.update(delta);
+        }
+        if (redBird2.getBody() != null) {
+            redBird2.update(delta);
+        }
+
         Iterator<Pig> pigIterator = pigBodies.iterator();
         while (pigIterator.hasNext()) {
             Pig pig = pigIterator.next();
@@ -548,7 +585,7 @@ public class Level1 extends Level {
 
         // Sprites
         //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
-        redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
+        //redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.13f, AngryBirds.V_HEIGHT * 0.139f);
         //pig1.setSize(60, 60);
         //pig1.setOrigin(pig1.getWidth() / 2, pig1.getHeight() / 2);
@@ -566,31 +603,36 @@ public class Level1 extends Level {
         if (pig2.getBody()!=null) {
             pig2.render(game.batch);
         }
-
-        currentBird.draw(game.batch);
-        redBird2.draw(game.batch);
-        slingshot.draw(game.batch);
-        game.batch.end();
-        /*
-        if (currentBird != null && currentBird.isSelected()) {
-            Vector2 startPosition = currentBird.getBody().getPosition(); // Bird's current position in world units
-            renderTrajectory(startPosition, dragStart.sub(startPosition)); // Drag vector
+        if (currentBird != null) {
+            currentBird.draw(game.batch);
         }
-        */
-        // Draw draggable area outline
-        shapeRenderer.setProjectionMatrix(gameCam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
+        //currentBird.draw(game.batch);
+        // Check birds in action
+        Iterator<Bird> iterator = birdsInAction.iterator();
+        while (iterator.hasNext()) {
+            Bird bird = iterator.next();
+            if (bird.getBody() == null) {
+                iterator.remove();
+                System.out.println("Bird removed");
+            } else {
+                bird.draw(game.batch);
+                System.out.println("Bird Position: " + bird.getBody().getPosition());
+            }
+            // Check if the bird is out of bounds or has stopped moving
+            if (bird.isOutOfBounds() || bird.isStopped()) {
+                bird.reset(); // Auto-die the bird
+                iterator.remove(); // Remove it from the active list
 
-        // Convert slingshot position to meters
-        float slingshotX = SLINGSHOT_X / PPM;
-        float slingshotY = SLINGSHOT_Y / PPM;
-        float maxDragRadius = 20f; // In meters (adjust as needed)
-
-        // Draw circle for draggable area
-        shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
-
-        shapeRenderer.end();
+                // Switch to the next bird if available
+                if (!birdBodies.isEmpty() && currentBird == null) {
+                    currentBird = birdBodies.remove(0); // Get the next bird
+                    currentBird.getBody().setTransform(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM, 0);
+                }
+            }
+        }
+        //redBird1.draw(game.batch);
+        //redBird2.draw(game.batch);
+        slingshot.draw(game.batch);
 
 
         if (isPaused) {
@@ -617,6 +659,35 @@ public class Level1 extends Level {
             levelFailedLabel.remove();
             skipButton2.remove();
         }
+        if (pigBodies.isEmpty() && !isLevelCleared) {
+            isLevelCleared = true;
+            System.out.println("Level Cleared!");
+        } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && !pigBodies.isEmpty()) {
+            isLevelFailed = true;
+        }
+        game.batch.end();
+        /*
+        if (currentBird != null && currentBird.isSelected()) {
+            Vector2 startPosition = currentBird.getBody().getPosition(); // Bird's current position in world units
+            renderTrajectory(startPosition, dragStart.sub(startPosition)); // Drag vector
+        }
+        */
+        // Draw draggable area outline
+        shapeRenderer.setProjectionMatrix(gameCam.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+
+        // Convert slingshot position to meters
+        float slingshotX = SLINGSHOT_X / PPM;
+        float slingshotY = SLINGSHOT_Y / PPM;
+        float maxDragRadius = 20f; // In meters (adjust as needed)
+
+        // Draw circle for draggable area
+        shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
+
+        shapeRenderer.end();
+
+
         stage.act();
         stage.draw();
 
