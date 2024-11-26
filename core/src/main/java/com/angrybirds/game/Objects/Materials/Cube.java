@@ -22,6 +22,9 @@ public class Cube extends Material {
         this.textureHeight=height;
         setSize(60, 60);
         setOrigin(getWidth() / 2, getHeight() / 2);
+        this.normalTexture = new TextureRegion(texture, x, 860, width, height);
+        this.damagedTexture = new TextureRegion(texture, x, 944, width, height);
+        this.criticalTexture = new TextureRegion(texture, x, 1028, width, height);
     }
 
     public void createBody(World world, float x, float y, float width, float height, boolean isStatic) {

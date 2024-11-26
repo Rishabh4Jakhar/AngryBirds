@@ -15,8 +15,10 @@ public class Pig extends Sprite implements Serializable {
     protected Body body;
     protected String name = "Pig";
     protected int health = 100;
+    private int maxHealth = 100;
     protected int textureWidth;
     protected int textureHeight;
+    private TextureRegion normalTexture, damagedTexture, criticalTexture;
 
     // Physics constants
     protected static final float PPM = 100f;
@@ -29,8 +31,8 @@ public class Pig extends Sprite implements Serializable {
     protected Vector2 originalPosition;
 
     private float rollingTime = 0; // Tracks how long the body has been rolling
-    private static final float ROLLING_THRESHOLD = 1f; // Velocity below which it's considered rolling (adjust as needed)
-    private static final float MAX_ROLLING_TIME = 0.8f;  // Maximum time allowed for rolling in seconds
+    private static final float ROLLING_THRESHOLD = 0.7f; // Velocity below which it's considered rolling (adjust as needed)
+    private static final float MAX_ROLLING_TIME = 1f;  // Maximum time allowed for rolling in seconds
     private World world;
 
     public Pig(Texture pigSheet, int x, int y, int width, int height) {
@@ -40,7 +42,13 @@ public class Pig extends Sprite implements Serializable {
         originalPosition = new Vector2(x, y);
         setSize(60, 60);
         setOrigin(getWidth() / 2, getHeight() / 2);
+        normalTexture = new TextureRegion(pigSheet, 2953, y, width, height);
+        damagedTexture = new TextureRegion(pigSheet, 3063, y, width, height);
+        criticalTexture = new TextureRegion(pigSheet, 3173, y, width, height);
     }
+
+
+
     public void setBody(Body body) {
         this.body = body;
     }
@@ -118,6 +126,30 @@ public class Pig extends Sprite implements Serializable {
     }
     private boolean isOutOfBounds() {
         return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            die(); // Call the die method when health reaches zero
+        } else {
+            updateTextureBasedOnHealth();
+        }
+    }
+
+    private void updateTextureBasedOnHealth() {
+        float healthPercentage = (float) health / maxHealth;
+
+        if (healthPercentage > 0.5f) {
+            // High health, normal texture
+            setRegion(new TextureRegion(normalTexture));
+        } else if (healthPercentage > 0.2f) {
+            // Medium health, damaged texture
+            setRegion(new TextureRegion(damagedTexture));
+        } else {
+            // Low health, critical texture
+            setRegion(new TextureRegion(criticalTexture));
+        }
     }
 }
 

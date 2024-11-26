@@ -3,6 +3,7 @@ package com.angrybirds.game.Screens.Levels;
 import com.angrybirds.game.AngryBirds;
 import com.angrybirds.game.Objects.Bird;
 import com.angrybirds.game.Objects.Materials.Cube;
+import com.angrybirds.game.Objects.Materials.Material;
 import com.angrybirds.game.Objects.Materials.Triangle;
 import com.angrybirds.game.Objects.Pig;
 import com.angrybirds.game.Objects.RedBird;
@@ -20,10 +21,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -211,6 +209,23 @@ public class Level1 extends Level {
         shape.setAsBox(1, AngryBirds.V_HEIGHT);
         fdef.shape = shape;
         body.createFixture(fdef);
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                handleCollision(contact); // Delegate to a method to process the collision
+            }
+
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+
 
         // Sprite batch rendering for level design is done in render method
         // Now create bodies for the objects (birds, pigs, structures here)
@@ -298,6 +313,27 @@ public class Level1 extends Level {
 
     }
 
+    private void handleCollision(Contact contact) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+
+        // Check if bird collides with a pig or block
+        if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
+            Pig pig = (Pig) fixtureB.getBody().getUserData();
+            pig.takeDamage(50); // Adjust damage value
+        } else if (fixtureA.getBody().getUserData() instanceof Pig && fixtureB.getBody().getUserData() instanceof Bird) {
+            Pig pig = (Pig) fixtureA.getBody().getUserData();
+            pig.takeDamage(50); // Adjust damage value
+        }
+
+        if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
+            Material block = (Material) fixtureB.getBody().getUserData();
+            block.takeDamage(world,30); // Adjust damage value
+        } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
+            Material block = (Material) fixtureA.getBody().getUserData();
+            block.takeDamage(world,30); // Adjust damage value
+        }
+    }
     /*
     Made for static GUI buttons
     private void addDummyButtons() {
@@ -398,21 +434,37 @@ public class Level1 extends Level {
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
 
         // Level Designing
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < cubes.size(); i++) {
             cubes.get(i).setSize(60,60);
             cubes.get(i).update();
-            cubes.get(i).draw(game.batch);
+            if (cubes.get(i).getHealth() <= 0) {
+                //world.destroyBody(cubes.get(i).getBody());
+                cubes.remove(i);
+            } else {
+                cubes.get(i).draw(game.batch);
+            }
         }
+        /*
         for (int i = 2; i < 5; i++) {
             cubes.get(i).setSize(60,60);
             cubes.get(i).update();
-            cubes.get(i).draw(game.batch);
+            if (cubes.get(i).getHealth() <= 0) {
+                //world.destroyBody(cubes.get(i).getBody());
+                cubes.remove(i);
+            } else {
+                cubes.get(i).draw(game.batch);
+            }
         }
+        */
         //wood_triangle.setPosition(AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f);
        // wood_triangle.setSize(60, 60);
-        wood_triangle.update();
-        wood_triangle.draw(game.batch);
-
+        if (wood_triangle.getHealth() <= 0) {
+            //world.destroyBody(wood_triangle.getBody());
+            wood_triangle.update();
+        } else {
+            wood_triangle.update();
+            wood_triangle.draw(game.batch);
+        }
 
         // Sprites
         //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
