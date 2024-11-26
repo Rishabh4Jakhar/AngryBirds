@@ -45,7 +45,7 @@ public class Cube extends Material {
         body.createFixture(fixtureDef);
 
         shape.dispose();
-
+        setBody(body);
         originalPosition = new Vector2(x, y);
         body.setUserData(this); // Link this object with the body
     }

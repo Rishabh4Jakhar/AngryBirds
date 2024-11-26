@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Level1 extends Level {
     private Stage stage;
@@ -48,7 +49,7 @@ public class Level1 extends Level {
     private TextureRegion pausePopUp;
     private Label pauseLabel, levelClearedLabel, levelFailedLabel;
     private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
-
+    private List<Body> bodiesToDestroy = new ArrayList<>();
     // For loop to create 5 cube objects
 
    //Box2D
@@ -250,6 +251,7 @@ public class Level1 extends Level {
         }
         wood_triangle = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
         wood_triangle.createBody(world, AngryBirds.V_WIDTH * 0.6f, AngryBirds.V_HEIGHT * 0.139f, 57, 57, false);
+        System.out.println("Triangle body created: " + wood_triangle.getBody());
         // Input processor
         Gdx.input.setInputProcessor(new InputAdapter() {
                                         @Override
@@ -274,20 +276,20 @@ public class Level1 extends Level {
                                                 // Optionally add a check to see if the bird is being dragged in the right direction
                                                 // If bird is dragged beyond a certain distance, set it to the max distance
                                                 float distance = touchPoint.dst(dragStart)/PPM;
-                                                System.out.println("Distance: " + distance);
+                                                //System.out.println("Distance: " + distance);
                                                 float maxDrag = 2.5f;
                                                 if (distance > maxDrag) {
-                                                    System.out.println("Dragging beyond max distance " + distance);
+                                                    //System.out.println("Dragging beyond max distance " + distance);
                                                     Vector2 direction = touchPoint.sub(dragStart).nor();
                                                     //touchPoint = gamePort.unproject(new Vector2(screenX, screenY)).scl(1/PPM).add(direction);
                                                     touchPoint = new Vector2(dragStart).add(direction.scl(maxDrag)).scl(1/PPM);
                                                     //touchPoint = touchPoint.scl(1/PPM);
-                                                    System.out.println("Current Distance: " + distance);
-                                                    System.out.println("Clamped Position: " + touchPoint);
+                                                    //System.out.println("Current Distance: " + distance);
+                                                    //System.out.println("Clamped Position: " + touchPoint);
                                                 }
                                                 // Right direction check
                                                 currentBird.dragTo(touchPoint.x, touchPoint.y);
-                                                System.out.println("Dragging Bird to: " + touchPoint);
+                                                //System.out.println("Dragging Bird to: " + touchPoint);
                                             }
                                             return true;
                                         }
@@ -298,7 +300,7 @@ public class Level1 extends Level {
                                                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                                                 Vector2 dragVector = dragStart.sub(touchPoint);
                                                 currentBird.shoot(dragVector);
-                                                System.out.println("Shooting Bird with vector: " + dragVector);
+                                                //System.out.println("Shooting Bird with vector: " + dragVector);
                                                 // Optionally prepare next bird
                                                 // prepareNextBird();
                                             }
@@ -320,18 +322,18 @@ public class Level1 extends Level {
         // Check if bird collides with a pig or block
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
             Pig pig = (Pig) fixtureB.getBody().getUserData();
-            pig.takeDamage(50); // Adjust damage value
+            pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Pig && fixtureB.getBody().getUserData() instanceof Bird) {
             Pig pig = (Pig) fixtureA.getBody().getUserData();
-            pig.takeDamage(50); // Adjust damage value
+            pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         }
 
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
             Material block = (Material) fixtureB.getBody().getUserData();
-            block.takeDamage(world,30); // Adjust damage value
+            block.takeDamage(world,30, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
             Material block = (Material) fixtureA.getBody().getUserData();
-            block.takeDamage(world,30); // Adjust damage value
+            block.takeDamage(world,30, bodiesToDestroy); // Adjust damage value
         }
     }
     /*
@@ -403,6 +405,16 @@ public class Level1 extends Level {
         shapeRenderer.end();
     }
 
+
+    private void destroyBodies() {
+        for (Body body : bodiesToDestroy) {
+            world.destroyBody(body);
+            System.out.println("Body destroyed: " + body);
+        }
+        bodiesToDestroy.clear(); // Clear the list after destruction
+    }
+
+
     @Override
     public void render(float delta) {
 
@@ -412,7 +424,7 @@ public class Level1 extends Level {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
+        destroyBodies();
         // TESTING MIGHT BREAK
         currentBird.update(delta);
         Iterator<Pig> pigIterator = pigBodies.iterator();
@@ -422,7 +434,7 @@ public class Level1 extends Level {
                 pigIterator.remove();
                 System.out.println("Pig removed");
             } else {
-                pig.update(delta);
+                pig.update(delta, bodiesToDestroy);
             }
         }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Pig extends Sprite implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -85,7 +86,7 @@ public class Pig extends Sprite implements Serializable {
         body.setUserData(this);
     }
 
-    public void update(float delta) {
+    public void update(float delta, List<Body> bodiesToDestroy) {
         if (body!=null) {
             Vector2 velocity = body.getLinearVelocity();
 
@@ -94,7 +95,7 @@ public class Pig extends Sprite implements Serializable {
                 rollingTime += delta;
                 if (rollingTime >= MAX_ROLLING_TIME) {
                     // Reset or "kill" the object
-                    die();
+                    die(bodiesToDestroy);
                     System.out.println("Resetting due to rolling too long!");
                     return;
                 }
@@ -113,9 +114,10 @@ public class Pig extends Sprite implements Serializable {
         }
     }
 
-    private void die() {
+    private void die(List<Body> bodiesToDestroy) {
         if (body != null) {
-            world.destroyBody(body); // Remove the body from the physics world
+            bodiesToDestroy.add(body);
+            //world.destroyBody(body); // Remove the body from the physics world
             body = null;
             rollingTime = 0; // Reset the rolling timer
             System.out.println("Pig has been killed!");
@@ -128,10 +130,10 @@ public class Pig extends Sprite implements Serializable {
         return body.getPosition().x < 0 || body.getPosition().x * PPM > AngryBirds.V_WIDTH || body.getPosition().y < 0 || body.getPosition().y * PPM > AngryBirds.V_HEIGHT;
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, List<Body> bodiesToDestroy) {
         health -= damage;
         if (health <= 0) {
-            die(); // Call the die method when health reaches zero
+            die(bodiesToDestroy); // Call the die method when health reaches zero
         } else {
             updateTextureBasedOnHealth();
         }

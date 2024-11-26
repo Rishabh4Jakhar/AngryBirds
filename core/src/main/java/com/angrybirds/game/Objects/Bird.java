@@ -108,14 +108,14 @@ public class Bird extends Sprite {
     public void dragTo(float x, float y) {
         if (!isShot && isSelected) {
             float distance = new Vector2(x, y).sub(originalPosition).len();
-            System.out.println("DEBUGGING: 100f and " + distance);
+            //System.out.println("DEBUGGING: 100f and " + distance);
             if (body.getType() != BodyDef.BodyType.KinematicBody) {
                 body.setType(BodyDef.BodyType.KinematicBody);
             }
 
             if (distance <= AngryBirds.V_WIDTH*0.27f) {
                 body.setTransform(x, y, 0);
-                System.out.println("DEBUGGING: Bird is dragged to position (if): " + x + ", " + y);
+                //System.out.println("DEBUGGING: Bird is dragged to position (if): " + x + ", " + y);
             } //else {
                 //System.out.println("DEBUGGING: Bird is dragged to position: " + x + ", " + y);
                 //Vector2 direction = new Vector2(x, y).sub(originalPosition).nor();
