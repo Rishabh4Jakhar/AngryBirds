@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 public class Rectangle extends Material implements Serializable {
     private static final long serialVersionUID = 1L;
+    private int textureHeight;
+    private int textureWidth;
+    private boolean isVertical;
     protected Body body;
     protected static final float PPM = 100f;
     protected static final float RECTANGLE_DENSITY = 1.0f;
@@ -17,8 +20,21 @@ public class Rectangle extends Material implements Serializable {
     protected Vector2 originalPosition;
 
 
-    public Rectangle(String type, int health, Texture texture, int x, int y, int width, int height) {
+    public Rectangle(String type, int health, Texture texture, int x, int y, int width, int height, int setWidth, int setHeight, boolean isVertical) {
         super(type, health, new TextureRegion(texture, x, y, width, height));
+        this.textureWidth=width;
+        this.textureHeight=height;
+        setSize(setWidth, setHeight);
+        setOrigin(getWidth() / 2, getHeight() / 2);
+        this.normalTexture = new TextureRegion(texture, x, 860, width, height);
+        this.damagedTexture = new TextureRegion(texture, x, 944, width, height);
+        this.criticalTexture = new TextureRegion(texture, x, 1028, width, height);
+        this.isVertical = isVertical;
+        // Rotate the sprite by 90 degrees if it's vertical
+        if (isVertical) {
+            setRotation(90); // Rotate sprite to vertical position
+        }
+
     }
 
     public void createBody(World world, float x, float y, float width, float height, boolean isStatic) {
@@ -50,8 +66,13 @@ public class Rectangle extends Material implements Serializable {
     public void update() {
         if (body!=null) {
             Vector2 position = body.getPosition();
+            setOriginCenter();
             setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
-            setRotation((float) Math.toDegrees(body.getAngle()));
+            if (isVertical) {
+                setRotation(90 + (float) Math.toDegrees(body.getAngle()));
+            } else {
+                setRotation((float) Math.toDegrees(body.getAngle()));
+            }
         }
     }
 

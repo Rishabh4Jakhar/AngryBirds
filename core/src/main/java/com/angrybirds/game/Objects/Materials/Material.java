@@ -80,7 +80,7 @@ public abstract class Material extends Sprite {
 
     private void updateTextureBasedOnHealth() {
         float healthPercentage = (float) health / maxHealth;
-
+        System.out.println("Material Type " + this.type);
         if (healthPercentage > 0.5f) {
             // High health, normal texture
             System.out.println("High health " + healthPercentage);

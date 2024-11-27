@@ -159,15 +159,15 @@ public class Level3 extends Level {
 
         //15 rods (7 wood + 5 ice + 3 stone)
         for (int i = 0; i < 7; i++) {
-            Rectangle rod = new Rectangle("Wood Rod", 100, angryBirdSheet, 1138, 895, 205, 21);
+            Rectangle rod = new Rectangle("Wood Rod", 100, angryBirdSheet, 1138, 895, 205, 21, 205, 21, true);
             rods.add(rod); //indices 0-6
         }
         for (int i = 0; i < 5; i++) {
-            Rectangle rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21);
+            Rectangle rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 205, 21, true);
             rods.add(rod); //indices 7-11
         }
         for (int i = 0; i < 3; i++) {
-            Rectangle rod = new Rectangle("Stone Rod", 200, angryBirdSheet, 1098, 1739, 205, 21);
+            Rectangle rod = new Rectangle("Stone Rod", 200, angryBirdSheet, 1098, 1739, 205, 21, 205, 21, true);
             rods.add(rod); //indices 12-14
         }
         Sphere stone_ball1 = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
