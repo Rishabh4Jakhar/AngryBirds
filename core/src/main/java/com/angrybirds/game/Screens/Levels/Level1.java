@@ -48,7 +48,7 @@ public class Level1 extends Level {
     private Slingshot slingshot;
     private boolean isPaused = false;
     private TextureRegion pausePopUp;
-    private Label pauseLabel, levelClearedLabel, levelFailedLabel;
+    private Label pauseLabel, levelClearedLabel, levelFailedLabel, scoreLabel, highScoreLabel, scoreLabel2;
     private ImageButton resumeButton, homeButton, skipButton, skipButton2, greenButton, redButton;
     private List<Body> bodiesToDestroy = new ArrayList<>();
     private int score = 0;
@@ -168,6 +168,7 @@ public class Level1 extends Level {
             }
         });
 
+        TextureRegion replayButtonRegion = new TextureRegion(uiTexture, 9, 580, 100, 100);
         skin.add("skipButton2", skipButtonRegion);
         ImageButton.ImageButtonStyle skipStyle2 = new ImageButton.ImageButtonStyle();
         skipStyle2.imageUp = skin.getDrawable("skipButton2");
@@ -178,6 +179,7 @@ public class Level1 extends Level {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelSelectScreen(game));
+                //replayLevel();
             }
         });
         // Labels for level clear level fail
@@ -187,10 +189,12 @@ public class Level1 extends Level {
         labelStyle2.font.getData().setScale(3);
         levelClearedLabel = new Label("Level Cleared", labelStyle2);
         levelClearedLabel.setPosition((AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2 - 60 , (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2 + 200);
-
+        scoreLabel = new Label(String.valueOf(score), labelStyle2);
+        scoreLabel.setPosition((AngryBirds.V_WIDTH - levelClearedPopUp.getRegionWidth()) / 2 - 72, (AngryBirds.V_HEIGHT - levelClearedPopUp.getRegionHeight()) / 2 - 50);
         levelFailedLabel = new Label("Level Failed", labelStyle2);
         levelFailedLabel.setPosition((AngryBirds.V_WIDTH - levelFailedPopUp.getRegionWidth()) / 2 - 60, (AngryBirds.V_HEIGHT - levelFailedPopUp.getRegionHeight()) / 2 + 200);
-
+        scoreLabel2 = new Label(String.valueOf(score), labelStyle2);
+        scoreLabel2.setPosition((AngryBirds.V_WIDTH - levelFailedPopUp.getRegionWidth()) / 2 - 72, (AngryBirds.V_HEIGHT - levelFailedPopUp.getRegionHeight()) / 2 - 50);
 
 
         // Add dummy buttons
@@ -388,28 +392,24 @@ public class Level1 extends Level {
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
             Pig pig = (Pig) fixtureB.getBody().getUserData();
             if (pig.getHealth() - 50 <= 0) {
-                score += 500;
+                updateScore(80);
             }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Pig && fixtureB.getBody().getUserData() instanceof Bird) {
             Pig pig = (Pig) fixtureA.getBody().getUserData();
             if (pig.getHealth() - 50 <= 0) {
-                score += 500;
+                updateScore(80);
             }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         }
 
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
             Material block = (Material) fixtureB.getBody().getUserData();
-            if (block.getHealth() - 25 <= 0) {
-                score += 100;
-            }
+            updateScore(30);
             block.takeDamage(world,25, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
             Material block = (Material) fixtureA.getBody().getUserData();
-            if (block.getHealth() - 25 <= 0) {
-                score += 100;
-            }
+            updateScore(30);
             block.takeDamage(world,25, bodiesToDestroy); // Adjust damage value
         }
 
@@ -422,8 +422,10 @@ public class Level1 extends Level {
         Object dataB = fixtureB.getBody().getUserData();
         if ("Ground".equals(dataA)) {
             processGroundCollision(fixtureB.getBody(), impulse);
+            updateScore(10);
         } else if ("Ground".equals(dataB)) {
             processGroundCollision(fixtureA.getBody(), impulse);
+            updateScore(10);
         }
     }
     private void processGroundCollision(Body body, ContactImpulse impulse) {
@@ -477,6 +479,31 @@ public class Level1 extends Level {
         pig.setGrounded(true);
     }
 
+    public void updateScore(int points) {
+        score += points; // Update the score
+        scoreLabel.setText(String.valueOf(score));// Update the label
+        scoreLabel2.setText(String.valueOf(score));// Update the label
+    }
+
+    private void replayLevel() {
+        // Reset all game variables
+        isLevelCleared = false;
+        isLevelFailed = false;
+        waitingForLevelEnd = false;
+        levelEndTimer = 0;
+        score = 0;
+
+        // Clear lists
+        pigBodies.clear();
+        birdBodies.clear();
+        birdsInAction.clear();
+
+        // Reinitialize the level
+        initializeLevel();
+
+        // Hide the replay button
+        //skipButton2.setVisible(false);
+    }
     /*
     Made for static GUI buttons
     private void addDummyButtons() {
@@ -585,8 +612,7 @@ public class Level1 extends Level {
                 pigIterator.remove();
                 System.out.println("Pig out of bounds");
                 //world.destroyBody(pig.getBody());
-            }
-            if (pig.getBody() == null) {
+            } else if (pig.getBody() == null) {
                 // Remove the pig from the list if it has been destroyed
                 //pigBodies.remove(pig);
                 pigIterator.remove();
@@ -711,22 +737,28 @@ public class Level1 extends Level {
         if (isLevelCleared) { // Add button to go to next level in level clear pop up
             stage.addActor(levelClearedLabel);
             stage.addActor(skipButton2);
+            stage.addActor(scoreLabel);
         } else if (isLevelFailed) { // Add button to retry level in level fail pop up
             stage.addActor(levelFailedLabel);
             stage.addActor(skipButton2);
+            stage.addActor(scoreLabel2);
         } else {
             levelClearedLabel.remove();
             levelFailedLabel.remove();
             skipButton2.remove();
+            scoreLabel.remove();
+            scoreLabel2.remove();
         }
         if (pigBodies.isEmpty() && !isLevelCleared) {
             isLevelCleared = true;
             System.out.println("Level Cleared!");
+            System.out.println("Score: " + score);
         } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && currentBird == null && !waitingForLevelEnd && !pigBodies.isEmpty()) {
             //isLevelFailed = true;
             waitingForLevelEnd = true;
             levelEndTimer = 0;
             System.out.println("Waiting for level end");
+            System.out.println("Score: " + score);
         }
         if (waitingForLevelEnd) {
             levelEndTimer += delta; // Increment the timer
