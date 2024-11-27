@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Rectangle extends Material implements Serializable {
     private static final long serialVersionUID = 1L;
     private int textureHeight;
+    private int no = 1;
     private int textureWidth;
     private boolean isVertical;
     protected Body body;
@@ -29,6 +30,29 @@ public class Rectangle extends Material implements Serializable {
         this.normalTexture = new TextureRegion(texture, x, 860, width, height);
         this.damagedTexture = new TextureRegion(texture, x, 944, width, height);
         this.criticalTexture = new TextureRegion(texture, x, 1028, width, height);
+        this.isVertical = isVertical;
+        // Rotate the sprite by 90 degrees if it's vertical
+        if (isVertical) {
+            setRotation(90); // Rotate sprite to vertical position
+        }
+
+    }
+
+    public Rectangle(String type, int health, Texture texture, int x, int y, int width, int height, int setWidth, int setHeight, boolean isVertical, int no) {
+        super(type, health, new TextureRegion(texture, x, y, width, height));
+        this.textureWidth=width;
+        this.textureHeight=height;
+        setSize(setWidth, setHeight);
+        setOrigin(getWidth() / 2, getHeight() / 2);
+        if (no == 3) {
+        this.normalTexture = new TextureRegion(texture, x, 860, width, height);
+        this.damagedTexture = new TextureRegion(texture, x, 944, width, height);
+        this.criticalTexture = new TextureRegion(texture, x, 1028, width, height);
+        } else if (no == 2) {
+            this.normalTexture = new TextureRegion(texture, x, 1323, width, height);
+            this.damagedTexture = new TextureRegion(texture, x, 1301, width, height);
+            this.criticalTexture = new TextureRegion(texture, x, 1367, width, height);
+        }
         this.isVertical = isVertical;
         // Rotate the sprite by 90 degrees if it's vertical
         if (isVertical) {

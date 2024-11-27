@@ -60,7 +60,7 @@ public class Level2 extends Level {
     private boolean waitingForLevelEnd = false; // Indicates if we are waiting for pigs to die
 
     //Constants
-    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 15.5f; // 20% from left
+    private static final float SLINGSHOT_X = AngryBirds.V_WIDTH * 21.5f; // 20% from left
     private static final float SLINGSHOT_Y = AngryBirds.V_HEIGHT * 27f; // 25% from bottom
 
 
@@ -97,9 +97,9 @@ public class Level2 extends Level {
         yellowBird = new YellowBird(birdSheet);
         slingshot = new Slingshot(blockSheet);
         angryBirdSheet = new Texture(Gdx.files.internal("SpriteSheet/AngryBirds.png"));
-        pig2 = new Pig(angryBirdSheet, 2843, 708, 107, 93);
+        pig2 = new Pig(angryBirdSheet, 2843, 708, 107, 93, 2);
         pig1 = new Pig(angryBirdSheet, 2843, 7, 103, 103);
-        pig3 = new Pig(angryBirdSheet, 2843, 708, 107, 93);
+        pig3 = new Pig(angryBirdSheet, 2843, 708, 107, 93, 2);
         // Load custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Font/angrybirds.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -276,14 +276,14 @@ public class Level2 extends Level {
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
         yellowBird.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, true);
-        redBird1.createBody(world, (SLINGSHOT_X/ PPM)-70, (SLINGSHOT_Y/ PPM)-72, false);
-        redBird2.createBody(world, (SLINGSHOT_X/ PPM)-120, (SLINGSHOT_Y/ PPM)-72, false);
+        redBird1.createBody(world, (SLINGSHOT_X/ PPM)-100, (SLINGSHOT_Y/ PPM)-72, false);
+        redBird2.createBody(world, (SLINGSHOT_X/ PPM)-160, (SLINGSHOT_Y/ PPM)-72, false);
         birdBodies.add(yellowBird);
         birdBodies.add(redBird1);
         birdBodies.add(redBird2);
-        //pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.34f);
-        //pig2.createBody(world, AngryBirds.V_WIDTH * 0.743f, AngryBirds.V_HEIGHT * 0.4f);
-        //pig3.createBody(world, AngryBirds.V_WIDTH * 0.f, AngryBirds.V_HEIGHT * 0.f);
+        pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.32f);
+        pig2.createBody(world, AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.58f, 2);
+        pig3.createBody(world, AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.12f, 2);
         this.pigBodies.add(pig1);
         this.pigBodies.add(pig2);
         this.pigBodies.add(pig3);
@@ -292,7 +292,7 @@ public class Level2 extends Level {
         for (int i = 0; i < 6; i++) {
             Rectangle rod;
             if(i==0) {
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
                 //need to rotate to 90 degrees
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.58f, AngryBirds.V_HEIGHT * 0.14f, 21, 150, false);
                 // Rotate the rod by 90 degrees
@@ -301,31 +301,31 @@ public class Level2 extends Level {
             }
             if(i==1){
                 //need to rotate to 90 degrees
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.14f, 21, 150, false);
                 rods.add(rod);
             }
             if(i==2){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 21, false);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 21, false, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * (0.36f + 0.23f), AngryBirds.V_HEIGHT * (0.55f - 0.2f), AngryBirds.V_WIDTH*0.146f, 18, false);
                 rods.add(rod);
             }
             if (i==3) {
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 18, false);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 18, false, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.553f, (int) (AngryBirds.V_WIDTH*0.146f), 18, false);
                 rods.add(rod);
             }
             if(i==4){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 130, 21, true);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 130, 21, true, 2);
                 rod.createBody(world,AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.376f, 21,127,false);
                 rods.add(rod);
             }
             if(i==5){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 298, 21, true);
+                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 298, 21, true, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.847f, AngryBirds.V_HEIGHT * 0.14f, 21, 298, false);
                 rods.add(rod);
             }
-            System.out.println("Rod " + i + " created");
+            //System.out.println("Rod " + i + " created");
 
         }
         // length of rods
@@ -333,6 +333,14 @@ public class Level2 extends Level {
         InputAdapter birdInputProcessor = new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (currentBird != null) {
+                    System.out.println("Current Bird Is Shot " + currentBird.isShot());
+                }
+                if (yellowBird.getBody()!= null && yellowBird.isShot()) {
+                    System.out.println("Applying speed boost to Yellow Bird");
+                    yellowBird.applySpeedBoost();
+                    return true;
+                }
                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                 //System.out.println("Touch Down at: " + touchPoint); // Debug print
                 // Check if the click is on any bird
@@ -465,11 +473,11 @@ public class Level2 extends Level {
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
             Material block = (Material) fixtureB.getBody().getUserData();
             updateScore(30);
-            //block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
+            block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
             Material block = (Material) fixtureA.getBody().getUserData();
             updateScore(30);
-            //block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
+            block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
         }
 
     }
@@ -511,7 +519,7 @@ public class Level2 extends Level {
         // Apply damage based on impulse strength
         int damage = (int) (totalImpulse * DAMAGE_SCALING_FACTOR); // Adjust scaling factor as needed
         if (damage > MINIMUM_DAMAGE_THRESHOLD) { // Ignore small impacts
-            //material.takeDamage(world, damage, bodiesToDestroy, blockBodies);
+            material.takeDamage(world, damage, bodiesToDestroy, blockBodies);
         }
 
         // Mark the object as grounded after the first collision with the ground
@@ -635,28 +643,66 @@ public class Level2 extends Level {
             rod.update();
             rod.draw(game.batch);
         }
-        stone_ball.setPosition(AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f);
-        stone_ball.setSize(60, 60);
-        stone_ball.draw(game.batch);
+        //stone_ball.setPosition(AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f);
+        //stone_ball.setSize(60, 60);
+        //stone_ball.draw(game.batch);
         // Sprites
         //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
         //redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
-        yellowBird.setPosition(AngryBirds.V_WIDTH * 0.15f, AngryBirds.V_HEIGHT * 0.137f);
+        //yellowBird.setPosition(AngryBirds.V_WIDTH * 0.15f, AngryBirds.V_HEIGHT * 0.137f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.2f, AngryBirds.V_HEIGHT * 0.139f);
         pig1.setSize(60, 60);
         pig2.setSize(75, 75);
         pig3.setSize(75, 75);
-        pig1.setPosition(AngryBirds.V_WIDTH * 0.58f, AngryBirds.V_HEIGHT * 0.139f);
-        pig2.setPosition(AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.559f);
-        pig3.setPosition(AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.139f);
-        pig1.draw(game.batch);
-        pig2.draw(game.batch);
-        pig3.draw(game.batch);
-        redBird1.draw(game.batch);
-        redBird2.draw(game.batch);
-        yellowBird.draw(game.batch);
+        //pig1.setPosition(AngryBirds.V_WIDTH * 0.58f, AngryBirds.V_HEIGHT * 0.139f);
+        //pig2.setPosition(AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.559f);
+        //pig3.setPosition(AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.139f);
+        //pig1.draw(game.batch);
+        //pig2.draw(game.batch);
+        //pig3.draw(game.batch);
+        if (pig1.getBody()!=null) {
+            pig1.render(game.batch);
+        }
+        if (pig2.getBody()!=null) {
+            pig2.render(game.batch);
+        }
+        if (pig3.getBody()!=null) {
+            pig3.render(game.batch);
+        }
+        if (currentBird != null) {
+            currentBird.draw(game.batch);
+        }
+        //redBird1.draw(game.batch);
+        //redBird2.draw(game.batch);
+        //yellowBird.draw(game.batch);
         slingshot.draw(game.batch);
+        Iterator<Bird> iterator = birdsInAction.iterator();
+        while (iterator.hasNext()) {
+            Bird bird = iterator.next();
+            if (bird.getBody() == null) {
+                iterator.remove();
+                System.out.println("Bird removed");
+            } else {
+                //bird.update();
+                bird.draw(game.batch);
+            }
 
+            if (bird.isOutOfBounds() || bird.isStopped()) {
+                bird.reset();
+                iterator.remove();
+
+                if (!birdBodies.isEmpty() && currentBird == null) {
+                    currentBird = birdBodies.remove(0);
+                    currentBird.getBody().setTransform(SLINGSHOT_X / PPM, SLINGSHOT_Y / PPM, 0); // Position at slingshot
+                }
+            }
+        }
+
+        for (Bird bird : birdBodies) {
+            if (!birdsInAction.contains(bird)) {
+                bird.draw(game.batch);
+            }
+        }
         if (isPaused) {
             game.batch.draw(pausePopUp, (AngryBirds.V_WIDTH - pausePopUp.getRegionWidth()) / 2, (AngryBirds.V_HEIGHT - pausePopUp.getRegionHeight()) / 2);
             stage.addActor(pauseLabel);
@@ -673,15 +719,44 @@ public class Level2 extends Level {
         if (isLevelCleared) { // Add button to go to next level in level clear pop up
             stage.addActor(levelClearedLabel);
             stage.addActor(skipButton2);
+            stage.addActor(scoreLabel);
         } else if (isLevelFailed) { // Add button to retry level in level fail pop up
             stage.addActor(levelFailedLabel);
             stage.addActor(skipButton2);
+            stage.addActor(scoreLabel2);
         } else {
             levelClearedLabel.remove();
             levelFailedLabel.remove();
             skipButton2.remove();
+            scoreLabel.remove();
+            scoreLabel2.remove();
         }
+        if (pigBodies.isEmpty() && !isLevelCleared) {
+            isLevelCleared = true;
+            System.out.println("Level Cleared!");
+            System.out.println("Score: " + score);
+        } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && currentBird == null && !waitingForLevelEnd && !pigBodies.isEmpty()) {
+            //isLevelFailed = true;
+            waitingForLevelEnd = true;
+            levelEndTimer = 0;
+            System.out.println("Waiting for level end");
+            System.out.println("Score: " + score);
+        }
+        if (waitingForLevelEnd) {
+            levelEndTimer += delta; // Increment the timer
 
+            if (levelEndTimer >= 4.0f) { // 4 seconds delay
+                waitingForLevelEnd = false;
+
+                if (pigBodies.isEmpty()) {
+                    isLevelCleared = true; // All pigs are dead, level is cleared
+                    System.out.println("Level Cleared!");
+                } else {
+                    isLevelFailed = true; // Pigs remain, level is failed
+                    System.out.println("Level Failed!");
+                }
+            }
+        }
         game.batch.end();
         stage.act();
         stage.draw();

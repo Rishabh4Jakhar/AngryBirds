@@ -17,6 +17,7 @@ public class Pig extends Sprite implements Serializable {
     protected String name = "Pig";
     protected int health = 100;
     private int maxHealth = 100;
+    private int type = 1;
     protected int textureWidth;
     protected int textureHeight;
     private TextureRegion normalTexture, damagedTexture, criticalTexture;
@@ -49,6 +50,19 @@ public class Pig extends Sprite implements Serializable {
         criticalTexture = new TextureRegion(pigSheet, 3173, y, width, height);
     }
 
+    public Pig(Texture pigSheet, int x, int y, int width, int height, int type) {
+        super(new TextureRegion(pigSheet, x, y, width, height));
+        this.textureWidth = width;
+        this.textureHeight = height;
+        originalPosition = new Vector2(x, y);
+        setSize(60, 60);
+        setOrigin(getWidth() / 2, getHeight() / 2);
+        this.type = type;
+        normalTexture = new TextureRegion(pigSheet, 2956, y, width-1, height);
+        damagedTexture = new TextureRegion(pigSheet, 3067, y, width, height);
+        criticalTexture = new TextureRegion(pigSheet, 3291, y, width, height);
+    }
+
 
 
     public void setBody(Body body) {
@@ -62,6 +76,41 @@ public class Pig extends Sprite implements Serializable {
     }
     public Body getBody() {
         return body;
+    }
+    public void createBody(World world, float v, float v1, int type) {
+        // Create body definition
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(v / PPM, (v1 + 100) / PPM);
+
+        // Create body in world
+        body = world.createBody(bodyDef);
+        this.world = world;
+
+        // Create shape
+        CircleShape shape = new CircleShape();
+        if (type == 2) {
+            shape.setRadius(PIG_RADIUS*1.2f);
+        } else {
+            shape.setRadius(PIG_RADIUS);
+        }
+        //shape.setRadius(PIG_RADIUS);
+
+        // Create fixture
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = PIG_DENSITY;
+        fixtureDef.friction = PIG_FRICTION;
+        fixtureDef.restitution = PIG_RESTITUTION;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        originalPosition = new Vector2(v, v1);
+        body.setUserData(this);
+        if (Math.abs(v1 - GROUND_Y) < 1.0f) { // GROUND_Y is the ground level in world coordinates
+            setGrounded(true);
+        }
     }
 
     public void createBody(World world, float v, float v1) {
