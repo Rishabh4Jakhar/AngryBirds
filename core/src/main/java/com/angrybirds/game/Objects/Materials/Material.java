@@ -54,7 +54,11 @@ public abstract class Material extends Sprite {
         }
     }
 
-    public void takeDamage(World world, int damage, List<Body> bodiesToDestroy) {
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void takeDamage(World world, int damage, List<Body> bodiesToDestroy, List<Material> blockBodies) {
         System.out.println("Body state in takeDamage: " + body);
         this.world = world;
         health -= damage;
@@ -69,6 +73,8 @@ public abstract class Material extends Sprite {
         } else {
             updateTextureBasedOnHealth();
         }
+        // Remove the block from the list of block bodies
+        blockBodies.remove(this);
     }
 
 
@@ -101,5 +107,13 @@ public abstract class Material extends Sprite {
         } else {
             throw new IllegalStateException("Body already set for: " + this.type);
         }
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

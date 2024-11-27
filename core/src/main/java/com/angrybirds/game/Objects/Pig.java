@@ -95,6 +95,15 @@ public class Pig extends Sprite implements Serializable {
         }
     }
 
+    // Overload update function with no parameter, just to sync positions with physics body
+    public void update() {
+        if (body != null) {
+            Vector2 position = body.getPosition();
+            setPosition(position.x * PPM - getWidth() / 2, position.y * PPM - getHeight() / 2);
+            setRotation((float) Math.toDegrees(body.getAngle()));
+        }
+    }
+
     public void update(float delta, List<Body> bodiesToDestroy) {
         if (body!=null) {
             Vector2 velocity = body.getLinearVelocity();
@@ -166,6 +175,20 @@ public class Pig extends Sprite implements Serializable {
 
     public int getHealth() {
         return health;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public void setDead(boolean dead) {
+        if (dead) {
+            health = 0;
+        }
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }
 

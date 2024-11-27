@@ -248,4 +248,8 @@ public class Bird extends Sprite {
     public Vector2 getOriginalPosition() {
         return originalPosition;
     }
+
+    public void setShot(boolean shot) {
+        isShot = shot;
+    }
 }
