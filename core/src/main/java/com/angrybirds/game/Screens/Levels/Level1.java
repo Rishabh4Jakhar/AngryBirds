@@ -538,7 +538,7 @@ public class Level1 extends Level {
     }
     private void clearLevel() {
         // Destroy all bodies in the world
-        Array bodies = new Array();
+        Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
         // Convert to a standard Java array if needed
         // Convert to a standard Java ArrayList
