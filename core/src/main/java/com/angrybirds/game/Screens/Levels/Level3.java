@@ -245,8 +245,8 @@ public class Level3 extends Level {
         // Now create bodies for the objects (birds, pigs, structures here)
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
-        yellowBird.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, true);
-        redBird1.createBody(world, (SLINGSHOT_X/ PPM)-12, (SLINGSHOT_Y/ PPM)-72, false);
+        yellowBird.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, false);
+        redBird1.createBody(world, (SLINGSHOT_X/ PPM)-120, (SLINGSHOT_Y/ PPM)-72, false);
         redBird2.createBody(world, (SLINGSHOT_X/ PPM)-180, (SLINGSHOT_Y/ PPM)-72, false);
         blueBird.createBody(world, (SLINGSHOT_X/PPM)-60, (SLINGSHOT_Y/PPM)-72, false);
         birdBodies.add(yellowBird);
@@ -808,7 +808,9 @@ public class Level3 extends Level {
         }
         for (Bird bird : birdBodies) {
             if (!birdsInAction.contains(bird)) {
-                bird.draw(game.batch);
+                if (bird.getBody() != null) {
+                    bird.draw(game.batch);
+                }
             }
         }
         if (isPaused) {

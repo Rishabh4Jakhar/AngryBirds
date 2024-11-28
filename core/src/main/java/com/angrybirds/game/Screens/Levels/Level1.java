@@ -252,7 +252,7 @@ public class Level1 extends Level {
         // Now create bodies for the objects (birds, pigs, structures here)
         System.out.println("Slingshot Position (Pixels): " + SLINGSHOT_X + ", " + SLINGSHOT_Y);
         // Create birds
-        redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, true);
+        redBird1.createBody(world, SLINGSHOT_X/PPM, SLINGSHOT_Y/PPM, false);
         redBird2.createBody(world, (SLINGSHOT_X/ PPM)-70, (SLINGSHOT_Y/ PPM)-72, false);
         birdBodies.add(redBird1);
         birdBodies.add(redBird2);
