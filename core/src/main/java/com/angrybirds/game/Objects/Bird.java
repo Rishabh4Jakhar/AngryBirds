@@ -88,7 +88,11 @@ public class Bird extends Sprite {
         shape.dispose();
 
         originalPosition = new Vector2(v, v1);
-        body.setType(BodyDef.BodyType.KinematicBody);
+        if (isDynamic) {
+            body.setType(BodyDef.BodyType.DynamicBody);
+        } else {
+            body.setType(BodyDef.BodyType.KinematicBody);
+        }
         body.setUserData(this);
     }
 
