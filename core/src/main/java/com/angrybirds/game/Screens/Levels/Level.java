@@ -62,7 +62,7 @@ public abstract class Level implements Screen {
         moreUITexture = new Texture(Gdx.files.internal("SpriteSheet/moreUI.png"));
         levelClearedPopUp = new TextureRegion(moreUITexture, 12, 448, 172, 165); // Adjust coordinates as needed
         levelFailedPopUp = new TextureRegion(moreUITexture, 204, 448, 175, 165); // Adjust coordinates as needed
-        world = new World(new Vector2(0, -4f), true);
+        world = new World(new Vector2(0, -6.5f), true);
         b2dr = new Box2DDebugRenderer();
         birdBodies = new ArrayList<>();
         pigBodies = new ArrayList<>();
