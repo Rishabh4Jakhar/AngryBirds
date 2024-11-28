@@ -1006,7 +1006,7 @@ public class Level1 extends Level {
         if (waitingForLevelEnd) {
             levelEndTimer += delta; // Increment the timer
 
-            if (levelEndTimer >= 4.0f) { // 4 seconds delay
+            if (levelEndTimer >= 3.0f) { // 4 seconds delay
                 waitingForLevelEnd = false;
 
                 if (pigBodies.isEmpty()) {

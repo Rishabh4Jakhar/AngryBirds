@@ -45,9 +45,9 @@ public class Rectangle extends Material implements Serializable {
         setSize(setWidth, setHeight);
         setOrigin(getWidth() / 2, getHeight() / 2);
         if (no == 3) {
-        this.normalTexture = new TextureRegion(texture, x, 860, width, height);
-        this.damagedTexture = new TextureRegion(texture, x, 944, width, height);
-        this.criticalTexture = new TextureRegion(texture, x, 1028, width, height);
+        this.normalTexture = new TextureRegion(texture, x, 1762, width, height);
+        this.damagedTexture = new TextureRegion(texture, x, 1783, width, height);
+        this.criticalTexture = new TextureRegion(texture, x, 1806, width, height);
         } else if (no == 2) {
             this.normalTexture = new TextureRegion(texture, x, 1323, width, height);
             this.damagedTexture = new TextureRegion(texture, x, 1301, width, height);

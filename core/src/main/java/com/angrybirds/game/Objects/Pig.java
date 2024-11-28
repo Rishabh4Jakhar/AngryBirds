@@ -55,12 +55,25 @@ public class Pig extends Sprite implements Serializable {
         this.textureWidth = width;
         this.textureHeight = height;
         originalPosition = new Vector2(x, y);
-        setSize(60, 60);
-        setOrigin(getWidth() / 2, getHeight() / 2);
         this.type = type;
-        normalTexture = new TextureRegion(pigSheet, 2956, y, width-1, height);
-        damagedTexture = new TextureRegion(pigSheet, 3067, y, width, height);
-        criticalTexture = new TextureRegion(pigSheet, 3291, y, width, height);
+        if (type == 2) {
+            setSize(80, 80);
+            normalTexture = new TextureRegion(pigSheet, 2956, y, width-1, height);
+            damagedTexture = new TextureRegion(pigSheet, 3067, y, width, height);
+            criticalTexture = new TextureRegion(pigSheet, 3291, y, width, height);
+        } else if (type == 3) {
+            setSize(100, 100);
+            normalTexture = new TextureRegion(pigSheet, x, y, width, height);
+            damagedTexture = new TextureRegion(pigSheet, x, y, width, height);
+            criticalTexture = new TextureRegion(pigSheet, x, y, width, height);
+        } else {
+            setSize(60, 60);
+            normalTexture = new TextureRegion(pigSheet, 2953, y, width, height);
+            damagedTexture = new TextureRegion(pigSheet, 3063, y, width, height);
+            criticalTexture = new TextureRegion(pigSheet, 3173, y, width, height);
+        }
+        setOrigin(getWidth() / 2, getHeight() / 2);
+
     }
 
 
@@ -90,7 +103,9 @@ public class Pig extends Sprite implements Serializable {
         // Create shape
         CircleShape shape = new CircleShape();
         if (type == 2) {
-            shape.setRadius(PIG_RADIUS*1.2f);
+            shape.setRadius(PIG_RADIUS*1.4f);
+        } else if (type == 3) {
+            shape.setRadius(PIG_RADIUS*1.8f);
         } else {
             shape.setRadius(PIG_RADIUS);
         }
