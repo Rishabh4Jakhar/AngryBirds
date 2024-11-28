@@ -337,6 +337,11 @@ public class Level3 extends Level {
                     yellowBird.applySpeedBoost();
                     return true;
                 }
+                if (blueBird.getBody()!= null && blueBird.isShot()) {
+                    System.out.println("Blue Bird Splitting");
+                    blueBird.split(world, birdBodies, birdSheet); // Pass the list of birds
+                    return true;
+                }
                 Vector2 touchPoint = gamePort.unproject(new Vector2(screenX, screenY));
                 //System.out.println("Touch Down at: " + touchPoint); // Debug print
                 // Check if the click is on any bird
@@ -590,6 +595,7 @@ public class Level3 extends Level {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         destroyBodies(delta);
+
         if (redBird1.getBody() != null) {
             redBird1.update(delta);
         }
@@ -601,6 +607,16 @@ public class Level3 extends Level {
         }
         if (blueBird.getBody() != null) {
             blueBird.update(delta);
+        }
+        for (Bird bird : birdBodies) {
+            // If bird is instance of BlueBird, update the state of the bird
+            if (bird instanceof BlueBird) {
+                // Update state if bird != blueBird
+                if (bird != blueBird) {
+                    //System.out.println("Updating Blue Bird Childs");
+                    ((BlueBird) bird).update(delta);
+                }
+            }
         }
         Iterator<Pig> pigIterator = pigBodies.iterator();
         while (pigIterator.hasNext()) {
