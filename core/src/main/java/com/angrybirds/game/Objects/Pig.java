@@ -209,9 +209,12 @@ public class Pig extends Sprite implements Serializable {
 
     private void updateTextureBasedOnHealth() {
         float healthPercentage = (float) health / maxHealth;
-
-        if (healthPercentage > 0.5f) {
+        if (healthPercentage > 0.8f) {
+            // Full health, normal texture
+            //System.out.println("Pig health: " + healthPercentage);
+        } else if (healthPercentage > 0.5f) {
             // High health, normal texture
+            //System.out.println("Pig health: " + healthPercentage);
             setRegion(new TextureRegion(normalTexture));
         } else if (healthPercentage > 0.2f) {
             // Medium health, damaged texture

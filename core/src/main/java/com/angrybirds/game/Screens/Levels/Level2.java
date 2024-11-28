@@ -40,6 +40,7 @@ public class Level2 extends Level {
     private RedBird redBird1, redBird2;
     private YellowBird yellowBird;
     private Slingshot slingshot;
+    private TNT tnt;
     private boolean isPaused = false;
     private TextureRegion pausePopUp;
     private Label pauseLabel, levelClearedLabel, levelFailedLabel, scoreLabel, scoreLabel2;;
@@ -283,7 +284,7 @@ public class Level2 extends Level {
         birdBodies.add(redBird2);
         pig1.createBody(world, AngryBirds.V_WIDTH * 0.673f, AngryBirds.V_HEIGHT * 0.32f);
         pig2.createBody(world, AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.58f, 2);
-        pig3.createBody(world, AngryBirds.V_WIDTH * 0.8f, AngryBirds.V_HEIGHT * 0.12f, 2);
+        pig3.createBody(world, AngryBirds.V_WIDTH * 0.77f, AngryBirds.V_HEIGHT * 0.07f, 2);
         this.pigBodies.add(pig1);
         this.pigBodies.add(pig2);
         this.pigBodies.add(pig3);
@@ -329,7 +330,10 @@ public class Level2 extends Level {
 
         }
         // length of rods
-        System.out.println("Rods size: " + rods.size());
+        //System.out.println("Rods size: " + rods.size());
+        tnt = new TNT(angryBirdSheet,472, 901, 71, 68);
+        tnt.createBody(world, AngryBirds.V_WIDTH * 0.66f, AngryBirds.V_HEIGHT * 0.187f, 60,60);
+        blockBodies.add(tnt);
         InputAdapter birdInputProcessor = new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -456,6 +460,13 @@ public class Level2 extends Level {
         Object dataA = fixtureA.getBody().getUserData();
         Object dataB = fixtureB.getBody().getUserData();
         // Check if bird collides with a pig or block
+        if (dataA instanceof TNT) {
+            ((TNT) dataA).explode(world, bodiesToDestroy, blockBodies, pigBodies);// Pass the world and objects list
+            tnt.renderRadius(shapeRenderer);
+        } else if (dataB instanceof TNT) {
+            ((TNT) dataB).explode(world, bodiesToDestroy, blockBodies, pigBodies); // Pass the world and objects list
+            tnt.renderRadius(shapeRenderer);
+        }
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
             Pig pig = (Pig) fixtureB.getBody().getUserData();
             if (pig.getHealth() - 50 <= 0) {
@@ -473,15 +484,28 @@ public class Level2 extends Level {
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Material) {
             Material block = (Material) fixtureB.getBody().getUserData();
             updateScore(30);
-            block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
+            block.takeDamage(world,70, bodiesToDestroy, blockBodies); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Material && fixtureB.getBody().getUserData() instanceof Bird) {
             Material block = (Material) fixtureA.getBody().getUserData();
             updateScore(30);
-            block.takeDamage(world,25, bodiesToDestroy, blockBodies); // Adjust damage value
+            block.takeDamage(world,70, bodiesToDestroy, blockBodies); // Adjust damage value
         }
 
+        if (dataA instanceof Pig && dataB instanceof Material) {
+            applyDamage((Pig) dataA, fixtureB.getBody());
+        } else if (dataB instanceof Pig && dataA instanceof Material) {
+            applyDamage((Pig) dataB, fixtureA.getBody());
+        }
     }
+    private void applyDamage(Pig pig, Body blockBody) {
+        Vector2 velocity = blockBody.getLinearVelocity();
+        float speed = velocity.len(); // Calculate speed (magnitude of velocity)
 
+        float damage = speed * blockBody.getMass()*8f; // Example damage formula
+        pig.takeDamage((int) damage, bodiesToDestroy);
+
+        //System.out.println("Pig took damage: " + damage + ", Remaining Health: " + pig.getHealth());
+    }
     private void handleCollisionGround(Contact contact, ContactImpulse impulse) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
@@ -561,7 +585,7 @@ public class Level2 extends Level {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        destroyBodies();
+        destroyBodies(delta);
         if (redBird1.getBody() != null) {
             redBird1.update(delta);
         }
@@ -599,10 +623,11 @@ public class Level2 extends Level {
         //}
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
         Sphere stone_ball = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
-        TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
+        //TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
-        game.batch.draw(tnt, AngryBirds.V_WIDTH * 0.68f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
+
+        //game.batch.draw(tnt, AngryBirds.V_WIDTH * 0.68f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
         // Level designing
         //for (int i = 0; i < 2; i++) {
         //    Rectangle rod = rods.get(i);
@@ -643,6 +668,14 @@ public class Level2 extends Level {
             rod.update();
             rod.draw(game.batch);
         }
+        if (tnt.getBody() != null) {
+            tnt.update(delta);
+
+            //System.out.println("TNT Position: " + tnt.getX() + ", " + tnt.getY());
+            tnt.draw(game.batch);
+            tnt.renderRadius(shapeRenderer);
+        }
+        //tnt.draw(game.batch);
         //stone_ball.setPosition(AngryBirds.V_WIDTH * 0.64f, AngryBirds.V_HEIGHT * 0.36f);
         //stone_ball.setSize(60, 60);
         //stone_ball.draw(game.batch);
@@ -766,8 +799,13 @@ public class Level2 extends Level {
         b2dr.render(world, b2dCam.combined);
     }
 
-    private void destroyBodies() {
+    private void destroyBodies(float delta) {
         for (Body body : bodiesToDestroy) {
+            // If body is of instance tnt, do explosion first
+            if (body.getUserData() instanceof TNT) {
+                //materials.removeIf(material -> material instanceof TNT && ((TNT) material).isAnimationComplete());
+                tnt.showAnimation(delta);
+            }
             world.destroyBody(body);
             System.out.println("Body destroyed: " + body);
         }
