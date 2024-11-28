@@ -3,6 +3,7 @@ package com.angrybirds.game.Objects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class BlueBird extends Bird {
 
         // Original bird continues with the same trajectory
         System.out.println("Blue bird splits!");
+        // Log original bird state
+        System.out.println("Blue bird splits! Original velocity: " + originalVelocity + ", Position: " + position);
 
         // Create new bird trajectories
         Vector2 velocity1 = rotateVector(originalVelocity, 15);  // Clockwise
@@ -46,7 +49,11 @@ public class BlueBird extends Bird {
         // Add new birds to the list
         birds.add(bird1);
         birds.add(bird2);
-    }
+
+        // Log new birds' velocities for debugging
+        System.out.println("Bird 1 velocity: " + bird1.getBody().getLinearVelocity());
+        System.out.println("Bird 2 velocity: " + bird2.getBody().getLinearVelocity());
+}
 
     private Vector2 rotateVector(Vector2 vector, float angleDegrees) {
         float angleRadians = (float) Math.toRadians(angleDegrees);
@@ -65,6 +72,10 @@ public class BlueBird extends Bird {
         newBody.setLinearDamping(originalBody.getLinearDamping());
         newBody.setAngularDamping(originalBody.getAngularDamping());
         newBody.setFixedRotation(originalBody.isFixedRotation());
+
+        // Copy mass and inertia if necessary
+        MassData massData = originalBody.getMassData();
+        newBody.setMassData(massData);
     }
 
 }
