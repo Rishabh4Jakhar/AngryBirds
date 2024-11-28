@@ -204,7 +204,7 @@ public class Pig extends Sprite implements Serializable {
             bodiesToDestroy.add(body);
             //world.destroyBody(body); // Remove the body from the physics world
             body = null;
-            rollingTime = 0; // Reset the rolling timer
+            //rollingTime = 0; // Reset the rolling timer
             System.out.println("Pig has been killed!");
         }
     }
