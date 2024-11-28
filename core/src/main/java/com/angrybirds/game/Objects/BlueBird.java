@@ -26,16 +26,11 @@ public class BlueBird extends Bird {
         Vector2 originalVelocity = body.getLinearVelocity();
         Vector2 position = body.getPosition();
 
-        // Original bird continues with the same trajectory
-        System.out.println("Blue bird splits!");
-        // Log original bird state
-        System.out.println("Blue bird splits! Original velocity: " + originalVelocity + ", Position: " + position);
 
-        // Create new bird trajectories
         Vector2 velocity1 = rotateVector(originalVelocity, 15);  // Clockwise
         Vector2 velocity2 = rotateVector(originalVelocity, -15); // Counter-clockwise
 
-        // Create new birds
+
         Bird bird1 = new BlueBird(birdTexture);
         bird1.createBody(world, position.x * PPM, position.y * PPM, true);
         copyBodyProperties(body, bird1.getBody());
@@ -46,13 +41,9 @@ public class BlueBird extends Bird {
         copyBodyProperties(body, bird2.getBody());
         bird2.getBody().setLinearVelocity(velocity2);
 
-        // Add new birds to the list
         birds.add(bird1);
         birds.add(bird2);
 
-        // Log new birds' velocities for debugging
-        System.out.println("Bird 1 velocity: " + bird1.getBody().getLinearVelocity());
-        System.out.println("Bird 2 velocity: " + bird2.getBody().getLinearVelocity());
 }
 
     private Vector2 rotateVector(Vector2 vector, float angleDegrees) {
