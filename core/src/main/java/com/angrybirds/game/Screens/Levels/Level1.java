@@ -810,7 +810,7 @@ public class Level1 extends Level {
 
             // Update position using basic physics
             currentPosition.add(velocity.x * timeStep, velocity.y * timeStep);
-            velocity.add(0, -4f * timeStep); // Apply gravity (adjust if world gravity is different)
+            velocity.add(0, -6f * timeStep); // Apply gravity (adjust if world gravity is different)
         }
 
         shapeRenderer.end();
@@ -1006,7 +1006,7 @@ public class Level1 extends Level {
         if (waitingForLevelEnd) {
             levelEndTimer += delta; // Increment the timer
 
-            if (levelEndTimer >= 3.0f) { // 4 seconds delay
+            if (levelEndTimer >= 2.0f) { // 4 seconds delay
                 waitingForLevelEnd = false;
 
                 if (pigBodies.isEmpty()) {
