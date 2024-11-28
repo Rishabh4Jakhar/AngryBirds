@@ -82,6 +82,7 @@ public class Rectangle extends Material implements Serializable {
 
         originalPosition = new Vector2(x, y);
         body.setUserData(this); // Link this object with the body
+        setBody(body);
         if (Math.abs(y - GROUND_Y) < 1.0f) { // GROUND_Y is the ground level in world coordinates
             setGrounded(true);
         }
@@ -109,6 +110,10 @@ public class Rectangle extends Material implements Serializable {
 
     private void onDestroy() {
         body.getWorld().destroyBody(body);
+    }
+
+    public Body getBody() {
+        return body;
     }
 
     public int getHealth() {

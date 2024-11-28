@@ -293,39 +293,51 @@ public class Level2 extends Level {
         for (int i = 0; i < 6; i++) {
             Rectangle rod;
             if(i==0) {
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
                 //need to rotate to 90 degrees
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.58f, AngryBirds.V_HEIGHT * 0.14f, 21, 150, false);
                 // Rotate the rod by 90 degrees
-
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
             if(i==1){
                 //need to rotate to 90 degrees
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, 150, 21, true, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.14f, 21, 150, false);
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
             if(i==2){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 21, false, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 21, false, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * (0.36f + 0.23f), AngryBirds.V_HEIGHT * (0.55f - 0.2f), AngryBirds.V_WIDTH*0.146f, 18, false);
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
             if (i==3) {
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 18, false, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, (int) (AngryBirds.V_WIDTH*0.146f), 18, false, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.553f, (int) (AngryBirds.V_WIDTH*0.146f), 18, false);
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
             if(i==4){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 130, 21, true, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, 130, 21, true, 2);
                 rod.createBody(world,AngryBirds.V_WIDTH * 0.72f, AngryBirds.V_HEIGHT * 0.376f, 21,127,false);
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
             if(i==5){
-                rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 298, 21, true, 2);
+                rod = new Rectangle("Ice Rod", 100, angryBirdSheet, 1090, 1344, 205, 21, 298, 21, true, 2);
                 rod.createBody(world, AngryBirds.V_WIDTH * 0.847f, AngryBirds.V_HEIGHT * 0.14f, 21, 298, false);
+                blockBodies.add(rod);
                 rods.add(rod);
+                System.out.println("Rod body: " + rod.getBody());
             }
+
             //System.out.println("Rod " + i + " created");
 
         }
@@ -460,11 +472,15 @@ public class Level2 extends Level {
         Object dataA = fixtureA.getBody().getUserData();
         Object dataB = fixtureB.getBody().getUserData();
         // Check if bird collides with a pig or block
+        // Print .getBody of 1 rod from rods to check if its null or not
+
         if (dataA instanceof TNT) {
-            ((TNT) dataA).explode(world, bodiesToDestroy, blockBodies, pigBodies);// Pass the world and objects list
+            //System.out.println("Rod 1 body: " + rods.get(0).getBody());
+            ((TNT) dataA).explode(world, bodiesToDestroy, rods, pigBodies, blockBodies);// Pass the world and objects list
             tnt.renderRadius(shapeRenderer);
         } else if (dataB instanceof TNT) {
-            ((TNT) dataB).explode(world, bodiesToDestroy, blockBodies, pigBodies); // Pass the world and objects list
+            //System.out.println("Rod 1 body: " + rods.get(0).getBody());
+            ((TNT) dataB).explode(world, bodiesToDestroy, rods, pigBodies, blockBodies); // Pass the world and objects list
             tnt.renderRadius(shapeRenderer);
         }
         if (fixtureA.getBody().getUserData() instanceof Bird && fixtureB.getBody().getUserData() instanceof Pig) {
@@ -472,11 +488,21 @@ public class Level2 extends Level {
             if (pig.getHealth() - 50 <= 0) {
                 updateScore(80);
             }
+            // If bird is not selected, dont apply damage
+            Bird bird = (Bird) fixtureA.getBody().getUserData();
+            if (!bird.isShot()) {
+                return;
+            }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         } else if (fixtureA.getBody().getUserData() instanceof Pig && fixtureB.getBody().getUserData() instanceof Bird) {
             Pig pig = (Pig) fixtureA.getBody().getUserData();
             if (pig.getHealth() - 50 <= 0) {
                 updateScore(80);
+            }
+            // If bird is not selected, dont apply damage
+            Bird bird = (Bird) fixtureB.getBody().getUserData();
+            if (!bird.isShot()) {
+                return;
             }
             pig.takeDamage(50, bodiesToDestroy); // Adjust damage value
         }
@@ -666,7 +692,11 @@ public class Level2 extends Level {
             // Sync the box2d body with the sprite position
             //System.out.println("Rod position: " + rod.getX() + ", " + rod.getY());
             rod.update();
-            rod.draw(game.batch);
+            if (rod.getHealth() > 0) {
+                //System.out.println("Rod teesting " + rod.getBody());
+                rod.draw(game.batch);
+            }
+            //rod.draw(game.batch);
         }
         if (tnt.getBody() != null) {
             tnt.update(delta);
@@ -802,10 +832,6 @@ public class Level2 extends Level {
     private void destroyBodies(float delta) {
         for (Body body : bodiesToDestroy) {
             // If body is of instance tnt, do explosion first
-            if (body.getUserData() instanceof TNT) {
-                //materials.removeIf(material -> material instanceof TNT && ((TNT) material).isAnimationComplete());
-                tnt.showAnimation(delta);
-            }
             world.destroyBody(body);
             System.out.println("Body destroyed: " + body);
         }

@@ -17,7 +17,7 @@ public class TNT extends Material {
     private Body body;
     protected static final float PPM = 100f;
     private static final float EXPLOSION_RADIUS = 1.6f; // Radius in Box2D units
-    private static final int EXPLOSION_DAMAGE = 200; // Damage to apply to nearby objects
+    private static final int EXPLOSION_DAMAGE = 90; // Damage to apply to nearby objects
     private boolean exploded = false;
     private boolean isExploding = false;
     private float currentExplosionRadius = 0f; // Radius of the current explosion animation
@@ -31,7 +31,9 @@ public class TNT extends Material {
         //System.out.println("TNT Texture: " + new TextureRegion(texture, x, y, width, height));
         setSize(width, height); // Set the size of the sprite
         setOriginCenter(); // Set origin to center for proper rotation and scaling
-
+        this.normalTexture = new TextureRegion(texture, x, y, width, height);
+        this.damagedTexture = new TextureRegion(texture, x, y, width, height);
+        this.criticalTexture = new TextureRegion(texture, x, y, width, height);
         //createBody(world, x, y, width, height); // Create the physical body
     }
 
@@ -70,18 +72,6 @@ public class TNT extends Material {
         }
         //System.out.println("TNT Update");
         //System.out.println("show explosion: " + showExplosion);
-        if (isExploding) {
-            System.out.println("TNT Exploding");
-            explosionTime += delta;
-
-            // Expand the explosion radius over time
-            currentExplosionRadius = EXPLOSION_RADIUS * (explosionTime / MAX_EXPLOSION_TIME);
-
-            // End explosion animation after max time
-            if (explosionTime >= MAX_EXPLOSION_TIME) {
-                isExploding = false; // End the explosion animation
-            }
-        }
     }
 
     public void showAnimation(float delta) {
@@ -109,7 +99,7 @@ public class TNT extends Material {
         return body;
     }
 
-    public void explode(World world, List<Body> bodiesToDestroy, List<Material> blockBodies, List<Pig> pigBodies) {
+    public void explode(World world, List<Body> bodiesToDestroy, ArrayList<Rectangle> rods, List<Pig> pigBodies, List<Material> blockBodies) {
         if (exploded) return; // Prevent multiple explosions
 
         System.out.println("TNT exploded!");
@@ -120,12 +110,18 @@ public class TNT extends Material {
         Vector2 tntPosition = body.getPosition();
 
         // Damage objects within the explosion radius
-        for (Material material : blockBodies) {
+        for (Material material : rods) {
+            System.out.println("Material tnt : " + material.getBody());
             if (material != this) { // Skip self
+                if (material.getBody() == null) {
+                    System.out.println("Material body is null");
+                    continue;
+                }
                 Vector2 materialPosition = material.getBody().getPosition();
                 float distance = materialPosition.dst(tntPosition);
-
+                //System.out.println("Distance for tnt explosion: " + distance);
                 if (distance <= EXPLOSION_RADIUS) {
+                    System.out.println("Material Body tnt: " + material.getBody());
                     material.takeDamage(world, EXPLOSION_DAMAGE, bodiesToDestroy, blockBodies);
                     System.out.println(material.getType() + " damaged by explosion. Remaining health: " + material.getHealth());
                 }

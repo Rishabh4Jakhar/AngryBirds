@@ -46,7 +46,7 @@ public abstract class Material extends Sprite {
             return;
         }
         isDead = true;
-        if (body != null) {
+        if (getBody() != null) {
             //world.destroyBody(body);
             bodiesToDestroy.add(body);
             body = null; // Remove the physics body
@@ -59,15 +59,15 @@ public abstract class Material extends Sprite {
     }
 
     public void takeDamage(World world, int damage, List<Body> bodiesToDestroy, List<Material> blockBodies) {
-        System.out.println("Body state in takeDamage: " + body);
+        System.out.println("Body state in takeDamage: " + getBody());
         this.world = world;
         health -= damage;
-        System.out.println("Health: " + health + ", Body: " + body + ", Type: " + this.type);
+        System.out.println("Health: " + health + ", Body: " + getBody() + ", Type: " + this.type);
         // Check if body is null for debug
-        if (body == null) {
+        if (getBody() == null) {
             System.out.println("Block destroyed! (null)" + this.type);
         }
-        if (health <= 0 && body != null) {
+        if (health <= 0 && getBody() != null) {
             System.out.println("Block destroyed! " + this.type);
             die(bodiesToDestroy);
         } else {
