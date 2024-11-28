@@ -57,12 +57,14 @@ public class Pig extends Sprite implements Serializable {
         originalPosition = new Vector2(x, y);
         this.type = type;
         if (type == 2) {
+            health = 150;
             setSize(80, 80);
             normalTexture = new TextureRegion(pigSheet, 2956, y, width-1, height);
             damagedTexture = new TextureRegion(pigSheet, 3067, y, width, height);
             criticalTexture = new TextureRegion(pigSheet, 3291, y, width, height);
         } else if (type == 3) {
             setSize(100, 100);
+            health = 200;
             normalTexture = new TextureRegion(pigSheet, x, y, width, height);
             damagedTexture = new TextureRegion(pigSheet, x, y, width, height);
             criticalTexture = new TextureRegion(pigSheet, x, y, width, height);
