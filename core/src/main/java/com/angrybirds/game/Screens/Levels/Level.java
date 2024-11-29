@@ -69,6 +69,10 @@ public abstract class Level implements Screen {
         blockBodies = new ArrayList<>();
         //addDummyButtons();
     }
+
+    public int getLevelNumber() {
+        return levelNumber;
+    }
     /*
     private void addDummyButtons() {
         // Green button for level cleared
@@ -157,6 +161,7 @@ public abstract class Level implements Screen {
 
     protected void increaseLevelNumber() {
         levelNumber++;
+        AngryBirds.currentLevel++;
     }
 
     @Override

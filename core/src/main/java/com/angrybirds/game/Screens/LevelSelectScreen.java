@@ -1,6 +1,7 @@
 package com.angrybirds.game.Screens;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.Screens.Levels.Level;
 import com.angrybirds.game.Screens.Levels.Level1;
 import com.angrybirds.game.Screens.Levels.Level2;
 import com.angrybirds.game.Screens.Levels.Level3;
@@ -76,7 +77,8 @@ public class LevelSelectScreen implements Screen {
         });
 
         // Level 1 button
-        TextureRegion level1Region = new TextureRegion(moreUiTexture, 777, 593, 60, 77);
+        TextureRegion level1Region = new TextureRegion(moreUiTexture, 777, 593, 62, 77);
+        TextureRegion levelLockedRegion = new TextureRegion(moreUiTexture, 956, 122, 64, 64);
         skin.add("level1Button", level1Region);
         ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = skin.getDrawable("level1Button");
@@ -92,7 +94,13 @@ public class LevelSelectScreen implements Screen {
         });
 
         // Level 2 button
-        TextureRegion level2Region = new TextureRegion(moreUiTexture, 777, 593, 60, 77);
+        TextureRegion level2Region;
+        if (AngryBirds.currentLevel >= 2) {
+            level2Region = new TextureRegion(moreUiTexture, 777, 593, 62, 77);
+        } else {
+            level2Region = levelLockedRegion;
+        }
+        //level2Region = new TextureRegion(moreUiTexture, 777, 593, 60, 77);
         skin.add("level2Button", level2Region);
         ImageButton.ImageButtonStyle style2 = new ImageButton.ImageButtonStyle();
         style2.imageUp = skin.getDrawable("level2Button");
@@ -104,12 +112,20 @@ public class LevelSelectScreen implements Screen {
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
+                if (AngryBirds.currentLevel >= 2) {
+                    game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
+                }
+                //game.setScreen(new Level2(game, gameCam, gamePort, moreUiTexture));
             }
         });
 
         // Level 3 button
-        TextureRegion level3Region = new TextureRegion(moreUiTexture, 777, 593, 60, 77);
+        TextureRegion level3Region;
+        if (AngryBirds.currentLevel >= 3) {
+            level3Region = new TextureRegion(moreUiTexture, 777, 593, 62, 77);
+        } else {
+            level3Region = levelLockedRegion;
+        }
         skin.add("level3Button", level3Region);
         ImageButton.ImageButtonStyle style3 = new ImageButton.ImageButtonStyle();
         style3.imageUp = skin.getDrawable("level3Button");
@@ -121,7 +137,10 @@ public class LevelSelectScreen implements Screen {
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
+                if (AngryBirds.currentLevel >= 3) {
+                    game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
+                }
+                //game.setScreen(new Level3(game, gameCam, gamePort, moreUiTexture));
             }
         });
 
@@ -153,11 +172,19 @@ public class LevelSelectScreen implements Screen {
 
         // Level 2 Label
         Label level2Label = new Label("2", labelStyle);
-        level2Label.setPosition(level2Button.getX() + level2Button.getWidth() * 0.55f, level2Button.getY() + level2Button.getHeight() * 0.47f);
-
+        if (AngryBirds.currentLevel >= 2) {
+            level2Label.setPosition(level2Button.getX() + level2Button.getWidth() * 0.55f, level2Button.getY() + level2Button.getHeight() * 0.47f);
+        } else {
+            level2Label.setPosition(AngryBirds.V_WIDTH*100f, AngryBirds.V_HEIGHT*100f); //Anything outside the screen
+        }
         // Level 3 Label
         Label level3Label = new Label("3", labelStyle);
-        level3Label.setPosition(level3Button.getX() + level3Button.getWidth() * 0.55f, level3Button.getY() + level3Button.getHeight() * 0.47f);
+        if (AngryBirds.currentLevel >= 3) {
+            level3Label.setPosition(level3Button.getX() + level3Button.getWidth() * 0.55f, level3Button.getY() + level3Button.getHeight() * 0.47f);
+        } else {
+            level3Label.setPosition(AngryBirds.V_WIDTH*100f, AngryBirds.V_HEIGHT*100f); //Anything outside the screen
+        }
+        //level3Label.setPosition(level3Button.getX() + level3Button.getWidth() * 0.55f, level3Button.getY() + level3Button.getHeight() * 0.47f);
 
         // Title Label
         Label titleLabel = new Label("Select Level", labelStyle);

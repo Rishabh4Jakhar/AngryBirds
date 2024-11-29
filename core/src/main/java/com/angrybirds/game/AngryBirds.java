@@ -14,7 +14,8 @@ public class AngryBirds extends Game {
     // Virtual width and height of the game screen
     public static final int V_WIDTH = 1280;
     public static final int V_HEIGHT = 720;
-
+    public static final float PPM = 100;
+    public static int currentLevel = 1;
     // Dimensions of various sprites (commented out for now)
     /*
     public static final int RED_BIRD_WIDTH = 45;
