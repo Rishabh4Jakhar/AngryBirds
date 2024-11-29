@@ -11,9 +11,9 @@ public class Triangle extends Material {
     protected int textureWidth;
     protected int textureHeight;
     protected static final float PPM = 100f;
-    private static final float MATERIAL_DENSITY = 1.0f;
-    private static final float MATERIAL_FRICTION = 0.5f;
-    private static final float MATERIAL_RESTITUTION = 0.2f;
+    private static final float TRIANGLE_DENSITY = 1.0f;
+    private static final float TRIANGLE_FRICTION = 0.5f;
+    private static final float TRIANGLE_RESTITUTION = 0.2f;
     private Vector2 originalPosition;
 
     public Triangle(String type, int health, Texture texture, int x, int y, int width, int height) {
@@ -45,9 +45,9 @@ public class Triangle extends Material {
         // Define fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = MATERIAL_DENSITY;
-        fixtureDef.friction = MATERIAL_FRICTION;
-        fixtureDef.restitution = MATERIAL_RESTITUTION;
+        fixtureDef.density = TRIANGLE_DENSITY;
+        fixtureDef.friction = TRIANGLE_FRICTION;
+        fixtureDef.restitution = TRIANGLE_RESTITUTION;
         body.createFixture(fixtureDef);
 
         shape.dispose();
@@ -83,3 +83,4 @@ public class Triangle extends Material {
         return body;
     }
 }
+
