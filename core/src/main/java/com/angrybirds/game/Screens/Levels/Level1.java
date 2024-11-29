@@ -287,6 +287,9 @@ public class Level1 extends Level {
                 if (keycode == Input.Keys.I) { // Save game
                     saveGame("savefile.dat");
                     System.out.println("Game saved.");
+                    System.out.println("Birds: " + birdBodies);
+                    System.out.println("Pigs: " + pigBodies);
+                    System.out.println("Blocks: " + blockBodies);
                     return true; // Event consumed
                 }
 
@@ -547,7 +550,7 @@ public class Level1 extends Level {
         // Get all world bodies and store them in an array, and run a for loop to destroy them
 
         for (Object body : bodies) {
-            System.out.println("Destroying body: " + body);
+            System.out.println("Destroying body: " + body.toString());
             world.destroyBody((Body) body);
         }
 
@@ -578,7 +581,7 @@ public class Level1 extends Level {
         ArrayList<BirdState> birdStates = new ArrayList<>();
         for (Bird bird : birdBodies) {
             birdStates.add(new BirdState(
-                bird.getX(), bird.getY(),
+                bird.getBody().getPosition().x, bird.getBody().getPosition().y,
                 bird.getBody().getLinearVelocity().x,
                 bird.getBody().getLinearVelocity().y,
                 bird.isSelected(), bird.isShot(), bird.isDead(), bird.getName()
@@ -587,16 +590,20 @@ public class Level1 extends Level {
 
         ArrayList<PigState> pigStates = new ArrayList<>();
         for (Pig pig : pigBodies) {
-            pigStates.add(new PigState(pig.getX(), pig.getY(), pig.isDead(), pig.getHealth(), pig.isGrounded()));
+            pigStates.add(new PigState(pig.getBody().getPosition().x, pig.getBody().getPosition().y, pig.isDead(), pig.getHealth(), pig.isGrounded()));
         }
 
         ArrayList<MaterialState> blockStates = new ArrayList<>();
         for (Material block : blockBodies) {
-            blockStates.add(new MaterialState(block.getX(), block.getY(), block.getBody().getAngle(), block.isDead(), block.getHealth(), block.getType(), block.isGrounded()));
+            // if its a triangle, print
+            if (block.getType().equals("Wood Triangle")) {
+                System.out.println("Saving Wood Triangle");
+            }
+            blockStates.add(new MaterialState(block.getBody().getPosition().x, block.getBody().getPosition().y, block.getBody().getAngle(), block.isDead(), block.getHealth(), block.getType(), block.isGrounded()));
         }
 
         BirdState currentBirdState = (currentBird != null) ? new BirdState(
-            currentBird.getX(), currentBird.getY(),
+            currentBird.getBody().getPosition().x, currentBird.getBody().getPosition().y,
             currentBird.getBody().getLinearVelocity().x,
             currentBird.getBody().getLinearVelocity().y,
             currentBird.isSelected(), currentBird.isShot(), currentBird.isDead(), currentBird.getName()
@@ -656,7 +663,8 @@ public class Level1 extends Level {
                 continue;
             }
             Pig pig = new Pig(angryBirdSheet,2843, 7, 103, 103);
-            pig.createBody(world, pigState.getX(), pigState.getY());
+            pig.createBody(world, pigState.getX() / PPM, pigState.getY() / PPM);
+            pig.setPosition(pigState.getX(), pigState.getY());
             pig.update();
             pig.setDead(pigState.isDead());
             pig.setHealth(pigState.getHealth());
@@ -671,9 +679,12 @@ public class Level1 extends Level {
             }
             //Material block;
             if (blockState.getType().equals("Wood Cube")) {
+                System.out.println("Creating Wood Cube from restore");
                 Cube block;
                 block = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
-                block.createBody(world, blockState.getX(), blockState.getY(), 57, 57, false);
+                block.createBody(world, blockState.getX() / PPM, blockState.getY() / PPM, 57, 57, false);
+                block.setPosition(blockState.getX(), blockState.getY());
+                block.getBody().setTransform(blockState.getX() / PPM, blockState.getY() / PPM, blockState.getAngle());
                 block.update();
                 block.setDead(blockState.isDead());
                 block.setHealth(blockState.getHealth());
@@ -682,6 +693,7 @@ public class Level1 extends Level {
                 // Setting angle
 
             } else {
+                System.out.println("Creating Wood Triangle from restore");
                 Triangle block;
                 block = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
                 block.createBody(world, blockState.getX(), blockState.getY(), 57, 57, false);
