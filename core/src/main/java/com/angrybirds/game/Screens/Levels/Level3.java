@@ -613,16 +613,22 @@ public class Level3 extends Level {
         if (blueBird.getBody() != null) {
             blueBird.update(delta);
         }
+        ArrayList<Bird> tempBirdsToRemove = new ArrayList<>();
         for (Bird bird : birdBodies) {
             // If bird is instance of BlueBird, update the state of the bird
             if (bird instanceof BlueBird) {
                 // Update state if bird != blueBird
                 if (bird != blueBird) {
                     //System.out.println("Updating Blue Bird Childs");
-                    ((BlueBird) bird).update(delta);
+                    if (bird.getBody() != null) {
+                        ((BlueBird) bird).update(delta);
+                    } else {
+                        tempBirdsToRemove.add(bird);
+                    }
                 }
             }
         }
+        birdBodies.removeAll(tempBirdsToRemove);
         Iterator<Pig> pigIterator = pigBodies.iterator();
         while (pigIterator.hasNext()) {
             Pig pig = pigIterator.next();
