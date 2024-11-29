@@ -11,9 +11,9 @@ public class Cube extends Material {
     protected int textureWidth;
     protected int textureHeight;
     protected static final float PPM = 100f;
-    protected static final float RECTANGLE_DENSITY = 1.0f;
-    protected static final float RECTANGLE_FRICTION = 0.5f;
-    protected static final float RECTANGLE_RESTITUTION = 0.2f;
+    protected static final float CUBE_DENSITY = 1.0f;
+    protected static final float CUBE_FRICTION = 0.5f;
+    protected static final float CUBE_RESTITUTION = 0.2f;
     protected Vector2 originalPosition;
 
     public Cube(String type, int health, Texture texture, int x, int y, int width, int height) {
@@ -39,9 +39,9 @@ public class Cube extends Material {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = RECTANGLE_DENSITY;
-        fixtureDef.friction = RECTANGLE_FRICTION;
-        fixtureDef.restitution = RECTANGLE_RESTITUTION;
+        fixtureDef.density = CUBE_DENSITY;
+        fixtureDef.friction = CUBE_FRICTION;
+        fixtureDef.restitution = CUBE_RESTITUTION;
         body.createFixture(fixtureDef);
 
         shape.dispose();
@@ -76,3 +76,4 @@ public class Cube extends Material {
         return health;
     }
 }
+
