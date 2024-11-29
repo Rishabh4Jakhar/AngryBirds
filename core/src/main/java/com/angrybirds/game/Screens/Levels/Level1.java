@@ -1097,9 +1097,9 @@ public class Level1 extends Level {
         float maxDragRadius = 20f; // In meters (adjust as needed)
 
         // Draw circle for draggable area
-        shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
+        //shapeRenderer.circle(slingshotX, slingshotY, maxDragRadius, 100); // 100 segments for a smooth circle
 
-        shapeRenderer.end();
+        //shapeRenderer.end();
 
 
         stage.act();
