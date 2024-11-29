@@ -12,7 +12,7 @@ public class GameState implements Serializable {
 
     // Level Number
     private int level;
-
+    private int currentLevel;
     // Score
     private int score;
 
@@ -24,8 +24,9 @@ public class GameState implements Serializable {
     // Bird state
     private BirdState currentBird;
 
-    public GameState(int level, ArrayList<BirdState> birds, ArrayList<PigState> pigs, ArrayList<MaterialState> blocks, int score, BirdState currentBird) {
+    public GameState(int level, int currentLevel, ArrayList<BirdState> birds, ArrayList<PigState> pigs, ArrayList<MaterialState> blocks, int score, BirdState currentBird) {
         this.level = level;
+        this.currentLevel = currentLevel;
         this.birds = birds;
         this.pigs = pigs;
         this.blocks = blocks;

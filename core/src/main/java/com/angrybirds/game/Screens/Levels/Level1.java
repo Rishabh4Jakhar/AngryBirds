@@ -285,7 +285,7 @@ public class Level1 extends Level {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.I) { // Save game
-                    saveGame("savefile.dat");
+                    saveGame("save_game_" + System.currentTimeMillis() + ".dat");
                     System.out.println("Game saved.");
                     System.out.println("Birds: " + birdBodies);
                     System.out.println("Pigs: " + pigBodies);
@@ -609,7 +609,7 @@ public class Level1 extends Level {
             currentBird.isSelected(), currentBird.isShot(), currentBird.isDead(), currentBird.getName()
         ) : null;
 
-        return new GameState(1, birdStates, pigStates, blockStates, score, currentBirdState);
+        return new GameState(AngryBirds.currentLevel, 1, birdStates, pigStates, blockStates, score, currentBirdState);
     }
 
     public void loadGame(String fileName) {
@@ -630,7 +630,8 @@ public class Level1 extends Level {
         birdBodies.clear();
         pigBodies.clear();
         blockBodies.clear();
-
+        // Update the current level
+        AngryBirds.currentLevel = gameState.getLevel();
         // Restore birds
         for (BirdState birdState : gameState.getBirds()) {
             //Bird bird = new RedBird(birdTexture); // Recreate bird object
