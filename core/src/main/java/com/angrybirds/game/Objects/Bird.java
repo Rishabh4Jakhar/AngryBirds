@@ -23,7 +23,7 @@ public class Bird extends Sprite {
     protected static final float PPM = 100f;
     protected static final float BIRD_DENSITY = 1f;
     protected static final float BIRD_FRICTION = 0.3f;
-    protected static final float BIRD_RESTITUTION = 0.5f;
+    protected static final float BIRD_RESTITUTION = 0.3f;
     protected static final float BIRD_RADIUS = 20f / PPM;
 
 
@@ -33,7 +33,7 @@ public class Bird extends Sprite {
     protected boolean isShot = false;
     protected Vector2 originalPosition;
     protected static final float MAX_DRAG_DISTANCE = 100f * PPM;
-    protected static final float SHOOT_POWER_MULTIPLIER = 1.2f;
+    protected static final float SHOOT_POWER_MULTIPLIER = 1f;
     private float rollingTime = 0; // Tracks how long the body has been rolling
     private static final float ROLLING_THRESHOLD = 0.8f; // Velocity below which it's considered rolling (adjust as needed)
     private static final float MAX_ROLLING_TIME = 2.0f;  // Maximum time allowed for rolling in seconds
@@ -86,7 +86,7 @@ public class Bird extends Sprite {
         body.createFixture(fixtureDef);
 
         shape.dispose();
-
+        //body.setLinearDamping(0.2f);
         originalPosition = new Vector2(v, v1);
         if (isDynamic) {
             body.setType(BodyDef.BodyType.DynamicBody);
