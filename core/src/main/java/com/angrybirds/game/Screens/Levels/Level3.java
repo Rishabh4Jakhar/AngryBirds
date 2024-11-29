@@ -210,6 +210,10 @@ public class Level3 extends Level {
 
     private void handleLoading() {
         // Load global variables
+        if (!AngryBirds.isLoadedFirstTime) { // False
+            return;
+        }
+        AngryBirds.isLoadedFirstTime = false;
         if (AngryBirds.nowLevel == 3) {
             if (AngryBirds.redBirdsLeft == 0) {
                 redBird1.reset();
@@ -413,7 +417,7 @@ public class Level3 extends Level {
                         }
 
                         // If there is already a bird on the slingshot, return it to the list
-                        if (currentBird.getBody() != null) {
+                        if (currentBird != null && currentBird.getBody() != null) {
                             // Check if the currentbird is in birdbodies, if not add to bird bodies
                             if (!birdBodies.contains(currentBird)) {
                                 birdBodies.add(currentBird);

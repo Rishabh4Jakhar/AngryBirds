@@ -102,6 +102,7 @@ public class LoadMenu implements Screen {
             // Restore game state
             AngryBirds.currentLevel = gameSaveState.getLevel();
             AngryBirds.nowLevel = gameSaveState.getCurrentLevel();
+            AngryBirds.isLoadedFirstTime = gameSaveState.isLoadedFirstTime();
             System.out.println("Loaded level: " + AngryBirds.currentLevel);
             loadGameState(gameSaveState);
             //game.setScreen(new LevelSelectScreen(game)); // Return to level select after loading

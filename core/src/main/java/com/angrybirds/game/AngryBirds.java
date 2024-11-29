@@ -26,6 +26,7 @@ public class AngryBirds extends Game {
     public static int norPigsLeft = 2;
     public static int kingPigsLeft = 0;
     public static int helmetPigsLeft = 0;
+    public static boolean isLoadedFirstTime = true;
 
     // Dimensions of various sprites (commented out for now)
     /*

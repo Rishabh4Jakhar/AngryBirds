@@ -13,7 +13,7 @@ public class GameState implements Serializable {
     // Level Number
     private int level;
     private int currentLevel;
-    // Score
+    private boolean isLoadedFirstTime = true;
     private int score;
 
     // Birds, pigs, and blocks
@@ -157,5 +157,13 @@ public class GameState implements Serializable {
 
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    public boolean isLoadedFirstTime() {
+        return isLoadedFirstTime;
+    }
+
+    public void setLoadedFirstTime(boolean isLoadedFirstTime) {
+        this.isLoadedFirstTime = isLoadedFirstTime;
     }
 }
