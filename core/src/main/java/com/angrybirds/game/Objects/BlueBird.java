@@ -35,11 +35,15 @@ public class BlueBird extends Bird {
         bird1.createBody(world, position.x * PPM, position.y * PPM, true);
         copyBodyProperties(body, bird1.getBody());
         bird1.getBody().setLinearVelocity(velocity1);
+        bird1.setHealth(getHealth());
+        bird1.isShot = true;
 
         Bird bird2 = new BlueBird(birdTexture);
         bird2.createBody(world, position.x * PPM, position.y * PPM, true);
         copyBodyProperties(body, bird2.getBody());
         bird2.getBody().setLinearVelocity(velocity2);
+        bird2.setHealth(getHealth());
+        bird2.isShot = true;
 
         birds.add(bird1);
         birds.add(bird2);
