@@ -1087,9 +1087,9 @@ public class Level1 extends Level {
         }
         */
         // Draw draggable area outline
-        shapeRenderer.setProjectionMatrix(gameCam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
+        //shapeRenderer.setProjectionMatrix(gameCam.combined);
+        //shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        //shapeRenderer.setColor(Color.RED);
 
         // Convert slingshot position to meters
         float slingshotX = SLINGSHOT_X / PPM;
