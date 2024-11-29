@@ -641,8 +641,9 @@ public class Level1 extends Level {
             } else {
                 bird = new YellowBird(birdSheet);
             }
-            bird.createBody(world, birdState.getX(), birdState.getY(), true);
+            bird.createBody(world, birdState.getX() / PPM, birdState.getY() / PPM, false);
             bird.getBody().setLinearVelocity(birdState.getVelocityX(), birdState.getVelocityY());
+            bird.setPosition(birdState.getX(), birdState.getY());
             bird.update();
             bird.setSelected(birdState.isSelected());
             bird.setShot(birdState.isShot());
@@ -994,7 +995,7 @@ public class Level1 extends Level {
         }
         if (pigBodies.isEmpty() && !isLevelCleared) {
             isLevelCleared = true;
-            increaseLevelNumber();
+            increaseLevelNumber(1);
             System.out.println("Level Cleared!");
             System.out.println("Score: " + score);
         } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && currentBird == null && !waitingForLevelEnd && !pigBodies.isEmpty()) {
@@ -1012,7 +1013,7 @@ public class Level1 extends Level {
 
                 if (pigBodies.isEmpty()) {
                     isLevelCleared = true; // All pigs are dead, level is cleared
-                    increaseLevelNumber();
+                    increaseLevelNumber(1);
                     System.out.println("Level Cleared!");
                 } else {
                     isLevelFailed = true; // Pigs remain, level is failed
