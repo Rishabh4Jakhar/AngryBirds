@@ -206,6 +206,26 @@ public class Level1 extends Level {
         //addDummyButtons();
         shapeRenderer = new ShapeRenderer();
         initializeLevel();
+        handleLoading();
+    }
+
+    private void handleLoading() {
+        // Load global variables
+        if (AngryBirds.nowLevel == 1) {
+            if (AngryBirds.redBirdsLeft == 0) {
+                redBird1.reset();
+                redBird2.reset();
+            } else if (AngryBirds.redBirdsLeft == 1) {
+                redBird2.reset();
+                birdBodies.remove(redBird2);
+            }
+            if (AngryBirds.norPigsLeft == 0) {
+                pig1.die(bodiesToDestroy);
+                pig2.die(bodiesToDestroy);
+            } else if (AngryBirds.norPigsLeft == 1) {
+                pig2.die(bodiesToDestroy);
+            }
+        }
     }
 
     private void initializeLevel() {
@@ -285,7 +305,7 @@ public class Level1 extends Level {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.I) { // Save game
-                    saveGame("save_game_" + System.currentTimeMillis() + ".dat");
+                    saveGame("save_game_" + getNextSaveFileNumber() + ".dat");
                     System.out.println("Game saved.");
                     System.out.println("Birds: " + birdBodies);
                     System.out.println("Pigs: " + pigBodies);
@@ -294,7 +314,7 @@ public class Level1 extends Level {
                 }
 
                 if (keycode == Input.Keys.L) { // Load game
-                    loadGame("savefile.dat");
+                    //loadGame("savefile.dat");
                     System.out.println("Game loaded.");
                     return true; // Event consumed
                 }
@@ -317,7 +337,7 @@ public class Level1 extends Level {
                                                     System.out.println("Bird clicked: " + bird);
 
                                                     // If there is already a bird on the slingshot, return it to the list
-                                                    if (currentBird != null) {
+                                                    if (currentBird.getBody() != null) {
                                                         // Check if the currentbird is in birdbodies, if not add to bird bodies
                                                         if (!birdBodies.contains(currentBird)) {
                                                             birdBodies.add(currentBird);
@@ -415,7 +435,27 @@ public class Level1 extends Level {
         b2dCam.setToOrtho(false, AngryBirds.V_WIDTH / PPM, AngryBirds.V_HEIGHT / PPM);
 
     }
+    private int getNextSaveFileNumber() {
+        File counterFile = new File("save_counter.dat");
+        int counter = 1; // Default to 1 if the file doesn't exist
 
+        if (counterFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(counterFile))) {
+                counter = Integer.parseInt(reader.readLine());
+            } catch (IOException | NumberFormatException e) {
+                System.err.println("Failed to read save counter. Defaulting to 1.");
+            }
+        }
+
+        // Increment and save the updated counter
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(counterFile))) {
+            writer.write(String.valueOf(counter + 1));
+        } catch (IOException e) {
+            System.err.println("Failed to update save counter.");
+        }
+
+        return counter;
+    }
     private void handleCollision(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
@@ -590,7 +630,7 @@ public class Level1 extends Level {
 
         ArrayList<PigState> pigStates = new ArrayList<>();
         for (Pig pig : pigBodies) {
-            pigStates.add(new PigState(pig.getBody().getPosition().x, pig.getBody().getPosition().y, pig.isDead(), pig.getHealth(), pig.isGrounded()));
+            pigStates.add(new PigState(pig.getBody().getPosition().x, pig.getBody().getPosition().y, pig.isDead(), pig.getHealth(), pig.isGrounded(), pig.getType()));
         }
 
         ArrayList<MaterialState> blockStates = new ArrayList<>();

@@ -82,4 +82,80 @@ public class GameState implements Serializable {
     public void setCurrentBird(BirdState currentBird) {
         this.currentBird = currentBird;
     }
+
+    public int getNoOfBirds() {
+        return birds.size();
+    }
+
+    public int getNoOfPigs() {
+        return pigs.size();
+    }
+
+    public int getRedBirds() {
+        int redBirds = 0;
+        for (BirdState bird : birds) {
+            if (bird.getName().equals("Red Bird")) {
+                redBirds++;
+            }
+        }
+        return redBirds;
+    }
+
+    public int getYellowBirds() {
+        int yellowBirds = 0;
+        for (BirdState bird : birds) {
+            if (bird.getName().equals("Yellow Bird")) {
+                yellowBirds++;
+            }
+        }
+        return yellowBirds;
+    }
+
+    public int getBlueBirds() {
+        int blueBirds = 0;
+        for (BirdState bird : birds) {
+            if (bird.getName().equals("Blue Bird")) {
+                blueBirds++;
+            }
+        }
+        return blueBirds;
+    }
+
+    public int getNorPigs() {
+        int norPigs = 0;
+        for (PigState pig : pigs) {
+            if (pig.getType() == 1) {
+                norPigs++;
+            }
+        }
+        return norPigs;
+    }
+
+    public int getKingPigs() {
+        int kingPigs = 0;
+        for (PigState pig : pigs) {
+            if (pig.getType() == 3) {
+                kingPigs++;
+            }
+        }
+        return kingPigs;
+    }
+
+    public int getHelmetPigs() {
+        int helmetPigs = 0;
+        for (PigState pig : pigs) {
+            if (pig.getType() == 2) {
+                helmetPigs++;
+            }
+        }
+        return helmetPigs;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
 }

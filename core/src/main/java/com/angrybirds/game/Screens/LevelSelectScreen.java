@@ -152,7 +152,7 @@ public class LevelSelectScreen implements Screen {
         loadMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LoadMenu(game));
+                game.setScreen(new LoadMenu(game, gameCam, gamePort, moreUiTexture));
             }
         });
         stage.addActor(loadMenuButton);

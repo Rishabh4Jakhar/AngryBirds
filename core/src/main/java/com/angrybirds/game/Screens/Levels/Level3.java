@@ -1,11 +1,16 @@
 package com.angrybirds.game.Screens.Levels;
 
 import com.angrybirds.game.AngryBirds;
+import com.angrybirds.game.GameState.BirdState;
+import com.angrybirds.game.GameState.GameState;
+import com.angrybirds.game.GameState.MaterialState;
+import com.angrybirds.game.GameState.PigState;
 import com.angrybirds.game.Objects.*;
 import com.angrybirds.game.Objects.Materials.*;
 import com.angrybirds.game.Screens.LevelSelectScreen;
 import com.angrybirds.game.Screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
@@ -24,8 +29,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -198,7 +205,55 @@ public class Level3 extends Level {
         //addDummyButtons();
         shapeRenderer = new ShapeRenderer();
         initializeLevel3();
+        handleLoading();
+    }
 
+    private void handleLoading() {
+        // Load global variables
+        if (AngryBirds.nowLevel == 3) {
+            if (AngryBirds.redBirdsLeft == 0) {
+                redBird1.reset();
+                redBird2.reset();
+            } else if (AngryBirds.redBirdsLeft == 1) {
+                redBird2.reset();
+                birdBodies.remove(redBird2);
+            }
+            if (AngryBirds.yellowBirdsLeft == 0) {
+                yellowBird.reset();
+                birdBodies.remove(yellowBird);
+                // Try to remove from bird in action list if present
+                try {
+                    birdsInAction.remove(yellowBird);
+                } catch (Exception e) {
+                    System.err.println("Yellow Bird not in action list");
+                }
+            }
+            if (AngryBirds.blueBirdsLeft == 0) {
+                blueBird.reset();
+                birdBodies.remove(blueBird);
+                // Try to remove from bird in action list if present
+                //try {
+                //    birdsInAction.remove(blueBird);
+                //} catch (Exception e) {
+                //    System.err.println("Blue Bird not in action list");
+                //}
+            }
+            if (AngryBirds.norPigsLeft == 0) {
+                pig1.die(bodiesToDestroy);
+                pig2.die(bodiesToDestroy);
+            } else if (AngryBirds.norPigsLeft == 1) {
+                pig2.die(bodiesToDestroy);
+            }
+            if (AngryBirds.kingPigsLeft == 0) {
+                pig5.die(bodiesToDestroy);
+            }
+            if (AngryBirds.helmetPigsLeft == 0) {
+                pig3.die(bodiesToDestroy);
+                pig4.die(bodiesToDestroy);
+            } else if (AngryBirds.helmetPigsLeft == 1) {
+                pig4.die(bodiesToDestroy);
+            }
+        }
     }
 
     private void initializeLevel3() {
@@ -358,7 +413,7 @@ public class Level3 extends Level {
                         }
 
                         // If there is already a bird on the slingshot, return it to the list
-                        if (currentBird != null) {
+                        if (currentBird.getBody() != null) {
                             // Check if the currentbird is in birdbodies, if not add to bird bodies
                             if (!birdBodies.contains(currentBird)) {
                                 birdBodies.add(currentBird);
@@ -447,7 +502,30 @@ public class Level3 extends Level {
                 return true;
             }
         };
+
+        InputAdapter keyboardInputProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.I) { // Save game
+                    saveGame("save_game_" + getNextSaveFileNumber() + ".dat");
+                    System.out.println("Game saved.");
+                    System.out.println("Birds: " + birdBodies);
+                    System.out.println("Pigs: " + pigBodies);
+                    System.out.println("Blocks: " + blockBodies);
+                    return true; // Event consumed
+                }
+
+                if (keycode == Input.Keys.L) { // Load game
+                    //loadGame("savefile.dat");
+                    System.out.println("Game loaded.");
+                    return true; // Event consumed
+                }
+
+                return false; // Let other processors handle if not consumed
+            }
+        };
         inputMultiplexer.addProcessor(birdInputProcessor);
+        inputMultiplexer.addProcessor(keyboardInputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         // Create camera for debug rendering
@@ -455,6 +533,240 @@ public class Level3 extends Level {
         b2dCam.setToOrtho(false, AngryBirds.V_WIDTH / PPM, AngryBirds.V_HEIGHT / PPM);
 
     }
+    private int getNextSaveFileNumber() {
+        File counterFile = new File("save_counter.dat");
+        int counter = 1; // Default to 1 if the file doesn't exist
+
+        if (counterFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(counterFile))) {
+                counter = Integer.parseInt(reader.readLine());
+            } catch (IOException | NumberFormatException e) {
+                System.err.println("Failed to read save counter. Defaulting to 1.");
+            }
+        }
+
+        // Increment and save the updated counter
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(counterFile))) {
+            writer.write(String.valueOf(counter + 1));
+        } catch (IOException e) {
+            System.err.println("Failed to update save counter.");
+        }
+
+        return counter;
+    }
+
+    private void recreateStaticObjects() {
+        // Create ground
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        //Body ground;
+
+        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.position.set(0, 0);
+        ground = world.createBody(bdef);
+
+        shape.setAsBox(AngryBirds.V_WIDTH, 1);
+        fdef.shape = shape;
+        ground.createFixture(fdef);
+
+        shape.setAsBox(1, AngryBirds.V_HEIGHT);
+        fdef.shape = shape;
+        ground.createFixture(fdef);
+        ground.setUserData("Ground");
+        // Add other static objects (like walls) here if needed
+        System.out.println("Static objects recreated.");
+    }
+    private void clearLevel() {
+        // Destroy all bodies in the world
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
+        // Convert to a standard Java array if needed
+        // Convert to a standard Java ArrayList
+        //List<Body> bodyList = new ArrayList<>((Collection) bodies);
+
+        // Get all world bodies and store them in an array, and run a for loop to destroy them
+
+        for (Object body : bodies) {
+            System.out.println("Destroying body: " + body.toString());
+            world.destroyBody((Body) body);
+        }
+
+        // Clear game object lists
+        birdBodies.clear();
+        pigBodies.clear();
+        blockBodies.clear();
+        birdsInAction.clear();
+
+        // Clear the current bird reference
+        currentBird = null;
+
+        // Recreate static objects
+        recreateStaticObjects();
+    }
+
+    public void saveGame(String fileName) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            GameState gameState = captureGameState();
+            oos.writeObject(gameState);
+            System.out.println("Game saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public GameState captureGameState() {
+        ArrayList<BirdState> birdStates = new ArrayList<>();
+        for (Bird bird : birdBodies) {
+            birdStates.add(new BirdState(
+                bird.getBody().getPosition().x, bird.getBody().getPosition().y,
+                bird.getBody().getLinearVelocity().x,
+                bird.getBody().getLinearVelocity().y,
+                bird.isSelected(), bird.isShot(), bird.isDead(), bird.getName()
+            ));
+        }
+
+        ArrayList<PigState> pigStates = new ArrayList<>();
+        for (Pig pig : pigBodies) {
+            pigStates.add(new PigState(pig.getBody().getPosition().x, pig.getBody().getPosition().y, pig.isDead(), pig.getHealth(), pig.isGrounded(), pig.getType()));
+        }
+
+        ArrayList<MaterialState> blockStates = new ArrayList<>();
+        for (Material block : blockBodies) {
+            // if its a triangle, print
+            if (block.getType().equals("Wood Triangle")) {
+                System.out.println("Saving Wood Triangle");
+            }
+            if (block.getBody() == null) {
+                System.out.println("Block body is null while saving");
+                continue;
+            }
+            blockStates.add(new MaterialState(block.getBody().getPosition().x, block.getBody().getPosition().y, block.getBody().getAngle(), block.isDead(), block.getHealth(), block.getType(), block.isGrounded()));
+        }
+
+        BirdState currentBirdState = (currentBird != null) ? new BirdState(
+            currentBird.getBody().getPosition().x, currentBird.getBody().getPosition().y,
+            currentBird.getBody().getLinearVelocity().x,
+            currentBird.getBody().getLinearVelocity().y,
+            currentBird.isSelected(), currentBird.isShot(), currentBird.isDead(), currentBird.getName()
+        ) : null;
+
+        return new GameState(AngryBirds.currentLevel, 3, birdStates, pigStates, blockStates, score, currentBirdState);
+    }
+    public void restoreGameState(GameState gameState) {
+        // Clear existing game objects
+        birdBodies.clear();
+        pigBodies.clear();
+        blockBodies.clear();
+        // Update the current level
+        AngryBirds.currentLevel = gameState.getLevel();
+        // Restore birds
+        for (BirdState birdState : gameState.getBirds()) {
+            //Bird bird = new RedBird(birdTexture); // Recreate bird object
+            // Check bird name to check which type of bird it is from red, blue and yellow
+            // If bird is dead, then skip
+            if (birdState.isDead()) {
+                continue;
+            }
+            String birdName = birdState.getName();
+            Bird bird;
+            if (birdName.equals("Red Bird") ) {
+                bird = new RedBird(birdSheet);
+            } else if (birdName.equals("Blue Bird")) {
+                bird = new BlueBird(birdSheet);
+            } else {
+                bird = new YellowBird(birdSheet);
+            }
+            bird.createBody(world, birdState.getX() / PPM, birdState.getY() / PPM, false);
+            bird.getBody().setLinearVelocity(birdState.getVelocityX(), birdState.getVelocityY());
+            bird.setPosition(birdState.getX(), birdState.getY());
+            bird.update();
+            bird.setSelected(birdState.isSelected());
+            bird.setShot(birdState.isShot());
+            birdBodies.add(bird);
+        }
+
+        // Restore pigs
+        for (PigState pigState : gameState.getPigs()) {
+            if (pigState.isDead()) {
+                continue;
+            }
+            Pig pig = new Pig(angryBirdSheet,2843, 7, 103, 103);
+            pig.createBody(world, pigState.getX() / PPM, pigState.getY() / PPM);
+            pig.setPosition(pigState.getX(), pigState.getY());
+            pig.update();
+            pig.setDead(pigState.isDead());
+            pig.setHealth(pigState.getHealth());
+            pig.setGrounded(pigState.isGrounded());
+            pigBodies.add(pig);
+        }
+
+        // Restore blocks
+        for (MaterialState blockState : gameState.getBlocks()) {
+            if (blockState.isDead()) {
+                continue;
+            }
+            //Material block;
+            if (blockState.getType().equals("Wood Cube")) {
+                System.out.println("Creating Wood Cube from restore");
+                Cube block;
+                block = new Cube("Wood Cube",100,  angryBirdSheet, 803, 776, 84, 84);
+                block.createBody(world, blockState.getX() / PPM, blockState.getY() / PPM, 57, 57, false);
+                block.setPosition(blockState.getX(), blockState.getY());
+                block.getBody().setTransform(blockState.getX() / PPM, blockState.getY() / PPM, blockState.getAngle());
+                block.update();
+                block.setDead(blockState.isDead());
+                block.setHealth(blockState.getHealth());
+                block.setGrounded(blockState.isGrounded());
+                blockBodies.add(block);
+                // Setting angle
+
+            } else {
+                System.out.println("Creating Wood Triangle from restore");
+                Triangle block;
+                block = new Triangle("Wood Triangle", 100, angryBirdSheet, 887, 776, 84, 84);
+                block.createBody(world, blockState.getX(), blockState.getY(), 57, 57, false);
+                block.update();
+                block.setDead(blockState.isDead());
+                block.setHealth(blockState.getHealth());
+                block.setGrounded(blockState.isGrounded());
+                blockBodies.add(block);
+            }
+            //Material block = new (blockTexture, world, blockState.getX(), blockState.getY(), blockState.getHealth());
+            // Restore properties and add to block
+            //block.createBody(world, blockState.getX(), blockState.getY(), 57, 57, false);
+            //blockBodies.add(block);
+        }
+
+        // Restore current bird
+        if (gameState.getCurrentBird() != null) {
+            BirdState birdState = gameState.getCurrentBird();
+            //currentBird = new Bird(birdTexture);
+            // Current Bird would be one of the birds from birdBodies, check which has same positions and set it as current bird
+            for (Bird bird : birdBodies) {
+                if (bird.getX() == birdState.getX() && bird.getY() == birdState.getY()) {
+                    currentBird = bird;
+                    break;
+                }
+            }
+            // If no current bird found, set it to birdBodies[0]
+            if (currentBird == null) {
+                currentBird = birdBodies.get(0);
+            }
+            //currentBird.createBody(world, birdState.getX(), birdState.getY());
+            //currentBird.getBody().setLinearVelocity(birdState.getVelocityX(), birdState.getVelocityY());
+            //currentBird.setSelected(birdState.isSelected());
+            //currentBird.setShot(birdState.isShot());
+        } else {
+            currentBird = null;
+        }
+
+        // Restore score
+        score = gameState.getScore();
+        scoreLabel.setText(String.valueOf(score));
+        scoreLabel2.setText(String.valueOf(score));
+    }
+
 
     private void handleCollision(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();

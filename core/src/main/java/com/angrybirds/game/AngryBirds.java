@@ -16,6 +16,17 @@ public class AngryBirds extends Game {
     public static final int V_HEIGHT = 720;
     public static final float PPM = 100;
     public static int currentLevel = 1;
+    public static int nowLevel = 1;
+    public static int noOfBirdsInLevel = 2;
+    public static int noOfPigsInLevel = 2;
+    // Type of birds and pigs left
+    public static int redBirdsLeft = 2;
+    public static int yellowBirdsLeft = 0;
+    public static int blueBirdsLeft = 0;
+    public static int norPigsLeft = 2;
+    public static int kingPigsLeft = 0;
+    public static int helmetPigsLeft = 0;
+
     // Dimensions of various sprites (commented out for now)
     /*
     public static final int RED_BIRD_WIDTH = 45;

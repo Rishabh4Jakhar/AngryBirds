@@ -9,16 +9,26 @@ public class PigState implements Serializable {
     private boolean isDead;
     private int health;
     private boolean grounded;
+    private int type;
 
-    public PigState(float x, float y, boolean isDead, int health, boolean grounded) {
+    public PigState(float x, float y, boolean isDead, int health, boolean grounded, int type) {
         this.x = x;
         this.y = y;
         this.isDead = isDead;
         this.health = health;
         this.grounded = grounded;
+        this.type = type;
     }
 
     // Getters and Setters
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public float getX() {
         return x;

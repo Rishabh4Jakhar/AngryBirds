@@ -160,10 +160,14 @@ public abstract class Level implements Screen {
     }
 
     protected void increaseLevelNumber(int previousLevelNumber) {
-        if ((previousLevelNumber + 1) > levelNumber) {
-            levelNumber = previousLevelNumber + 1;
+        if ((previousLevelNumber + 1) > AngryBirds.currentLevel) {
+            AngryBirds.currentLevel = previousLevelNumber + 1;
         }
-        AngryBirds.currentLevel = levelNumber;
+        levelNumber = AngryBirds.currentLevel;
+    }
+
+    protected void setLevelNumber(int levelNumber) {
+        this.levelNumber = levelNumber;
     }
 
     @Override
