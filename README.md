@@ -7,8 +7,7 @@ This project is a replica of the Angry Birds game, developed in **Java using the
 Made by [Rishabh Jakhar](https://github.com/Rishabh4Jakhar/) and [Advik Gupta](https://github.com/NOVA2OP) as part of the **Advanced Programming 2024 course**.
 <br><br>
 The game features three levels, three types of birds, three types of pigs, and three types of materials. 
-The first two levels are basic, while the third level is still under development. The game also includes dummy buttons to indicate level completion or failure.
-
+All the levels are simple enough to solve. The game is designed to be easy to play and understand, with the main goal being to destroy all the pigs in each level using the birds provided.
 ## How to Run
 
 To run the project, follow these steps:
@@ -41,11 +40,30 @@ To run the project, follow these steps:
 
 ## Assumptions
 
-- Only three levels are created, with level 1 and level 2 being basic, and level 3 coming soon. 
+- JUNIT TESTING IS NOT IMPLEMENTED AS IT WAS NOT ABLE TO BE LOADED IN LIBGDX AND CLASS COMMENTS FOR THE SAME WERE NOT ANSWERED EVEN AFTER THE DEADLINE.
+- The game is designed to be simple and easy to play.
+- Only three levels are created.
 - Three birds are created: RedBird, YellowBird, and BlueBird.
 - Three pigs are used: normal pig, chief pig, and king pig. 
 - Three types of materials are used: wood, ice, and stone. 
-- For win/lose screens, dummy buttons are used to show if a level has been completed (green button) or failed (red button) on each level screen.
+- To save a level, press the `I` key.
+- On pressing `I` key, game is saved and can be loaded from the load menu screen in the main menu. 
+- Current level, no of levels completed, and progress within current level, i.e, no of birds left and no of pigs left are saved and correctly loaded using ObjectOutput and ObjectInput streams (serialization).
+- If pigs are rolling on the ground with a very low velocity for more than 2 seconds, they are killed.
+- Birds/Pigs are killed if they go out of the screen.
+- Pigs take damage on falling to the ground or being hit by birds calculated using velocity and mass.
+- If all birds are used and level is not completed, game waits for 3 seconds before displaying level failed screen.
+- A reset button is present in load menu if you want to unload the currently loaded game.
+- Levels are locked and can be unlocked by completing the previous level.
+
+## Bonus Features
+
+- Yellow Bird: When the screen is touched, the bird **speeds up** and does more damage.
+- Blue Bird: When the screen is touched, the bird **splits into three** smaller birds.
+- TNT: When the TNT is hit, it **explodes** and damages all the pigs/blocks within a certain radius.
+
+## Demo Video
+[Youtube Video](https://www.youtube.com/watch?v=MskBtYtXlBQ)
 
 ## Preview
 - **Main Menu**
