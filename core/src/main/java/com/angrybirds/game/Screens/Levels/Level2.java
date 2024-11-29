@@ -648,7 +648,7 @@ public class Level2 extends Level {
         //    rods.add(rod);
         //}
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
-        Sphere stone_ball = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
+        //Sphere stone_ball = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
         //TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
