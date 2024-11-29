@@ -74,6 +74,7 @@ To run the project, follow these steps:
 <br>
 <img src="https://github.com/user-attachments/assets/c1a279c0-6147-4a97-8167-ee4873e09ae3" height="300" width="533">
 
+
 - **Level 1 Preview**
 <br>
 <img src="https://github.com/user-attachments/assets/6d2781f3-6512-4680-87e3-897b31dbadac" height="300" width="533">
@@ -81,6 +82,16 @@ To run the project, follow these steps:
 - **Level 2 Preview**
 <br>
 <img src="https://github.com/user-attachments/assets/a7017042-7cc8-4181-9515-71c18e395f83" height="300" width="533">
+
+- **Level 3 Preview**
+<br>
+<img src="https://github.com/user-attachments/assets/0bf38e65-9371-4f23-ba75-5613c9c58829" height="300" width="533">
+
+- **Load Menu**
+<br>
+<img src="https://github.com/user-attachments/assets/36b0d459-5809-4f0d-b174-adf8c332ef49" height="300" width="533">
+
+
 
 
 ## Online References
