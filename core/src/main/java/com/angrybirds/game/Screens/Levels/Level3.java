@@ -101,9 +101,9 @@ public class Level3 extends Level {
         angryBirdSheet = new Texture(Gdx.files.internal("SpriteSheet/AngryBirds.png"));
         pig1 = new Pig(angryBirdSheet, 2843, 8, 103, 103);
         pig2 = new Pig(angryBirdSheet, 2843, 8, 103, 103);
-        pig3 = new Pig(angryBirdSheet, 2843, 708, 107, 93);
-        pig4 = new Pig(angryBirdSheet, 2843, 708, 107, 93);
-        pig5 = new Pig(moreUITexture, 643, 312, 120, 126);
+        pig3 = new Pig(angryBirdSheet, 2843, 708, 107, 93, 2);
+        pig4 = new Pig(angryBirdSheet, 2843, 708, 107, 93, 2);
+        pig5 = new Pig(moreUITexture, 643, 312, 120, 126, 3);
 
         // Load custom font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Font/angrybirds.ttf"));
@@ -763,6 +763,7 @@ public class Level3 extends Level {
             pig4.draw(game.batch);
         }
         if (pig5.getBody() != null) {
+            //System.out.println("Pig 5 position: " + pig5.getBody().getPosition());
             pig5.draw(game.batch);
         }
         //pig1.draw(game.batch);

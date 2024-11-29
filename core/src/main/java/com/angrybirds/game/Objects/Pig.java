@@ -65,9 +65,10 @@ public class Pig extends Sprite implements Serializable {
         } else if (type == 3) {
             setSize(100, 100);
             health = 200;
-            normalTexture = new TextureRegion(pigSheet, x, y, width, height);
-            damagedTexture = new TextureRegion(pigSheet, x, y, width, height);
-            criticalTexture = new TextureRegion(pigSheet, x, y, width, height);
+            //normalTexture = new TextureRegion(pigSheet, x, y, width, height);
+            //damagedTexture = new TextureRegion(pigSheet, x, y, width, height);
+            //criticalTexture = new TextureRegion(pigSheet, x, y, width, height);
+            System.out.println("Pig type 3 created + KING PIG");
         } else {
             setSize(60, 60);
             normalTexture = new TextureRegion(pigSheet, 2953, y, width, height);
@@ -205,7 +206,13 @@ public class Pig extends Sprite implements Serializable {
             //world.destroyBody(body); // Remove the body from the physics world
             body = null;
             //rollingTime = 0; // Reset the rolling timer
-            System.out.println("Pig has been killed!");
+            if (type == 3) {
+                System.out.println("KING PIG HEALTH SO NO CHANGE");
+                //setRegion(new TextureRegion(normalTexture));
+            } else {
+                System.out.println("Pig has been killed!");
+            }
+            //System.out.println("Pig has been killed!");
         }
     }
     public void render(SpriteBatch batch) {
@@ -232,13 +239,31 @@ public class Pig extends Sprite implements Serializable {
         } else if (healthPercentage > 0.5f) {
             // High health, normal texture
             //System.out.println("Pig health: " + healthPercentage);
-            setRegion(new TextureRegion(normalTexture));
+            if (type == 3) {
+                System.out.println("KING PIG HEALTH SO NO CHANGE + Normal Texture");
+                //setRegion(new TextureRegion(normalTexture));
+            } else {
+                setRegion(new TextureRegion(normalTexture));
+            }
+            //setRegion(new TextureRegion(normalTexture));
         } else if (healthPercentage > 0.2f) {
             // Medium health, damaged texture
-            setRegion(new TextureRegion(damagedTexture));
+            if (type == 3) {
+                System.out.println("KING PIG HEALTH SO NO CHANGE + Damaged Texture");
+                //setRegion(new TextureRegion(normalTexture));
+            } else {
+                setRegion(new TextureRegion(damagedTexture));
+            }
+            //setRegion(new TextureRegion(damagedTexture));
         } else {
             // Low health, critical texture
-            setRegion(new TextureRegion(criticalTexture));
+            if (type == 3) {
+                System.out.println("KING PIG HEALTH SO NO CHANGE + Critical Texture");
+                //setRegion(new TextureRegion(normalTexture));
+            } else {
+                setRegion(new TextureRegion(criticalTexture));
+            }
+            //setRegion(new TextureRegion(criticalTexture));
         }
     }
 

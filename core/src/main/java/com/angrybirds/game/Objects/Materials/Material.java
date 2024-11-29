@@ -39,10 +39,10 @@ public abstract class Material extends Sprite {
     }
 
     public void die(List<Body> bodiesToDestroy) {
-        System.out.println("Body state in die: " + body);
-        System.out.println("Block destroyed! (not null)" + this.type);
+        //System.out.println("Body state in die: " + body);
+        //System.out.println("Block destroyed! (not null)" + this.type);
         if (isDead) {
-            System.out.println("Block already destroyed! " + this.type);
+            //System.out.println("Block already destroyed! " + this.type);
             return;
         }
         isDead = true;
@@ -50,7 +50,7 @@ public abstract class Material extends Sprite {
             //world.destroyBody(body);
             bodiesToDestroy.add(body);
             body = null; // Remove the physics body
-            System.out.println("Block destroyed! (test)" + this.type);
+            //System.out.println("Block destroyed! (test)" + this.type);
         }
     }
 
@@ -59,16 +59,16 @@ public abstract class Material extends Sprite {
     }
 
     public void takeDamage(World world, int damage, List<Body> bodiesToDestroy, List<Material> blockBodies) {
-        System.out.println("Body state in takeDamage: " + getBody());
+        //System.out.println("Body state in takeDamage: " + getBody());
         this.world = world;
         health -= damage;
-        System.out.println("Health: " + health + ", Body: " + getBody() + ", Type: " + this.type);
+        //System.out.println("Health: " + health + ", Body: " + getBody() + ", Type: " + this.type);
         // Check if body is null for debug
         if (getBody() == null) {
-            System.out.println("Block destroyed! (null)" + this.type);
+            //System.out.println("Block destroyed! (null)" + this.type);
         }
         if (health <= 0 && getBody() != null) {
-            System.out.println("Block destroyed! " + this.type);
+            //System.out.println("Block destroyed! " + this.type);
             die(bodiesToDestroy);
         } else {
             updateTextureBasedOnHealth();
@@ -80,17 +80,17 @@ public abstract class Material extends Sprite {
 
     private void updateTextureBasedOnHealth() {
         float healthPercentage = (float) health / maxHealth;
-        System.out.println("Material Type " + this.type);
+        //System.out.println("Material Type " + this.type);
         if (healthPercentage > 0.5f) {
             // High health, normal texture
-            System.out.println("High health " + healthPercentage);
+            //System.out.println("High health " + healthPercentage);
             setRegion(new TextureRegion(normalTexture));
         } else if (healthPercentage > 0.2f) {
-            System.out.println("Medium health " + healthPercentage);
+            //System.out.println("Medium health " + healthPercentage);
             // Medium health, damaged texture
             setRegion(new TextureRegion(damagedTexture));
         } else {
-            System.out.println("Low health " + healthPercentage);
+            //System.out.println("Low health " + healthPercentage);
             // Low health, critical texture
             setRegion(new TextureRegion(criticalTexture));
         }
@@ -103,7 +103,7 @@ public abstract class Material extends Sprite {
     void setBody(Body body) {
         if (this.body == null) {
             this.body = body;
-            System.out.println("Body set for: " + this.type);
+            //System.out.println("Body set for: " + this.type);
         } else {
             throw new IllegalStateException("Body already set for: " + this.type);
         }
