@@ -16,8 +16,8 @@ import java.util.List;
 public class TNT extends Material {
     private Body body;
     protected static final float PPM = 100f;
-    private static final float EXPLOSION_RADIUS = 1.6f; // Radius in Box2D units
-    private static final int EXPLOSION_DAMAGE = 90; // Damage to apply to nearby objects
+    private static final float EXPLOSION_RADIUS = 1.8f; // Radius in Box2D units
+    private static final int EXPLOSION_DAMAGE = 120; // Damage to apply to nearby objects
     private boolean exploded = false;
     private boolean isExploding = false;
     private float currentExplosionRadius = 0f; // Radius of the current explosion animation
