@@ -8,9 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import java.lang.reflect.Field;
-import java.util.Vector;
-
 public class Bird extends Sprite {
     protected String name = "Bird";
     protected int health = 100;
@@ -26,8 +23,6 @@ public class Bird extends Sprite {
     protected static final float BIRD_RESTITUTION = 0.3f;
     protected static final float BIRD_RADIUS = 20f / PPM;
 
-
-    // Shooting variables
     protected boolean isDead = false;
     protected boolean isSelected = false;
     protected boolean isShot = false;
@@ -67,16 +62,11 @@ public class Bird extends Sprite {
         } else {
             bodyDef.type = BodyDef.BodyType.KinematicBody;
         }
-        //bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(v / PPM, v1 / PPM);
-        //originalPosition = new Vector2(v / PPM, v1 / PPM);
-        // Create body in world
         body = world.createBody(bodyDef);
-
         // Create shape
         CircleShape shape = new CircleShape();
         shape.setRadius(BIRD_RADIUS);
-
         // Create fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -84,9 +74,7 @@ public class Bird extends Sprite {
         fixtureDef.friction = BIRD_FRICTION;
         fixtureDef.restitution = BIRD_RESTITUTION;
         body.createFixture(fixtureDef);
-
         shape.dispose();
-        //body.setLinearDamping(0.2f);
         originalPosition = new Vector2(v, v1);
         if (isDynamic) {
             body.setType(BodyDef.BodyType.DynamicBody);
@@ -99,7 +87,6 @@ public class Bird extends Sprite {
     public void update(float delta) {
         if (body!=null) {
             Vector2 velocity = body.getLinearVelocity();
-
             // Check if the body is rolling
             if (velocity.len() < ROLLING_THRESHOLD && velocity.len() > 0.1) {
                 rollingTime += delta;
