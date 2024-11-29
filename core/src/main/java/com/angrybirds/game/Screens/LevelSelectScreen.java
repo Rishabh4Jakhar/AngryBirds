@@ -77,6 +77,7 @@ public class LevelSelectScreen implements Screen {
         });
 
         // Level 1 button
+
         TextureRegion level1Region = new TextureRegion(moreUiTexture, 777, 593, 62, 77);
         TextureRegion levelLockedRegion = new TextureRegion(moreUiTexture, 956, 122, 64, 64);
         skin.add("level1Button", level1Region);
