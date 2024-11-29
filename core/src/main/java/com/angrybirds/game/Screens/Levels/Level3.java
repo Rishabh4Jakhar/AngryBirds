@@ -649,85 +649,12 @@ public class Level3 extends Level {
         }
 
         game.batch.begin();
-        //15 rods (7 wood + 5 ice + 3 stone)
-        /*
-        for (int i = 0; i < 7; i++) {
-            Rectangle rod = new Rectangle("Wood Rod", 100, angryBirdSheet, 1138, 895, 205, 21, 205, 21, true);
-            rods.add(rod); //indices 0-6
-        }
-        for (int i = 0; i < 5; i++) {
-            Rectangle rod = new Rectangle("Ice Rod", 150, angryBirdSheet, 1090, 1344, 205, 21, 205, 21, true);
-            rods.add(rod); //indices 7-11
-        }
-        for (int i = 0; i < 3; i++) {
-            Rectangle rod = new Rectangle("Stone Rod", 200, angryBirdSheet, 1098, 1739, 205, 21, 205, 21, true);
-            rods.add(rod); //indices 12-14
-        }
 
-         */
-        //Sphere stone_ball1 = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
-        //Sphere stone_ball2 = new Sphere("Stone Sphere", 200, angryBirdSheet, 975, 1703, 78, 78);
         TextureRegion backgroundL = new TextureRegion(background, 1027, 2, (1538 - 1027), 207);
         //TextureRegion tnt = new TextureRegion(angryBirdSheet, 472, 901, 71, 68);
 
         game.batch.draw(backgroundL, 0, 0, AngryBirds.V_WIDTH, AngryBirds.V_HEIGHT);
-        //game.batch.draw(tnt, AngryBirds.V_WIDTH * 0.68f, AngryBirds.V_HEIGHT * 0.139f, 60, 60);
-        //game.batch.draw(stone_ball1, AngryBirds.V_WIDTH * 0.535f, AngryBirds.V_HEIGHT * 0.367f, 60, 60);
-        //game.batch.draw(stone_ball2, AngryBirds.V_WIDTH * 0.823f, AngryBirds.V_HEIGHT * 0.367f, 60, 60);
 
-        //support rods (6)
-        /*
-        for (int i = 0; i < 6; i++) {
-            if (i<3) {
-                Rectangle rod = rods.get(i); //rods with indices 0,1,2
-                rod.setSize(AngryBirds.V_WIDTH * 0.139f, 21);
-                rod.setPosition(AngryBirds.V_WIDTH * (0.49f + 0.1375f*i), AngryBirds.V_HEIGHT * 0.342f);
-                rod.draw(game.batch);
-            }
-            else if (i<5) {
-                Rectangle rod = rods.get(i+4); //rods with indices 7,8
-                rod.setSize(AngryBirds.V_WIDTH *  0.122f, 21);
-                rod.setPosition(AngryBirds.V_WIDTH * (0.503f + 0.121f * (4-i)) + 100, AngryBirds.V_HEIGHT * 0.342f + 150);
-                rod.draw(game.batch);
-            }
-            else {
-                Rectangle rod = rods.get(i + 7); //rod with index 12
-                rod.setSize(AngryBirds.V_WIDTH * 0.122f, 21);
-                rod.setPosition(AngryBirds.V_WIDTH * (0.503f + 0.06f) + 100, AngryBirds.V_HEIGHT * 0.342f + 301);
-                rod.draw(game.batch);
-            }
-        }
-
-        //Vertical rods(4+3+2=9)
-        //Stone rods vertical(4)
-        for (int i = 3; i < 7; i++) {
-            Rectangle rod = rods.get(i);
-            rod.setSize(147, 21);
-            rod.setPosition(AngryBirds.V_WIDTH * (0.815f - 0.132f * (i-3)), AngryBirds.V_HEIGHT * 0.494f - 164);
-            rod.setRotation(90);
-            rod.draw(game.batch);
-        }
-
-        //Ice rods vertical(3)
-        for (int i = 9; i < 12; i++) {
-            Rectangle rod = rods.get(i);
-            rod.setSize(133, 21);
-            rod.setPosition(AngryBirds.V_WIDTH * (0.735f - 0.1135f * (i-9)), AngryBirds.V_HEIGHT * 0.494f);
-            rod.setRotation(90);
-            rod.draw(game.batch);
-        }
-
-        //Wood rods vertical(2)
-        for (int i = 13; i < 15; i++) {
-            Rectangle rod = rods.get(i);
-            rod.setSize(134, 21);
-            rod.setPosition(AngryBirds.V_WIDTH * (0.675f - 0.106f * (i-13)), AngryBirds.V_HEIGHT * 0.494f + 150);
-            rod.setRotation(90);
-            rod.draw(game.batch);
-        }
-
-
-         */
         for (Rectangle rod : rods) {
             // Sync the box2d body with the sprite position
             //System.out.println("Rod position: " + rod.getX() + ", " + rod.getY());
@@ -747,9 +674,6 @@ public class Level3 extends Level {
         }
 
         // Sprites
-        //redBird1.setPosition(AngryBirds.V_WIDTH * 0.05f, AngryBirds.V_HEIGHT * 0.139f);
-        //redBird2.setPosition(AngryBirds.V_WIDTH * 0.1f, AngryBirds.V_HEIGHT * 0.139f);
-        //yellowBird.setPosition(AngryBirds.V_WIDTH * 0.15f, AngryBirds.V_HEIGHT * 0.137f);
         slingshot.setPosition(AngryBirds.V_WIDTH * 0.2f, AngryBirds.V_HEIGHT * 0.139f);
         pig1.setSize(60, 60);
         pig2.setSize(60, 60);
