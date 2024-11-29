@@ -1127,8 +1127,8 @@ public class Level2 extends Level {
         stage.draw();
 
         // Debug rendering box2d lines
-        b2dCam.update();
-        b2dr.render(world, b2dCam.combined);
+        //b2dCam.update();
+        //b2dr.render(world, b2dCam.combined);
     }
 
     private void destroyBodies(float delta) {

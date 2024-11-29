@@ -1105,8 +1105,8 @@ public class Level1 extends Level {
         stage.act();
         stage.draw();
 
-        b2dCam.update();
-        b2dr.render(world, b2dCam.combined);
+        //b2dCam.update();
+        //b2dr.render(world, b2dCam.combined);
     }
 
     @Override
