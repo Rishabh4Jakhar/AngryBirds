@@ -351,6 +351,11 @@ public class Level3 extends Level {
                     //System.out.println("Touch Point: " + touchPoint);
                     if (!bird.isDead() && bird != currentBird &&bird.getBounds().contains(touchPoint.x/PPM, touchPoint.y/PPM)) {
                         System.out.println("Bird clicked: " + bird);
+                        // If Instance of blue bird, and blue bird already shot return
+                        if (bird instanceof BlueBird && blueBird.isShot()) {
+                            System.out.println("Blue Bird already shot");
+                            return true;
+                        }
 
                         // If there is already a bird on the slingshot, return it to the list
                         if (currentBird != null) {
