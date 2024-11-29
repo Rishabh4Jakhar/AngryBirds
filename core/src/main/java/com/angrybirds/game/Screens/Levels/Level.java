@@ -38,7 +38,7 @@ public abstract class Level implements Screen {
     protected TextureRegion levelFailedPopUp;
     protected boolean isLevelCleared = false;
     protected boolean isLevelFailed = false;
-
+    protected int levelNumber;
     // Box 2d variables
     protected World world;
     protected Box2DDebugRenderer b2dr;
@@ -155,6 +155,9 @@ public abstract class Level implements Screen {
         });
     }
 
+    protected void increaseLevelNumber() {
+        levelNumber++;
+    }
 
     @Override
     public void resize(int width, int height) {

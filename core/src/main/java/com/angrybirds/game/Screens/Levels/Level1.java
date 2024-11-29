@@ -994,6 +994,7 @@ public class Level1 extends Level {
         }
         if (pigBodies.isEmpty() && !isLevelCleared) {
             isLevelCleared = true;
+            increaseLevelNumber();
             System.out.println("Level Cleared!");
             System.out.println("Score: " + score);
         } else if (birdBodies.isEmpty() && birdsInAction.isEmpty() && currentBird == null && !waitingForLevelEnd && !pigBodies.isEmpty()) {
@@ -1011,6 +1012,7 @@ public class Level1 extends Level {
 
                 if (pigBodies.isEmpty()) {
                     isLevelCleared = true; // All pigs are dead, level is cleared
+                    increaseLevelNumber();
                     System.out.println("Level Cleared!");
                 } else {
                     isLevelFailed = true; // Pigs remain, level is failed
